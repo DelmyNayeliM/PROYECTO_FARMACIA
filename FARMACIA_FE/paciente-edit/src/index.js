@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import './style.css';
+import './bootstrap.min.css';
+import './owl.carousel.min.css';
+import './magnific-popup.css';
+import './owl.theme.default.min.css';
+import './aos.css';
+import './bootstrap.css';
+import Medicamento from './medicamento';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const root = ReactDOM.createRoot(document.getElementById('root')); // Crea un root
 root.render(
   <React.StrictMode>
-    <App />
+    <Medicamento />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

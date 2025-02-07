@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import Formulario from './principal'; // Importa el componente App
-import reportWebVitals from './reportWebVitals';
+import Formulario from './imprimir'; 
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Formulario /> {/* Asegúrate de que el componente App esté siendo renderizado aquí */}
-  </React.StrictMode>,
-  document.getElementById('root') // Esto se asegura de que el componente se monte en el HTML
-);
+const Formularios = () => {
+  return (
+    <div>
+      <h1>Formulario de Login</h1>
+      <Formulario />
+    </div>
+  );
+};
 
-reportWebVitals();
+ReactDOM.render(<Formularios />, document.getElementById('root'));
+
