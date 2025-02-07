@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+/*const medicamento = () => {
+  const [categoria, setCategoria] = useState ("");
+  const [nombre_medicamento, setNombre_Medicamento] = useState ("");
+  const [descripcion, setDescripcion] = useState ("");
+  const [precio, setPrecio] = useState ("");
+
+  const handleSumit = async (e) => {
+    e.preventDefault();
+    try {
+      if(
+        categoria === "" || 
+        nombre_medicamento === "" || 
+        descripcion === "" || 
+        precio === "" 
+      ) {
+        if (categoria === "") console.log("El campo de categoria esta vacia");
+        if (nombre_medicamento === "") console.log("El campo del nombre del medicamento esta vacia");
+        if (descripcion === "") console.log("El campo de descripcion esta vacia");
+        if (precio === "") console.log("El campo de precio esta vacia");
+      }
 
 
-const Medicamento = () => {
+    }
+  }
+};*/
+
+const form_medicamento = () => {
   return (
     <div className="site-wrap">
 
@@ -122,4 +147,4 @@ const Medicamento = () => {
   );
 }
 
-export default Medicamento;
+export default form_medicamento;

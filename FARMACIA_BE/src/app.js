@@ -36,6 +36,7 @@ const app = express();
 app.use(express.json());
 
 // Montar las rutas de usuario
+
 app.use('/usuarios', rutasUsuario);
 app.use('/citas', rutas_citas);
 app.use('/pacientes', rutas_pacientes);

@@ -93,6 +93,8 @@ const pacienteform = () => {
       </label>
  
       <button type="submit">Guardar paciente</button>
+      <button type="submit">Editar paciente</button>
+      <button type="submit">Eliminar paciente</button>
     </form>
   );
 };
