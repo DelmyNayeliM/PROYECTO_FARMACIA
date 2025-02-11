@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 
 const Inventario = () => {
   return (
@@ -79,4 +79,4 @@ const Inventario = () => {
   );
 }
 
-export default Inventario;
+export default Inventario;*/
