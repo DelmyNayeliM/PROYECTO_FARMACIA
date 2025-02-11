@@ -126,6 +126,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                     ></textarea>
                   </div>
 
+                  <div className="col-md-2">
                   <div className="form-group row">
                     <label htmlFor="precio" className="text-black">
                       Precio: <span className="text-danger">*</span>
@@ -138,6 +139,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                       value={precio}
                       onChange={(e) => setPrecio(e.target.value)}
                     />
+                    </div>
                   </div>
 
                   <div className="form-group row">

@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { pacienteguardar, pacienteeditar } from '../configuraciones/apiURLS';
+import Navbar from '../plantilla/navbar';
 
 const Formulariopaciente = ({ pacienteEditado }) => {
+
+  <Navbar />
+
+
   const [tipo_paciente, setTipo_paciente] = useState('');
   const [tipo_empleado, setTipo_empleado] = useState('');
   const [nombre_completo, setNombre_completo] = useState('');
@@ -126,6 +131,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       console.error('Error al guardar el paciente', error);
     }
   };
+
 
   return (
     <div className="site-wrap">
@@ -301,3 +307,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
 };
 
 export default Formulariopaciente;
+
+
+
