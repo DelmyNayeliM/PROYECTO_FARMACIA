@@ -30,6 +30,7 @@ root.render(
     <FormularioRegistro />
     <Form_medicamento />
     <Formulariocitas/>
+    < Inventario/>
     <Acercade/>
   </React.StrictMode>
 );
