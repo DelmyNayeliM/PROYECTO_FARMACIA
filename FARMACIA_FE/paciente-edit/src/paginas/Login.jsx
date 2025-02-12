@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 //import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const Login = () => {
     console.log({ tipo_usuario, nombre, password });
  
     try {
-        const response = await axios.post("http://localhost:3003/login", {
+        const response = await axios.post("http://localhost:3007/Login", {
             tipo_usuario: tipo_usuario,
             nombre: nombre,  
             contraseña: password
@@ -42,7 +42,7 @@ const Login = () => {
               placeholder="(Administrador o Medico)"
               value={tipo_usuario}
               onChange={(e) => setTipo_usuario(e.target.value)}
-              required
+
             />
           </div>
         
