@@ -1,7 +1,7 @@
 const usuario  = require('../modelos/usuarios');
 
 exports.login=async(req, res )=>{
-    const {tipo_usuario, nombre, password } = req.body;
+    const {nombre, password } = req.body;
     try{
         const buscarusuario = await usuario.findOne({
             where:{nombre:nombre}
@@ -12,7 +12,7 @@ exports.login=async(req, res )=>{
         }
         if(buscarusuario.contrasena!=password){
             console.log(msj,"contraseña no encontrado");
-            res.json({error:"contraseña incorrecta"});
+            res.json({error:"Usuario incorrecto"});
         }
     }
 };
