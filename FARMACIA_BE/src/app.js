@@ -5,14 +5,14 @@ const rutas_pacientes = require('./rutas/rutas_paciente');  // Importa las rutas
 const rutas_inventario = require('./rutas/rutas_inventario'); // Importa las rutas de inventario
 const rutas_citas = require('./rutas/rutas_citas'); // Importa las rutas de la citas
 const path = require('path');
+const cors = require('cors');
 
-
-const configurarModelos = require('./configurarmodelos');
-
-const usuarios = require('./modelos/usuarios'); // Importa el modelo
-const pacientes = require('./modelos/paciente');  
-const inventario = require('./modelos/inventario');
-const citas = require('./modelos/citas');
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
 
 db.sync({ alter: true })  // Modifica la estructura sin borrar datos
 
@@ -27,7 +27,6 @@ db.sync({ alter: true })  // Modifica la estructura sin borrar datos
 // Conectar con la base de datos
 db.authenticate().then(async () => {
     console.log("Conexión establecida");
-    //await configurarmodelo(); // Descomenta si necesitas configuración de modelos adicional
 }).catch((error) => {
     console.log("Error: " + error);
 });
@@ -40,12 +39,12 @@ app.use("/imagen", express.static(path.join(__dirname, "../pulica/img"))
 );
 
 // Montar las rutas de usuario
-
+app.use(cors(corsOptions));
 app.use('/usuarios', rutasUsuario);
 app.use('/citas', rutas_citas);
 app.use('/pacientes', rutas_pacientes);
 app.use('/inventario', rutas_inventario);
-
+  
 // Configurar el puerto y escuchar
 app.set('port', 3003);
 app.listen(app.get('port'), () => {

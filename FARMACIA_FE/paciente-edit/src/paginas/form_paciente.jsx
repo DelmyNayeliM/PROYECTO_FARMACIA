@@ -40,21 +40,22 @@ const Formulariopaciente = ({ pacienteEditado }) => {
     formData.append("file", file);
 
     try {
-      const response = await axios.post('/upload-endpoint', formData, {
+      const response = await axios.post('/guardarImagenPaciente', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      return response.data.imageUrl; // Suponiendo que la URL de la imagen es parte de la respuesta
+      return response.data.imageUrl; 
     } catch (error) {
       console.error('Error al subir la imagen', error);
+      return null;  // Devuelve null si no se pudo cargar la imagen
     }
   };
 
-  // Maneja el envío del formulario para guardar o editar el paciente
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Verificar que todos los campos estén completos
     if (
       tipo_paciente === '' ||
       tipo_empleado === '' ||
@@ -67,19 +68,24 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       correo === '' ||
       enfermedad_base === ''
     ) {
-      console.log('Por favor, complete todos los campos');
+      alert('Por favor, complete todos los campos');
       return;
     }
 
+    // Subir la foto del paciente si es necesario
     let fotoPacienteUrl = foto_paciente;
     if (foto_paciente && typeof foto_paciente !== 'string') {
-      // Si foto_paciente es un archivo, sube la imagen
       fotoPacienteUrl = await handleFileUpload(foto_paciente);
+      if (!fotoPacienteUrl) {
+        alert('Hubo un problema al subir la imagen');
+        return;
+      }
     }
 
     try {
       let response;
       if (id) {
+        // Editar paciente existente
         response = await axios.put(`${pacienteeditar}/${id}`, {
           tipo_paciente,
           tipo_empleado,
@@ -94,6 +100,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
           enfermedad_base,
         });
       } else {
+        // Guardar un nuevo paciente
         response = await axios.post(pacienteguardar, {
           tipo_paciente,
           tipo_empleado,
@@ -109,9 +116,11 @@ const Formulariopaciente = ({ pacienteEditado }) => {
         });
       }
 
+      // Respuesta exitosa
       console.log(response.data);
       alert('Paciente guardado exitosamente');
-      // Limpiar el formulario
+      
+      // Limpiar los campos después de guardar
       setTipo_paciente('');
       setTipo_empleado('');
       setNombre_completo('');
@@ -125,9 +134,9 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       setEnfermedad('');
     } catch (error) {
       console.error('Error al guardar el paciente', error);
+      alert('Hubo un error al guardar el paciente. Inténtelo nuevamente.');
     }
   };
-
 
   return (
     <div className="site-wrap">

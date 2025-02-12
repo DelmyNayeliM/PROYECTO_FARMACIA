@@ -1,8 +1,8 @@
-const cors={
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+const cors = {
+    origin: '*',  // Permite solicitudes de cualquier origen
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Métodos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'],
-    Credentials: true
+    credentials: true  // Habilita el uso de credenciales (cookies, autenticación, etc.)
 };
 
 module.exports = cors;

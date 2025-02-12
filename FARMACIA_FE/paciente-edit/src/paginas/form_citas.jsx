@@ -16,10 +16,6 @@ const Formulariocitas = ({ citasEditado }) => {
   const [nombre_medicamento, setNombre_medicamento] = useState('');
   const [id, setId] = useState('');
 
-  const [categoria, setCategoria] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [precio, setPrecio] = useState('');
-
   useEffect(() => {
     if (citasEditado) {
       setFecha_cita(citasEditado.fecha_cita);
@@ -37,7 +33,7 @@ const Formulariocitas = ({ citasEditado }) => {
     }
   }, [citasEditado]);
 
-  const handleSubmit = async (e, isEdit = false) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -51,18 +47,15 @@ const Formulariocitas = ({ citasEditado }) => {
       sintomas === '' ||
       receta === '' ||
       observaciones === '' ||
-      nombre_medicamento === '' ||
-      categoria === '' ||
-      descripcion === '' ||
-      precio === ''
+      nombre_medicamento === '' 
     ) {
-      console.log('Por favor, complete todos los campos');
+      alert('Por favor, complete todos los campos');
       return;
     }
 
     try {
       let response;
-      if (isEdit) {
+      if (id) {
         response = await axios.put(`${citaseditar}/${id}`, {
           fecha_cita,
           nombre_dr,
@@ -91,16 +84,9 @@ const Formulariocitas = ({ citasEditado }) => {
           nombre_medicamento,
         });
       }
-
       console.log(response.data);
       alert('Cita guardada exitosamente');
-      resetForm();
-    } catch (error) {
-      console.error('Error al guardar la cita', error);
-    }
-  };
-
-  const resetForm = () => {
+   
     setFecha_cita('');
     setNombre_dr('');
     setNombre_paciente('');
@@ -112,9 +98,11 @@ const Formulariocitas = ({ citasEditado }) => {
     setReceta('');
     setObservaciones('');
     setNombre_medicamento('');
-    setCategoria('');
-    setDescripcion('');
-    setPrecio('');
+
+  }catch (error) {
+      console.error('Error al guardar la cita', error);
+      alert('Hubo un error al guardar la cita. Inténtelo nuevamente.');
+    }
   };
 
   return (

@@ -94,4 +94,5 @@ rutas.delete('/eliminar',
     controladorUsuario.eliminar
 );
 
+
 module.exports = rutas;
