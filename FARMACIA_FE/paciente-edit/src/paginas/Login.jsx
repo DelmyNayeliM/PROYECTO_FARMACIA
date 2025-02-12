@@ -20,7 +20,8 @@ const Login = () => {
         });
         console.log(response.data);
     } catch (error) {
-        console.error('Error de login:', error.response ? error.response.data : error.message);
+      console.error('Error al ingresar', error);
+      alert('Hubo un error en el login. Inténtelo nuevamente.');
     }
 };
   return (
