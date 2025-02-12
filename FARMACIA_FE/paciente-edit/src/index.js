@@ -23,14 +23,17 @@ import Login from './paginas/Login';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root')); // Crea un root
+
 root.render(
   <React.StrictMode>
-    <Login/>
-    <Formulariopaciente />
-    <FormularioRegistro />
-    <Form_medicamento />
-    <Formulariocitas/>
-    < Inventario/>
-    <Acercade/>
+    <div>
+      <Login />
+      <Formulariopaciente />
+      <FormularioRegistro />
+      <Form_medicamento />
+      <Formulariocitas />
+      <Inventario />
+      <Acercade />
+    </div>
   </React.StrictMode>
 );

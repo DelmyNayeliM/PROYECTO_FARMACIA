@@ -4,6 +4,8 @@ const rutasUsuario = require('./rutas/rutas_usuario'); // Importa las rutas de u
 const rutas_pacientes = require('./rutas/rutas_paciente');  // Importa las rutas de pacientes
 const rutas_inventario = require('./rutas/rutas_inventario'); // Importa las rutas de inventario
 const rutas_citas = require('./rutas/rutas_citas'); // Importa las rutas de la citas
+const path = require('path');
+
 
 const configurarModelos = require('./configurarmodelos');
 
@@ -34,6 +36,8 @@ const app = express();
 
 // Middleware para procesar JSON en solicitudes
 app.use(express.json());
+app.use("/imagen", express.static(path.join(__dirname, "../pulica/img"))
+);
 
 // Montar las rutas de usuario
 

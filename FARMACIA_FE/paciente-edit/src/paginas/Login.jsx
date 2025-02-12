@@ -13,8 +13,9 @@ const Login = () => {
     console.log({ tipo_usuario, nombre, password });
  
     try {
-        const response = await axios.post("http://localhost:3003/usuarios/login", {
-            nombre: tipo_usuario,   // Revisa que este valor no sea undefined
+        const response = await axios.post("http://localhost:3003/login", {
+            tipo_usuario: tipo_usuario,
+            nombre: nombre,  
             contraseña: password
         });
         console.log(response.data);

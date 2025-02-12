@@ -29,7 +29,7 @@ const Pacientes = db.define(
             unique: true,
         },
         foto_paciente: {
-            type: DataTypes.STRING(250),
+            type: DataTypes.STRING(300),
             allowNull: true,
         },
         telefono: {

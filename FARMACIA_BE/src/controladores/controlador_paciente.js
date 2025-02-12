@@ -1,6 +1,11 @@
-const { Op } = require('sequelize'); // Asegúrate de importar Op
+const { Op, ValidationError } = require('sequelize'); // Asegúrate de importar Op
 const { validationResult } = require('express-validator');
 const pacientes = require('../modelos/paciente');
+const {guardarImagenPaciente} = require('../configuraciones/archivo');
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+const Pacientes = require('../modelos/paciente');
 
 
 // Ruta de inicio
@@ -137,5 +142,74 @@ exports.eliminar = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ msj: 'Error al eliminar el paciente', error });
+    }
+};
+
+exports. validarImagen = (req, res, next)=>{
+    const validacion = validationResult(req);
+    if (validacion.errors.length > 0){
+        var msjerror="";
+        validacion.errors.forEach( r=> {
+            msjerror = msjerror + r.msg + ".";
+        })
+        res.json({msj: "Hay errores en la peticion", error:msjerror});
+    }
+    else{
+        guardarImagenPaciente(req, res, (err)=> {
+            if(err instanceof multer.MulterError){
+                res.json({msj:"Hay error en la carga de la imagen", error: err});
+            }
+            else if (err){
+                res.json({msj:"Hay error en la carga de la imagen", error: err});
+            }
+            else{
+                next();
+            }
+        });
+    }
+};
+
+exports.actualizarImagen = async (req, res, next) => {
+    const validacion = validationResult(req);
+    
+    if (validacion.errors.length > 0) {
+        let msjerror = "";
+        validacion.errors.forEach(r => {
+            msjerror += r.msg + "."; 
+        });
+        return res.json({ msj: "Hay errores en la petición", error: msjerror });
+    }
+
+    const { id } = req.query;
+    if (!req.file || !id) {
+        return res.json({ msj: "Falta la imagen o el id de la petición" });
+    }
+
+    const nombreImagen = req.file.filename; 
+
+    try {
+   
+        const buscarpaciente = await Pacientes.findOne({ where: { id: id } });
+
+        if (!buscarpaciente) {
+            return res.json({ msj: "El ID no existe" });
+        }
+        if (buscarpaciente.imagen) {
+            const rutaImagenAnterior = path.join(__dirname, '../../public/imagen', buscarpaciente.imagen);
+            if (fs.existsSync(rutaImagenAnterior)) {
+                fs.unlinkSync(rutaImagenAnterior); 
+                console.log("Imagen anterior eliminada");
+            }
+        }
+
+        buscarpaciente.imagen = nombreImagen;
+        await buscarpaciente.save(); 
+
+        console.log("Imagen actualizada en la base de datos");
+        return res.json({ msj: "Imagen actualizada exitosamente" });
+
+    } catch (error) {
+        console.log("Error en actualizar la imagen en la base de datos", error);
+        return res.json({ msj: "Error en actualizar la imagen en el servidor" });
     }
 };
