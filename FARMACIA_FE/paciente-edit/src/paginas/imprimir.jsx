@@ -1,19 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const Formulario = () => {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    correo: '',
-    mensaje: ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,27 +8,24 @@ const Formulario = () => {
   };
 
   const imprimirFormulario = () => {
-    console.log('Datos del formulario:', formData);
+    console.log('Datos del formulario:');
     window.print();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-    <div>
-      <label htmlFor="nombre">Nombre:</label>
-      <input type="text" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} />
+    <div className="form-group row">
+      <div className="col-lg-6">
+        <button
+          type="submit"
+          className="btn btn-primary btn-lg btn-block"
+          onClick={(e) => handleSubmit(e, false)}
+        >
+        {'Imprimir Formulario'}
+      </button>
     </div>
-    <div>
-      <label htmlFor="correo">Correo:</label>
-      <input type="email" name="correo" id="correo" value={formData.correo} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="mensaje">Mensaje:</label>
-      <textarea name="mensaje" id="mensaje" value={formData.mensaje} onChange={handleChange}></textarea>
-    </div>
-      <button type="submit">Enviar</button>
-    </form>
+</div>
   );
 };
 
 export default Formulario;
+
