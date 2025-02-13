@@ -19,6 +19,7 @@ import Formulariocitas from './paginas/form_citas';
 import Inventario from './paginas/inventario';
 import Acercade from './paginas/acercade';
 import Login from './paginas/Login';
+import Navbar from './plantilla/navbar';
 
 
 

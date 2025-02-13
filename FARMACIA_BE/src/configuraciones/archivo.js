@@ -1,12 +1,12 @@
 const multer =require('multer');
 const path =require('path');
 
-const almacenamientoPaciente = multer.diskStorage({
+const almacenaPaciente = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname,'../publica/imagen/pacientes'))
+        cb(null, path.join(__dirname,'../../public/img/paciente'))
     },
     filename: (req,file, cb)=>{
-        if(file.mimetype == 'imagen/jpeg' || file.mimetype =='imagen/png' || file.mimetype=='imagen/jpg'){
+        if(file.mimetype == 'image/jpeg' || file.mimetype =='image/png' || file.mimetype=='image/jpg'){
             const randon = Math.round(Math.random()*(99998-10001))+10001;
             cb(null,
                 'paciente'+ Date.now()+'-'+randon+'-'+req.query.id+'-'+file.mimetype.replace('/','.'));
@@ -14,8 +14,8 @@ const almacenamientoPaciente = multer.diskStorage({
     }
 });
 exports.guardarImagenPaciente = multer({
-    storage: almacenamientoPaciente,
+    storage: almacenaPaciente,
     limits: {
         filesize: 1000000,
     }
-});
+}).single('img');

@@ -3,6 +3,7 @@ const { Router } = require('express');
 const { body, query } = require('express-validator');
 const controladorPacientes = require('../controladores/controlador_paciente');
 const paciente = require('../modelos/paciente'); // Modelo de usuario
+const { guardarImagenPaciente } = require('../configuraciones/archivo');
 
 const rutas = Router();
 
@@ -82,5 +83,6 @@ rutas.delete('/eliminar',
         }),
     controladorPacientes.eliminar
 );
+
 
 module.exports = rutas;

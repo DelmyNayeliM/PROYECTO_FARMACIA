@@ -35,8 +35,7 @@ const app = express();
 
 // Middleware para procesar JSON en solicitudes
 app.use(express.json());
-app.use("/imagen", express.static(path.join(__dirname, "../pulica/img"))
-);
+app.use("/imagen", express.static(path.join(__dirname, "public/img/paciente")));
 
 // Montar las rutas de usuario
 app.use(cors(corsOptions));
