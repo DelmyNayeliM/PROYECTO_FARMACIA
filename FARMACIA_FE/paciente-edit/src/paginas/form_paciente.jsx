@@ -167,7 +167,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       <p><strong>Dirección:</strong> ${direccion}</p>
       <p><strong>Correo:</strong> ${correo}</p>
       <p><strong>Enfermedad Base:</strong> ${enfermedad_base}</p>
-      <p><strong>Enfermedad Base:</strong> ${foto_paciente}</p>
     `;
     
     const ventana = window.open('', '', 'height=600,width=800');
