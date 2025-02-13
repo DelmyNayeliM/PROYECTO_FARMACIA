@@ -3,7 +3,6 @@ import axios from 'axios';
 import { pacienteguardar, pacienteeditar } from '../configuraciones/apiURLS';
 
 const Formulariopaciente = ({ pacienteEditado }) => {
-
   const [tipo_paciente, setTipo_paciente] = useState('');
   const [tipo_empleado, setTipo_empleado] = useState('');
   const [nombre_completo, setNombre_completo] = useState('');
@@ -16,6 +15,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
   const [correo, setCorreo] = useState('');
   const [enfermedad_base, setEnfermedad] = useState('');
   const [id, setId] = useState('');
+  const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
 
   useEffect(() => {
     if (pacienteEditado) {
@@ -37,18 +37,33 @@ const Formulariopaciente = ({ pacienteEditado }) => {
   // Función para manejar la subida de la foto del paciente
   const handleFileUpload = async (file) => {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     try {
       const response = await axios.post('/guardarImagenPaciente', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
-      return response.data.imageUrl; 
+      return response.data.imageUrl;
     } catch (error) {
       console.error('Error al subir la imagen', error);
       return null;  // Devuelve null si no se pudo cargar la imagen
+    }
+  };
+
+  // Función para manejar el cambio en el archivo de la foto y generar la vista previa
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFoto_paciente(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFotoPreview(reader.result); // Establecer la URL de la imagen para la vista previa
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFotoPreview(null); // Limpiar la vista previa si no hay archivo
     }
   };
 
@@ -132,67 +147,38 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       setDireccion('');
       setCorreo('');
       setEnfermedad('');
+      setFotoPreview(null);  // Limpiar la vista previa de la foto
     } catch (error) {
       console.error('Error al guardar el paciente', error);
       alert('Hubo un error al guardar el paciente. Inténtelo nuevamente.');
     }
   };
 
+  const imprimirFormulario = () => {
+    const contenido = `
+      <h1>Información del Paciente</h1>
+      <p><strong>Tipo de Paciente:</strong> ${tipo_paciente}</p>
+      <p><strong>Tipo de Empleado:</strong> ${tipo_empleado}</p>
+      <p><strong>Nombre Completo:</strong> ${nombre_completo}</p>
+      <p><strong>Clave de Empleado:</strong> ${clave_empleado}</p>
+      <p><strong>Clave de Expediente:</strong> ${clave_expediente}</p>
+      <p><strong>Teléfono:</strong> ${telefono}</p>
+      <p><strong>Edad:</strong> ${edad}</p>
+      <p><strong>Dirección:</strong> ${direccion}</p>
+      <p><strong>Correo:</strong> ${correo}</p>
+      <p><strong>Enfermedad Base:</strong> ${enfermedad_base}</p>
+      <p><strong>Enfermedad Base:</strong> ${foto_paciente}</p>
+    `;
+    
+    const ventana = window.open('', '', 'height=600,width=800');
+    ventana.document.write('<html><head><title>Impresión</title></head><body>');
+    ventana.document.write(contenido);
+    ventana.document.write('</body></html>');
+    ventana.document.close();
+    ventana.print();
+  };
+
   return (
-    <div className="site-wrap">
-      <div className="site-navbar py-2">
-        <div className="search-wrap">
-          <div className="container">
-            <a href="#" className="search-close js-search-close"><span className="icon-close2"></span></a>
-            <form action="#" method="post">
-              <input type="text" className="form-control" placeholder="Buscar por nombre del producto" />
-            </form>
-          </div>
-        </div>
-      </div>
-      
-      <div className="container">
-        <div className="d-flex align-items-center justify-content-between">
-          <div className="logo">
-            <div className="site-logo">
-              <a href="index.html" className="js-logo-clone">
-                <strong className="text-primary">DISPENSARIO MEDICO</strong> "EL CAJON"
-              </a>
-            </div>
-          </div>
-          <div className="main-nav d-none d-lg-block">
-            <nav className="site-navigation text-right text-md-center" role="navigation">
-              <ul className="site-menu js-clone-nav d-none d-lg-block">
-                <li><a href="index.html">Inicio</a></li>
-                <li className="active"><a href="shop.html">Inventario</a></li>
-                <li className="has-children">
-                  <a href="#">Categoria</a>
-                  <ul className="dropdown">
-                    <li><a href="#">Medicamento</a></li>
-                    <li><a href="#">Suplemento</a></li>
-                    <li><a href="#">Material</a></li>
-                  </ul>
-                </li>
-                <li><a href="about.html">Citas</a></li>
-                <li><a href="contact.html">Pacientes</a></li>
-              </ul>
-            </nav>
-          </div>
-          <div className="icons">
-            <a href="#" className="icons-btn d-inline-block js-search-open"><span className="icon-search"></span></a>
-            <a href="#" className="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span className="icon-menu"></span></a>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-light py-3">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12 mb-0"><a href="index.html">Inicio</a> <span className="mx-2 mb-0">/</span> <a href="shop.html">Medicamentos</a> <span className="mx-2 mb-0">/</span> <strong className="text-black">Ibuprofen Tablets, 200mg</strong></div>
-          </div>
-        </div>
-      </div>
-
     <div className="site-wrap">
       <div className="site-section">
         <div className="container">
@@ -204,9 +190,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
               <form onSubmit={handleSubmit}>
                 <div className="p-3 p-lg-5 border">
                   <div className="form-group row">
-                    <label htmlFor="tipo_paciente" className="text-black">
-                      Tipo de Paciente:
-                    </label>
+                    <label htmlFor="tipo_paciente" className="text-black">Tipo de Paciente:</label>
                     <input
                       type="text"
                       className="form-control"
@@ -218,9 +202,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                   </div>
 
                   <div className="form-group row">
-                    <label htmlFor="tipo_empleado" className="text-black">
-                      Tipo de Empleado:
-                    </label>
+                    <label htmlFor="tipo_empleado" className="text-black">Tipo de Empleado:</label>
                     <input
                       type="text"
                       className="form-control"
@@ -277,10 +259,20 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         className="form-control"
                         id="foto_paciente"
                         name="foto_paciente"
-                        onChange={(e) => setFoto_paciente(e.target.files[0])}
+                        onChange={handleFileChange}
                       />
                     </div>
                   </div>
+
+                  {/* Aquí se muestra la vista previa de la foto si existe */}
+                  {fotoPreview && (
+                    <div className="form-group row">
+                      <div className="col-md-12">
+                        <h5>Vista Previa de la Foto:</h5>
+                        <img src={fotoPreview} alt="Vista previa" className="img-thumbnail" style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                      </div>
+                    </div>
+                  )}
 
                   <div className="form-group row">
                     <div className="col-md-6">
@@ -322,7 +314,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label htmlFor="correo">Correo Electrónico:</label>
+                      <label htmlFor="correo">Correo:</label>
                       <input
                         type="email"
                         className="form-control"
@@ -335,7 +327,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                   </div>
 
                   <div className="form-group row">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
                       <label htmlFor="enfermedad_base">Enfermedad Base:</label>
                       <input
                         type="text"
@@ -348,12 +340,12 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
                   </div>
 
-                  <div className="form-group row">
-                    <div className="col-lg-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">
-                        {id ? 'Editar Paciente' : 'Guardar Paciente'}
-                      </button>
-                    </div>
+                  <div className="form-group">
+                    <button type="submit" className="btn btn-primary">Guardar</button>
+                  </div>
+
+                  <div className="form-group">
+                    <button type="button" className="btn btn-secondary" onClick={imprimirFormulario}>Imprimir Datos</button>
                   </div>
                 </div>
               </form>
@@ -362,11 +354,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
 export default Formulariopaciente;
-
-
-
