@@ -5,12 +5,12 @@ import './bootstrap.min.css';
 import './css/aos.css';
 import './css/bootstrap-grid.css';
 import './css/bootstrap-reboot.css';
-//import './css/bootstrap.css';
 import './css/bootstrap.min.css.map';
-//import './css/jquery-ui.css';
 import './css/magnific-popup.css';
 import './css/owl.carousel.min.css';
 import './css/owl.theme.default.min.css';
+
+import { BrowserRouter } from 'react-router-dom';  // Importa BrowserRouter
 
 import Form_medicamento from './paginas/medicamento';
 import FormularioRegistro from './paginas/form_registro';
@@ -22,21 +22,22 @@ import Login from './paginas/Login';
 import Navbar from './plantilla/navbar';
 import Formulario from './paginas/imprimir';
 
-
-
-const root = ReactDOM.createRoot(document.getElementById('root')); // Crea un root
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <div>
-      <Login />
-      <Formulariopaciente />
-      <FormularioRegistro />
-      <Form_medicamento />
-      <Formulariocitas />
-      <Inventario />
-      <Acercade />
-      <Formulario />
-    </div>
+    <BrowserRouter>  
+      <div>
+        <Login />
+        <Navbar />
+            <Formulariopaciente />
+            <FormularioRegistro />
+            <Form_medicamento />
+            <Formulariocitas />
+            <Inventario />
+        <Acercade />
+        <Formulario />
+      </div>
+    </BrowserRouter>
   </React.StrictMode>
 );
