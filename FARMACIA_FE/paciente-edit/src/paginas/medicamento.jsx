@@ -2,52 +2,6 @@ const form_medicamento = () => {
   return (
     <div className="site-wrap">
 
-      <div className="site-navbar py-2">
-
-        <div className="search-wrap">
-          <div className="container">
-            <a href="#" className="search-close js-search-close"><span className="icon-close2"></span></a>
-            <form action="#" method="post">
-              <input type="text" className="form-control" placeholder="Buscar por nombre del producto" />
-            </form>
-          </div>
-        </div>
-
-        <div className="container">
-          <div className="d-flex align-items-center justify-content-between">
-            <div className="logo">
-              <div className="site-logo">
-                <a href="index.html" className="js-logo-clone">
-                  <strong className="text-primary">DISPENSARIO MEDICO</strong> "EL CAJON"
-                </a>
-              </div>
-            </div>
-            <div className="main-nav d-none d-lg-block">
-              <nav className="site-navigation text-right text-md-center" role="navigation">
-                <ul className="site-menu js-clone-nav d-none d-lg-block">
-                  <li><a href="index.html">Inicio</a></li>
-                  <li className="active"><a href="shop.html">Inventario</a></li>
-                  <li className="has-children">
-                    <a href="#">Categoria</a>
-                    <ul className="dropdown">
-                      <li><a href="#">Medicamento</a></li>
-                      <li><a href="#">Suplemento</a></li>
-                      <li><a href="#">Material</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="about.html">Citas</a></li>
-                  <li><a href="contact.html">Pacientes</a></li>
-                </ul>
-              </nav>
-            </div>
-            <div className="icons">
-              <a href="#" className="icons-btn d-inline-block js-search-open"><span className="icon-search"></span></a>
-              <a href="#" className="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span className="icon-menu"></span></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="bg-light py-3">
         <div className="container">
           <div className="row">
