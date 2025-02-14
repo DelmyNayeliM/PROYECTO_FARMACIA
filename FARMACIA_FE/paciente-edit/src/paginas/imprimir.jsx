@@ -13,8 +13,11 @@ const Formulario = () => {
   };
 
   return (
-    <div className="form-group row">
-      <div className="col-lg-6">
+    <div className="site-wrap">
+      <div className="site-section">
+      <div className="container">
+      <div className="form-group">
+        <div className="col-md-12">
         <button
           type="submit"
           className="btn btn-primary btn-lg btn-block"
@@ -22,6 +25,9 @@ const Formulario = () => {
         >
         {'Imprimir Formulario'}
       </button>
+    </div>
+    </div>
+    </div>
     </div>
 </div>
   );

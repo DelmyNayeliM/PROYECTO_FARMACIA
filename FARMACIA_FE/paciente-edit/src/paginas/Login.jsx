@@ -3,10 +3,10 @@ import axios from 'axios';
 //import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [tipo_usuario, setTipo_usuario] = useState('');
-  const [nombre, setNombre] = useState('');
-  const [password, setPassword] = useState('');
-  //let navigate= useNavigate();
+const [tipo_usuario, setTipo_usuario] = useState('');
+const [nombre, setNombre] = useState('');
+const [password, setPassword] = useState('');
+//const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,20 +16,21 @@ const Login = () => {
         const response = await axios.post("http://localhost:3007/Login", {
             tipo_usuario: tipo_usuario,
             nombre: nombre,  
-            contraseña: password
-        });
-        console.log(response.data);
-    } catch (error) {
-      console.error('Error al ingresar', error);
-      alert('Hubo un error en el login. Inténtelo nuevamente.');
-    }
-};
-  return (
-    <div className="site-wrap">
-      <div className="site-section"></div>
-    <div className="container">
-      <div className="login-container mt-4">
-        <div className="login-header">
+            password: password
+          });
+          console.log(response.data);
+          // Redirigir a una página tras el login exitoso
+          //navigate("/form_paciente");  // O la ruta que prefieras
+      } catch (error) {
+        console.error('Error al ingresar', error);
+        alert(`Hubo un error en el login: ${error.response?.data?.mensaje || 'Inténtelo nuevamente.'}`);
+      }
+    };
+return (
+  <div className="site-wrap d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+   
+      <div className="login-container mt-4 p-4 border rounded shadow-sm" style={{ maxWidth: '400px', width: '100%' }}>
+        <div className="login-header text-center mb-4">
           <h2>Login</h2>
         </div>
         <form onSubmit={handleSubmit}>
@@ -42,10 +43,9 @@ const Login = () => {
               placeholder="(Administrador o Medico)"
               value={tipo_usuario}
               onChange={(e) => setTipo_usuario(e.target.value)}
-
             />
           </div>
-        
+
           <div className="mb-3">
             <label htmlFor="nombre" className="form-label">Nombre del Usuario</label>
             <input
@@ -72,13 +72,11 @@ const Login = () => {
             />
           </div>
 
-        
           <button type="submit" className="btn btn-primary w-100">Ingresar</button>
         </form>
       </div>
     </div>
-</div>
-  );
-};
+);
+}
 
 export default Login;

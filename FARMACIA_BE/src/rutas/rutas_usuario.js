@@ -36,6 +36,7 @@ rutas.post('/guardar',
         .optional()
         .isIn(['administrador', 'medico'])
         .withMessage('El tipo de usuario debe ser "administrador" o "medico"'),
+        
     controladorUsuario.guardar
 );
 
