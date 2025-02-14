@@ -1,82 +1,113 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-//import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-const Login = () => {
-const [tipo_usuario, setTipo_usuario] = useState('');
-const [nombre, setNombre] = useState('');
-const [password, setPassword] = useState('');
-//const navigate = useNavigate();
+const LoginForm = () => {
+  const [tipo_usuario, setTipo_usuario] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log({ tipo_usuario, nombre, password });
- 
-    try {
-        const response = await axios.post("http://localhost:3007/Login", {
-            tipo_usuario: tipo_usuario,
-            nombre: nombre,  
-            password: password
-          });
-          console.log(response.data);
-          // Redirigir a una página tras el login exitoso
-          //navigate("/form_paciente");  // O la ruta que prefieras
-      } catch (error) {
-        console.error('Error al ingresar', error);
-        alert(`Hubo un error en el login: ${error.response?.data?.mensaje || 'Inténtelo nuevamente.'}`);
-      }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const userData = {
+      tipo_usuario,
+      nombre,
+      password,
     };
-return (
-  <div className="site-wrap d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-   
-      <div className="login-container mt-4 p-4 border rounded shadow-sm" style={{ maxWidth: '400px', width: '100%' }}>
-        <div className="login-header text-center mb-4">
-          <h2>Login</h2>
+
+    try {
+      const response = await fetch('http://localhost:3003/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Credenciales incorrectas o error en la API');
+      }
+
+      const data = await response.json();
+
+      // Suponiendo que la respuesta incluye un campo "token" o algo que identifique el login exitoso
+      if (data.token) {
+        // Guardar el token o redirigir al usuario
+        console.log('Login exitoso!', data.token);
+        // Redirige a la página principal o a la siguiente sección
+      } else {
+        throw new Error('No se pudo iniciar sesión');
+      }
+    } catch (err) {
+      console.error('Error durante el login:', err);
+      setError(err.message); // Mostrar el error en la interfaz
+    } finally {
+      setLoading(false); // Termina el estado de carga
+    }
+  };
+
+  return (
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-4">
+            <div className="card p-4 shadow-sm">
+              <div className="card-body">
+                <h3 className="text-center mb-4">Login</h3>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="tipo_usuario" className="form-label">Tipo de Usuario</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="tipo_usuario"
+                      placeholder="(Administrador o Medico)"
+                      value={tipo_usuario}
+                      onChange={(e) => setTipo_usuario(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="nombre" className="form-label">Nombre del Usuario</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="nombre"
+                      placeholder="Ingrese su nombre"
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Contraseña</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="password"
+                      placeholder="Ingrese su contraseña (min 8 caracteres)"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                    {loading ? 'Cargando...' : 'Ingresar'}
+                  </button>
+                </form>
+                {error && <div className="alert alert-danger mt-3">{error}</div>}
+              </div>
+            </div>
+          </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="tipo_usuario" className="form-label">Tipo de Usuario</label>
-            <input
-              type="text"
-              className="form-control"
-              id="tipo_usuario"
-              placeholder="(Administrador o Medico)"
-              value={tipo_usuario}
-              onChange={(e) => setTipo_usuario(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="nombre" className="form-label">Nombre del Usuario</label>
-            <input
-              type="text"
-              className="form-control"
-              id="nombre"
-              placeholder="Ingrese su nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Contraseña</label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              placeholder="Ingrese su contraseña (min 8 caracteres)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-100">Ingresar</button>
-        </form>
       </div>
     </div>
-);
-}
+  );
+};
 
-export default Login;
+export default LoginForm;
