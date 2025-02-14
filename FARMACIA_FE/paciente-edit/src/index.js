@@ -21,6 +21,7 @@ import Acercade from './paginas/acercade';
 import Login from './paginas/Login';
 import Navbar from './plantilla/navbar';
 import Formulario from './paginas/imprimir';
+import Home from './plantilla/home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -28,13 +29,17 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>  
       <div>
+      <Home />
         <Login />
         <Navbar />
-            <Formulariopaciente />
-            <FormularioRegistro />
-            <Form_medicamento />
-            <Formulariocitas />
-            <Inventario />
+          <Formulariopaciente />
+        <Navbar />
+          <FormularioRegistro />
+        <Navbar />
+          <Form_medicamento />
+        <Navbar />
+          <Formulariocitas />
+        <Inventario />
         <Acercade />
         <Formulario />
       </div>
