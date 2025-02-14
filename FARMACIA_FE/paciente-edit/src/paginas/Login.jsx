@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const LoginForm = () => {
   const [tipo_usuario, setTipo_usuario] = useState('');
@@ -31,16 +31,7 @@ const LoginForm = () => {
         throw new Error('Credenciales incorrectas o error en la API');
       }
 
-      const data = await response.json();
-
-      // Suponiendo que la respuesta incluye un campo "token" o algo que identifique el login exitoso
-      if (data.token) {
-        // Guardar el token o redirigir al usuario
-        console.log('Login exitoso!', data.token);
-        // Redirige a la página principal o a la siguiente sección
-      } else {
-        throw new Error('No se pudo iniciar sesión');
-      }
+      const data = await response.json();  
     } catch (err) {
       console.error('Error durante el login:', err);
       setError(err.message); // Mostrar el error en la interfaz
