@@ -15,7 +15,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
   const [correo, setCorreo] = useState('');
   const [enfermedad_base, setEnfermedad] = useState('');
   const [id, setId] = useState('');
-  const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
+  const [fotoPreview, setFotoPreview] = useState(null); 
 
   useEffect(() => {
     if (pacienteEditado) {
@@ -34,7 +34,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
     }
   }, [pacienteEditado]);
 
-  // Función para manejar la subida de la foto del paciente
   const handleFileUpload = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -48,29 +47,28 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       return response.data.imageUrl;
     } catch (error) {
       console.error('Error al subir la imagen', error);
-      return null;  // Devuelve null si no se pudo cargar la imagen
+      return null;  
     }
   };
 
-  // Función para manejar el cambio en el archivo de la foto y generar la vista previa
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFoto_paciente(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFotoPreview(reader.result); // Establecer la URL de la imagen para la vista previa
+        setFotoPreview(reader.result); 
       };
       reader.readAsDataURL(file);
     } else {
-      setFotoPreview(null); // Limpiar la vista previa si no hay archivo
+      setFotoPreview(null); 
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verificar que todos los campos estén completos
     if (
       tipo_paciente === '' ||
       tipo_empleado === '' ||
@@ -86,8 +84,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       alert('Por favor, complete todos los campos');
       return;
     }
-
-    // Subir la foto del paciente si es necesario
     let fotoPacienteUrl = foto_paciente;
     if (foto_paciente && typeof foto_paciente !== 'string') {
       fotoPacienteUrl = await handleFileUpload(foto_paciente);
@@ -100,7 +96,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
     try {
       let response;
       if (id) {
-        // Editar paciente existente
         response = await axios.put(`${pacienteeditar}/${id}`, {
           tipo_paciente,
           tipo_empleado,
@@ -115,7 +110,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
           enfermedad_base,
         });
       } else {
-        // Guardar un nuevo paciente
         response = await axios.post(pacienteguardar, {
           tipo_paciente,
           tipo_empleado,
@@ -131,11 +125,9 @@ const Formulariopaciente = ({ pacienteEditado }) => {
         });
       }
 
-      // Respuesta exitosa
       console.log(response.data);
       alert('Paciente guardado exitosamente');
       
-      // Limpiar los campos después de guardar
       setTipo_paciente('');
       setTipo_empleado('');
       setNombre_completo('');
@@ -147,10 +139,10 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       setDireccion('');
       setCorreo('');
       setEnfermedad('');
-      setFotoPreview(null);  // Limpiar la vista previa de la foto
+      setFotoPreview(null);  
     } catch (error) {
       console.error('Error al guardar el paciente', error);
-      alert('Hubo un error al guardar el paciente. Inténtelo nuevamente.');
+      alert('Hubo un error al realizar su accion. Inténtelo nuevamente.');
     }
   };
 
@@ -167,6 +159,8 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       <p><strong>Dirección:</strong> ${direccion}</p>
       <p><strong>Correo:</strong> ${correo}</p>
       <p><strong>Enfermedad Base:</strong> ${enfermedad_base}</p>
+      <p><strong>Foto del Paciente:</strong></p>
+      <img src="${foto_paciente}" alt="Foto del Paciente" style="max-width: 300px; max-height: 300px;"/>
     `;
     
     const ventana = window.open('', '', 'height=600,width=800');
@@ -176,6 +170,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
     ventana.document.close();
     ventana.print();
   };
+  
 
   return (
     <div className="site-wrap">
@@ -263,7 +258,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
                   </div>
 
-                  {/* Aquí se muestra la vista previa de la foto si existe */}
                   {fotoPreview && (
                     <div className="form-group row">
                       <div className="col-md-12">
@@ -340,11 +334,23 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                   </div>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-primary">Guardar</button>
+                  <div className="row">
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Paciente</button>
+                    </div>
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Paciente</button>
+                    </div>
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Paciente</button>
+                    </div>
                   </div>
+                </div>
 
                   <div className="form-group">
-                    <button type="button" className="btn btn-secondary" onClick={imprimirFormulario}>Imprimir Datos</button>
+                  <div className="col-md-12">
+                    <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>
+                  </div>
                   </div>
                 </div>
               </form>

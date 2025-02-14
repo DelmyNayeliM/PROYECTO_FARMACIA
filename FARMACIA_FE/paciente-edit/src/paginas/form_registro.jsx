@@ -142,24 +142,19 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                     </div>
                   </div>
 
-                  <div className="form-group row">
-                    <div className="col-lg-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">
-                        {id ? 'Editar Medicamento' : 'Guardar Medicamento'}
-                      </button>
+                  <div className="form-group">
+                  <div className="row">
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Medicamento</button>
                     </div>
-                    {id && (
-                      <div className="col-lg-4">
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-lg btn-block"
-                          onClick={handleEliminar}
-                        >
-                          Eliminar Medicamento
-                        </button>
-                      </div>
-                    )}
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Medicamento</button>
+                    </div>
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Medicamento</button>
+                    </div>
                   </div>
+                </div>
                 </div>
               </form>
             </div>
