@@ -209,7 +209,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
 
                   <div className="form-group row">
                     <div className="col-md-6">
-                      <label htmlFor="nombre_completo">Nombre Completo:</label>
+                      <label className="text-black" htmlFor="nombre_completo">Nombre Completo:</label>
                       <input
                         type="text"
                         className="form-control"
@@ -221,7 +221,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label htmlFor="clave_empleado">Clave del Empleado:</label>
+                      <label className="text-black" htmlFor="clave_empleado">Clave del Empleado:</label>
                       <input
                         type="text"
                         className="form-control"
@@ -235,7 +235,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
 
                   <div className="form-group row">
                     <div className="col-md-6">
-                      <label htmlFor="clave_expediente">Clave del Expediente:</label>
+                      <label className="text-black"  htmlFor="clave_expediente">Clave del Expediente:</label>
                       <input
                         type="text"
                         className="form-control"
@@ -247,7 +247,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label htmlFor="foto_paciente">Foto del Paciente:</label>
+                      <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
                       <input
                         type="file"
                         className="form-control"
@@ -269,7 +269,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
 
                   <div className="form-group row">
                     <div className="col-md-6">
-                      <label htmlFor="telefono">Teléfono:</label>
+                      <label className="text-black" htmlFor="telefono">Teléfono:</label>
                       <input
                         type="tel"
                         className="form-control"
@@ -281,7 +281,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label htmlFor="edad">Edad:</label>
+                      <label  className="text-black" htmlFor="edad">Edad:</label>
                       <input
                         type="number"
                         className="form-control"
@@ -295,7 +295,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
 
                   <div className="form-group row">
                     <div className="col-md-6">
-                      <label htmlFor="direccion">Dirección:</label>
+                      <label className="text-black" htmlFor="direccion">Dirección:</label>
                       <input
                         type="text"
                         className="form-control"
@@ -307,7 +307,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label htmlFor="correo">Correo:</label>
+                      <label className="text-black" htmlFor="correo">Correo:</label>
                       <input
                         type="email"
                         className="form-control"
@@ -321,7 +321,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
 
                   <div className="form-group row">
                     <div className="col-md-12">
-                      <label htmlFor="enfermedad_base">Enfermedad Base:</label>
+                      <label className="text-black" htmlFor="enfermedad_base">Enfermedad Base:</label>
                       <input
                         type="text"
                         className="form-control"

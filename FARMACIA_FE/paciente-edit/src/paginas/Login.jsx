@@ -34,9 +34,9 @@ const LoginForm = () => {
       const data = await response.json();  
     } catch (err) {
       console.error('Error durante el login:', err);
-      setError(err.message); // Mostrar el error en la interfaz
+      setError(err.message); 
     } finally {
-      setLoading(false); // Termina el estado de carga
+      setLoading(false); 
     }
   };
 
@@ -80,7 +80,7 @@ const LoginForm = () => {
                       type="password"
                       className="form-control"
                       id="password"
-                      placeholder="Ingrese su contraseña (min 8 caracteres)"
+                      placeholder="(min 8 caracteres)"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
