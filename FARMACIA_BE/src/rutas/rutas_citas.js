@@ -32,31 +32,23 @@ rutas.post('/guardar',
 );
 
 rutas.put('/editar',
-    query("id")
+    body("id")
         .isInt()
-        .withMessage("El ID debe ser un número entero"),
-    
+        .withMessage("El ID debe ser un número entero")
+        .custom(async (value) => {
+            const citaExistente = await cita.findOne({
+                where: { id: value }
+            });
+            if (!citaExistente) {
+                throw new Error('La cita con el ID proporcionado no existe');
+            }
+        }),
+
     body("nombre_completo")
         .optional()
         .isLength({ min: 3, max: 50 })
-        .withMessage('El nombre debe tener entre 3 a 50 caracteres')
-        .custom(async (value, { req }) => {
-            if (!value) return true; // No validamos si no se envió un nuevo nombre
+        .withMessage('El nombre debe tener entre 3 a 50 caracteres'),
 
-            const pacienteId = parseInt(req.query.id, 10);
-            if (isNaN(pacienteId)) {
-                throw new Error("El ID del paciente es inválido");
-            }
-
-            const pacienteExistente = await paciente.findOne({
-                where: { nombre_completo: value, id: { [Op.ne]: pacienteId } }
-            });
-
-            if (pacienteExistente) {
-                throw new Error('El nombre del paciente ya existe');
-            }
-        }),
-    
     controladorcitas.editar
 );
 

@@ -138,8 +138,9 @@ const Formulariocitas = ({ citasEditado }) => {
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Citas</h2>
             </div>
             <div className="col-md-12">
+            <form onSubmit={handleSubmit}></form>
               <form action="#" method="post">
-                <div className="p-3 p-lg-5 border">
+                <div className="p-3 p-lg-5 border">                  
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="fecha_cita" className="text-black">

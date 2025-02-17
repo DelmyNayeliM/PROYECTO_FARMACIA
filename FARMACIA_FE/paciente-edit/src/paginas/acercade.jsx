@@ -17,72 +17,69 @@ const Acercade = () => {
         </div>
       </div>
 
-      <div className="container">
+      <div className="container py-5">
         <div className="row">
           <div className="col-lg-12 mx-auto align-self-center">
             <div className="site-block-cover-content text-center">
-              <h1 className="mb-0">Acerca del <strong className="text-primary">Dispensario</strong></h1>
-              <div className="row justify-content-center">
-                <div className="text-center">
-                  <p>El dispensario fue creado para retribuir un poco de lo mucho que hacen nuestros colaboradores todos los días.</p>
-                </div>
-              </div>
+              <h1 className="mb-4">Acerca del <strong className="text-primary">Dispensario</strong></h1>
+              <p className="lead">El dispensario fue creado para retribuir un poco de lo mucho que hacen nuestros colaboradores todos los días.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container">
-        <div className="row gx-4"> {/* gx-4 ajusta el espaciado entre columnas */}
-          <div className="col text-center">
+      <div className="container py-5">
+        <div className="row gy-4">
+          <div className="col-md-4 text-center">
             <h3 className="text-black">¿Quiénes se benefician?</h3>
-            <p>Nuestros colaboradores en primer lugar, ya sean permanentes o temporales, al igual que sus dependientes.</p>
+            <p className="no-space">Nuestros colaboradores en primer lugar, ya sean permanentes o temporales, al igual que sus dependientes.</p>
           </div>
-          <div className="col text-center">
+          <div className="col-md-4 text-center">
             <h3 className="text-black">Historia</h3>
-            <p>Nace a medida de las diferentes necesidades y accidentes que surgían entre los colaboradores, y cómo esto podría volver un riesgo para la planta.</p>
+            <p className="no-space">Nace a medida de las diferentes necesidades y accidentes que surgían entre los colaboradores, y cómo esto podría volver un riesgo para la planta.</p>
           </div>
-          <div className="col text-center">
+          <div className="col-md-4 text-center">
             <h3 className="text-black">Beneficiarios</h3>
-            <p>+ 200 trabajadores y sus familias son de los muchos que han gozado de este beneficio que otorga la empresa.</p>
+            <p className="no-space">+ 200 trabajadores y sus familias son de los muchos que han gozado de este beneficio que otorga la empresa.</p>
           </div>
         </div>
       </div>
 
-      <div className="container">
-        <div className="row justify-content-center mb-5">
-          <div className="title-section text-center col-md-7">
+      <div className="container py-5">
+        <div className="row justify-content-center mb-4">
+          <div className="title-section text-center col-md-8">
             <h2>Nuestros <strong className="text-primary">Médicos</strong></h2>
           </div>
         </div>
-        <div className="row gx-4"> {/* gx-4 ajusta el espaciado entre las columnas */}
-          <div className="col-md-6 mb-4">
+        <div className="row gy-4">
+          <div className="col-md-6 col-lg-4">
             <div className="block-38 text-center">
               <div className="block-38-header">
                 <h3 className="block-38-heading">1</h3>
                 <p className="block-38">Dr. Cristian Audatto Muñoz</p>
               </div>
               <div className="block-38-body">
-                <p>Egresado de la universidad:</p>
-                <p>Especialidad:</p>
+                <p className="no-space">Egresado de la universidad:</p>
+                <p className="no-space">Especialidad:</p>
               </div>
             </div>
           </div>
 
-          <div className="col-md-6 mb-4">
+          <div className="col-md-6 col-lg-4">
             <div className="text-center">
               <div className="block-38-header">
                 <h3 className="block-38-heading h4">2</h3>
                 <p className="block-38-subheading">Dr. Kevin Heney Llanes</p>
               </div>
               <div>
-                <p>Egresado de la universidad:</p>
-                <p>Especialidad:</p>
+                <p className="no-space">Egresado de la universidad:</p>
+                <p className="no-space">Especialidad:</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   );
 };
