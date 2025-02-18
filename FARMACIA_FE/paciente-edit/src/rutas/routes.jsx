@@ -6,13 +6,13 @@ import Formulariopaciente from './form_paciente';
 import Formulariocitas from './paginas/form_citas';
 import Acercade from '../paginas/acercade';
 import Navbar from '../plantilla/navbar';
-import Inicio from '../paginas/menu';
 import Tablero from '../paginas/tablero';
+import Inicioadmin from '../paginas/menu_admin';
 
 export const routers = createBrowserRouter(
     createRoutesFromElements(
     <Route element={<Navbar />}>
-        <Route path="/" element={<Inicio />} />
+        <Route path="/" element={<Inicioadmin />} />
         <Route path="/" element={<Navigate to="/medicamento" />} /> 
         <Route path="/medicamento" element={<Form_medicamento />} />
         <Route path="/Formulariopaciente" element={<Formulariopaciente />} />
