@@ -6,7 +6,7 @@ const Inicioadmin = () => {
     { title: 'Citas', path: '/form_citas' },
     { title: 'Pacientes', path: '/form_paciente' },
     { title: 'Inventario', path: '/tablero' },
-    { title: 'Medicamentos', path: '/form_registro'}
+    { title: 'Medicamentos', path: '/form_registro' }
   ];
 
   return (
@@ -14,10 +14,10 @@ const Inicioadmin = () => {
       <div className="pt-table desktop-768">
         <div className="container">
           <div className="row">
-            <div className="col-lg-offset-2">
+            <div className="col-lg-12">
               <div className="page-title home text-center"></div>
 
-              <div className="hexagon-menu clear">
+              <div className="hexagon-menu">
                 {menuItems.map((item, index) => (
                   <div className="hexagon-item" key={index}>
                     <div className="hex-item">
