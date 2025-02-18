@@ -8,9 +8,11 @@ import Acercade from '../paginas/acercade';
 import Navbar from '../plantilla/navbar';
 import Tablero from '../paginas/tablero';
 import Inicioadmin from '../paginas/menu_admin';
+import LoginForm from '../paginas/Login';
 
 export const routers = createBrowserRouter(
     createRoutesFromElements(
+    <Route element={<LoginForm />}>
     <Route element={<Navbar />}>
         <Route path="/" element={<Inicioadmin />} />
         <Route path="/" element={<Navigate to="/medicamento" />} /> 
@@ -19,6 +21,7 @@ export const routers = createBrowserRouter(
         <Route path="/Formulariocitas" element={<Formulariocitas />} />
         <Route path="/Acercade" element={<Acercade />} />
         <Route path="/Tablero" element={<Tablero />} />
+    </Route>
     </Route>
     )
 );
