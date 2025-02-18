@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { UsuarioContext } from '../configuraciones/usuario/Usuariocontext';
 
 const Navbar = () => {
   return (
@@ -22,21 +21,10 @@ const Navbar = () => {
                   <Link to="/">Inicio</Link>
                 </li>
                 <li>
-                  <Link to="/inventario">Inventario</Link>
+                  <Link to="/tablero">Inventario</Link>
                 </li>
-                <li className="has-children">
-                  <a href="#">Categoria</a>
-                  <ul className="dropdown">
-                    <li>
-                      <Link to="/inventario">Medicamentos</Link>
-                    </li>
-                    <li>
-                      <Link to="/inventario">Suplementos</Link>
-                    </li>
-                    <li>
-                      <Link to="/inventario">Material</Link>
-                    </li>
-                  </ul>
+                <li>
+                  <Link to="/form_registro">Medicamentos</Link>
                 </li>
                 <li>
                   <Link to="/form_citas">Citas</Link>
