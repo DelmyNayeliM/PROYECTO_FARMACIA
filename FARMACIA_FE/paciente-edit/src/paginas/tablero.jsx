@@ -1,53 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Tablero = () => {
+  const [sortOrder, setSortOrder] = useState('asc'); // Controlar el orden de la fecha
   const data = [
     {
-      id: 12,
       date: "1 Oct, 21",
       status: "Paid",
-      //customer: "Althan Travis",
       purchase: "Wirecard for figma",
       revenue: "$0.99",
-      //customerImg: "https://i.imgur.com/VKOeFyS.png",
     },
     {
-      id: 14,
       date: "12 Oct, 21",
       status: "Failed",
-      //customer: "Tomo arvis",
       purchase: "Altroz furry",
       revenue: "$0.19",
-      //customerImg: "https://i.imgur.com/nmnmfGv.png",
     },
     {
-      id: 17,
       date: "1 Nov, 21",
       status: "Paid",
-      //customer: "Althan Travis",
       purchase: "Apple Macbook air",
       revenue: "$1.99",
-      //customerImg: "https://i.imgur.com/VKOeFyS.png",
     },
     {
-      id: 90,
       date: "19 Oct, 21",
       status: "Paid",
-      //customer: "Travis head",
       purchase: "Apple Macbook Pro",
       revenue: "$9.99",
-      //customerImg: "https://i.imgur.com/VKOeFyS.png",
     },
     {
-      id: 12,
       date: "1 Oct, 21",
       status: "Paid",
-      //customer: "Althan Travis",
       purchase: "Wirecard for figma",
       revenue: "$0.99",
-      //customerImg: "https://i.imgur.com/nmnmfGv.png",
     }
   ];
+
+  // Función para ordenar la fecha
+  const sortedData = data.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    if (sortOrder === 'asc') {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  });
+
+  // Función para cambiar el orden
+  const toggleSortOrder = () => {
+    setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
+  };
 
   return (
     <div className="container mt-5 px-2">
@@ -58,10 +60,9 @@ const Tablero = () => {
           </span>
           <input className="form-control w-100" placeholder="Buscar por nombre" />
         </div>
-
-        <div className="px-2">
-          <i className="fa fa-ellipsis-h ms-3"></i>
-        </div>
+        <button className="btn btn-primary" onClick={toggleSortOrder}>
+          Ordenar por fecha ({sortOrder === 'asc' ? 'Ascendente' : 'Descendente'})
+        </button>
       </div>
 
       <div className="table-responsive">
@@ -71,23 +72,21 @@ const Tablero = () => {
               <th scope="col" width="5%">
                 <input className="form-check-input" type="checkbox" />
               </th>
-              <th scope="col" width="5%">#</th>
-              <th scope="col" width="10%">Fecha</th>
-              <th scope="col" width="10%">Estado</th>
-              <th scope="col" width="20%">Medicamento</th>
+              <th scope="col" width="10%" className="text-black">Fecha</th>
+              <th scope="col" width="10%" className="text-black">Estado</th>
+              <th scope="col" width="20%" className="text-black">Medicamento</th>
               <th scope="col" className="text-end" width="20%">
-                <span>Precio</span>
+                <span className="text-black">Precio</span>
               </th>
             </tr>
           </thead>
 
           <tbody>
-            {data.map((item, index) => (
+            {sortedData.map((item, index) => (
               <tr key={index}>
                 <th scope="row">
                   <input className="form-check-input" type="checkbox" />
                 </th>
-                <td>{item.id}</td>
                 <td>{item.date}</td>
                 <td>
                   <i className={`fa fa-${item.status === 'Paid' ? 'check-circle-o green' : 'dot-circle-o text-danger'}`}></i>
