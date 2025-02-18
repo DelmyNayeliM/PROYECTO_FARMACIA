@@ -1,17 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Inicio_admin = () => {
+const Inicioadmin = () => {
+  const menuItems = [
+    { title: 'Citas', path: '/form_citas' },
+    { title: 'Pacientes', path: '/form_paciente' },
+    { title: 'Inventario', path: '/tablero' },
+    { title: 'Medicamentos', path: '/form_registro'}
+  ];
+
   return (
     <main className="site-wrapper">
       <div className="pt-table desktop-768">
         <div className="container">
-          <div className="row justify-content-center"> 
-            <div className="col-lg-8"> 
-              <div className="page-title home text-center">
-              </div>
+          <div className="row">
+            <div className="col-lg-offset-2">
+              <div className="page-title home text-center"></div>
 
-              <div className="hexagon-menu clear d-flex justify-content-center flex-wrap"> 
-                {['citas', 'PACIENTES', 'inventario', 'MEDICAMENTOS'].map((title, index) => (
+              <div className="hexagon-menu clear">
+                {menuItems.map((item, index) => (
                   <div className="hexagon-item" key={index}>
                     <div className="hex-item">
                       <div></div>
@@ -23,11 +30,11 @@ const Inicio_admin = () => {
                       <div></div>
                       <div></div>
                     </div>
-                    <a className="hex-content">
-                      <span className="hex-content-inner">
-                        <span className="title">{title}</span>
+                    <Link to={item.path} className="hex-content">
+                      <span className="hex-content-inner text-black">
+                        <span className="title">{item.title}</span>
                       </span>
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -39,4 +46,4 @@ const Inicio_admin = () => {
   );
 };
 
-export default Inicio_admin;
+export default Inicioadmin;
