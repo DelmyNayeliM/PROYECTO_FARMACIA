@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Tablero = () => {
-  const [sortOrder, setSortOrder] = useState('asc'); // Controlar el orden de la categoría
+  const [sortOrder, setSortOrder] = useState('sup'); // Controlar el orden de la categoría
   const data = [
     {
       category: "Figma",
@@ -40,7 +40,7 @@ const Tablero = () => {
     if (sortOrder === 'asc') {
       return a.category.localeCompare(b.category); // Orden ascendente
     } else {
-      return b.category.localeCompare(a.category); // Orden descendente
+      return b.category.localeCompare(a.category); // Orden 
     }
   });
 
@@ -58,9 +58,6 @@ const Tablero = () => {
           </span>
           <input className="form-control w-100" placeholder="Buscar por nombre" />
         </div>
-        <button className="btn btn-primary" onClick={toggleSortOrder}>
-          Ordenar por categoría ({sortOrder === 'sup' ? 'Suplemento' : 'Medicamento'})
-        </button>
       </div>
 
       <div className="table-responsive">
