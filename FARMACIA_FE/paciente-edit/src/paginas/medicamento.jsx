@@ -1,33 +1,41 @@
-const form_medicamento = () => {
+import React, { useState } from 'react';
+
+const FormMedicamento = () => {
+  const [cantidad, setCantidad] = useState(10);
+
+  const incrementar = () => setCantidad(cantidad + 1);
+  const disminuir = () => setCantidad(cantidad > 1 ? cantidad - 1 : 1); // No dejar que sea menor que 1
+
   return (
     <div className="site-wrap">
-
       <div className="bg-light py-3">
         <div className="container">
-          <div className="row">
-            <div className="col-md-12 mb-0"><a href="index.html">Inicio</a> <span className="mx-2 mb-0">/</span> <a href="shop.html">Medicamentos</a> <span className="mx-2 mb-0">/</span> <strong className="text-black">Ibuprofen Tablets, 200mg</strong></div>
-          </div>
+          <div className="row"></div>
         </div>
       </div>
 
       <div className="site-section">
         <div className="container">
           <div className="row">
-            <div className=""></div>
             <div className="col-md-6">
               <h2 className="text-black">Ibuprofen Tablets, 200mg</h2>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, vitae, explicabo? Incidunt facere, natus soluta dolores iusto! Molestiae expedita veritatis nesciunt doloremque sint asperiores fuga voluptas, distinctio, aperiam, ratione dolore.</p>
-
               <strong className="text-primary h4">L.55.00</strong>
 
               <div className="mb-5">
                 <div className="input-group mb-3" style={{ maxWidth: '220px' }}>
                   <div className="input-group-prepend">
-                    <button className="btn btn-outline-primary js-btn-minus" type="button"> &minus;</button>
+                    <button className="btn btn-outline-primary" type="button" onClick={disminuir}> &minus;</button>
                   </div>
-                  <input type="text" className="form-control text-center" value="10" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
+                  <input
+                    type="text"
+                    className="form-control text-center"
+                    value={cantidad}
+                    onChange={() => {}}
+                    aria-label="Cantidad de medicamento"
+                  />
                   <div className="input-group-append">
-                    <button className="btn btn-outline-primary js-btn-plus" type="button">+</button>
+                    <button className="btn btn-outline-primary" type="button" onClick={incrementar}>+</button>
                   </div>
                 </div>
               </div>
@@ -53,11 +61,11 @@ const form_medicamento = () => {
                           <td>Pain Management: Acetaminophen PM Extra-Strength Caplets, 500 mg, 100/Bottle</td>
                         </tr>
                         <tr>
-                          <th scope="row">OTC022401</th>
+                          <th scope="row">OTC022402</th>
                           <td>Pain Management: Acetaminophen PM Extra-Strength Caplets, 500 mg, 100/Bottle</td>
                         </tr>
                         <tr>
-                          <th scope="row">OTC022401</th>
+                          <th scope="row">OTC022403</th>
                           <td>Pain Management: Acetaminophen PM Extra-Strength Caplets, 500 mg, 100/Bottle</td>
                         </tr>
                       </tbody>
@@ -73,4 +81,4 @@ const form_medicamento = () => {
   );
 }
 
-export default form_medicamento;
+export default FormMedicamento;

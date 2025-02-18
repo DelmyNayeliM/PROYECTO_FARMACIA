@@ -40,6 +40,7 @@ root.render(
           <Tablero />
         <Acercade />
         <Formulario />
+        <Form_medicamento />
       </div>
     </BrowserRouter>
   </React.StrictMode>

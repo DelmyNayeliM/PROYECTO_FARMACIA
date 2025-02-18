@@ -4,43 +4,43 @@ const Tablero = () => {
   const [sortOrder, setSortOrder] = useState('sup'); // Controlar el orden de la categoría
   const data = [
     {
-      category: "Figma",
+      categoria: "Figma",
       status: "Paid",
-      description: "Wirecard for figma",
-      revenue: "$0.99",
+      nombre_medicamento: "Wirecard for figma",
+      precio: "$0.99",
     },
     {
-      category: "Car",
+      categoria: "Car",
       status: "Failed",
-      description: "Altroz furry",
-      revenue: "$0.19",
+      nombre_medicamento: "Altroz furry",
+      precio: "$0.19",
     },
     {
-      category: "Tech",
+      categoria: "Tech",
       status: "Paid",
-      description: "Apple Macbook air",
-      revenue: "$1.99",
+      nombre_medicamento: "Apple Macbook air",
+      precio: "$1.99",
     },
     {
-      category: "Tech",
+      categoria: "Tech",
       status: "Paid",
-      description: "Apple Macbook Pro",
-      revenue: "$9.99",
+      nombre_medicamento: "Apple Macbook Pro",
+      precio: "$9.99",
     },
     {
-      category: "Figma",
+      categoria: "Figma",
       status: "Paid",
-      description: "Wirecard for figma",
-      revenue: "$0.99",
+      nombre_medicamento: "Wirecard for figma",
+      precio: "$0.99",
     }
   ];
 
-  // Función para ordenar por categoría
+  // Función para ordenar por categoria
   const sortedData = data.sort((a, b) => {
     if (sortOrder === 'asc') {
-      return a.category.localeCompare(b.category); // Orden ascendente
+      return a.categoria.localeCompare(b.categoria); // Orden ascendente
     } else {
-      return b.category.localeCompare(a.category); // Orden 
+      return b.categoria.localeCompare(a.categoria); // Orden descendente
     }
   });
 
@@ -69,7 +69,7 @@ const Tablero = () => {
               </th>
               <th scope="col" width="10%" className="text-black">Categoría</th>
               <th scope="col" width="10%" className="text-black">Estado</th>
-              <th scope="col" width="20%" className="text-black">Descripción</th>
+              <th scope="col" width="20%" className="text-black">Nombre del Medicamento</th>
               <th scope="col" className="text-end" width="20%">
                 <span className="text-black">Precio</span>
               </th>
@@ -82,14 +82,14 @@ const Tablero = () => {
                 <th scope="row">
                   <input className="form-check-input" type="checkbox" />
                 </th>
-                <td>{item.category}</td>
+                <td>{item.categoria}</td>
                 <td>
                   <i className={`fa fa-${item.status === 'Paid' ? 'check-circle-o green' : 'dot-circle-o text-danger'}`}></i>
                   <span className="ms-1">{item.status}</span>
                 </td>
-                <td>{item.description}</td>
+                <td>{item.nombre_medicamento}</td>
                 <td className="text-end">
-                  <span className="fw-bolder">{item.revenue}</span> <i className="fa fa-ellipsis-h ms-2"></i>
+                  <span className="fw-bolder">{item.precio}</span> <i className="fa fa-ellipsis-h ms-2"></i>
                 </td>
               </tr>
             ))}
