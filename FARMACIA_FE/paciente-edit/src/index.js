@@ -24,6 +24,7 @@ import Inicio from './paginas/menu';
 import Tablero from './paginas/tablero';
 import FormularioRegistro from './paginas/form_registro'
 import Inicioadmin from './paginas/menu_admin';
+import LoginForm from './paginas/Login';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -34,7 +35,7 @@ root.render(
         <Navbar />
         <Routes>
           <Route path="/" element={<Inicioadmin />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/medicamento" element={<Form_medicamento />} />
           <Route path="/form_paciente" element={<Formulariopaciente />} />
           <Route path="/form_citas" element={<Formulariocitas />} />
