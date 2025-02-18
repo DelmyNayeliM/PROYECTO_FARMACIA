@@ -159,8 +159,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       <p><strong>Dirección:</strong> ${direccion}</p>
       <p><strong>Correo:</strong> ${correo}</p>
       <p><strong>Enfermedad Base:</strong> ${enfermedad_base}</p>
-      <p><strong>Foto del Paciente:</strong></p>
-      <img src="${foto_paciente}" alt="Foto del Paciente" style="max-width: 300px; max-height: 300px;"/>
     `;
     
     const ventana = window.open('', '', 'height=600,width=800');
