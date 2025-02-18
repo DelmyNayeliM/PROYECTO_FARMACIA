@@ -547,4 +547,8 @@ body {
       transform: rotate(30deg) translate(0px, 0px);
   }
     
+  .hex-content-inner .title {
+    color: black !important;
+  }
+  
   }
