@@ -9,12 +9,11 @@ const path = require('path');
 const cors = require('cors');
 
 const corsOptions = {
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:3000',  // Origen permitido
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,  
 };
-
 const app = express();
 
 // Middleware para procesar JSON en solicitudes

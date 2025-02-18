@@ -22,6 +22,7 @@ import Login from './paginas/Login';
 import Navbar from './plantilla/navbar';
 import Formulario from './paginas/imprimir';
 import Inicio from './paginas/menu';
+import Tablero from './paginas/tablero';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -36,6 +37,7 @@ root.render(
           <Formulariopaciente />
         <Navbar />
           <Formulariocitas />
+          <Tablero />
         <Acercade />
         <Formulario />
       </div>

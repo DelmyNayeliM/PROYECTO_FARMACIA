@@ -7,6 +7,7 @@ import Formulariocitas from './paginas/form_citas';
 import Acercade from '../paginas/acercade';
 import Navbar from '../plantilla/navbar';
 import Inicio from '../paginas/menu';
+import Tablero from '../paginas/tablero';
 
 
 export const routers = createBrowserRouter(
@@ -18,6 +19,7 @@ export const routers = createBrowserRouter(
             <Route path='/Formulariopaciente' element={<Formulariopaciente />} />
             <Route path='/Formulariocitas' element={<Formulariocitas />} />
             <Route path='/Acercade' element={<Acercade />} />
+            <Route path='/Tablero' element={<Tablero />} />
         </Route>
         </Route>
     )
