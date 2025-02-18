@@ -1,2 +1,3 @@
 const cors = require('cors');
-app.use(cors()); // Permite solicitudes de cualquier origen
+app.use(cors({ origin: 'http://localhost:3000' })); 
+

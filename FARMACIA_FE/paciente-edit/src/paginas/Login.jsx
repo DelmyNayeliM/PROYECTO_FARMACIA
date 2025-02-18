@@ -11,34 +11,39 @@ const LoginForm = () => {
     event.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     const userData = {
       tipo_usuario,
       nombre,
       password,
     };
-
+  
     try {
-      const response = await fetch('http://localhost:3003/login', {
+      const response = await fetch('http://localhost:3003/inicio/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
       });
-
-      if (!response.ok) {
-        throw new Error('Credenciales incorrectas o error en la API');
-      }
-
+  
       const data = await response.json();  
+      if (response.ok) {
+        // Aquí puedes manejar lo que pasa si el login es exitoso
+        console.log('Login exitoso:', data);
+      } else {
+        // Si el response no es ok, mostrar el error que viene de la API
+        throw new Error(data.error || 'Credenciales incorrectas o error en la API');
+      }
     } catch (err) {
       console.error('Error durante el login:', err);
-      setError(err.message); 
+      setError(err.message);
     } finally {
       setLoading(false); 
     }
   };
+  
+
 
   return (
     <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
