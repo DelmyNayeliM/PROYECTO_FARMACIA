@@ -85,8 +85,6 @@ const Formulariocitas = ({ citasEditado }) => {
         });
       }
       console.log(response.data);
-      alert('Cita guardada exitosamente');
-   
     setFecha_cita('');
     setNombre_dr('');
     setNombre_paciente('');
@@ -98,7 +96,7 @@ const Formulariocitas = ({ citasEditado }) => {
     setReceta('');
     setObservaciones('');
     setNombre_medicamento('');
-
+    alert('Cita guardada exitosamente');
   }catch (error) {
       console.error('Error al guardar la cita', error);
       alert('Hubo un error al guardar la cita. Inténtelo nuevamente.');
@@ -150,6 +148,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="date"
                         className="form-control"
                         id="fecha_cita"
+                        name="fecha_cita"
                         value={fecha_cita}
                         onChange={(e) => setFecha_cita(e.target.value)}
                       />
@@ -163,6 +162,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="nombre_dr"
+                        name="nombre_dr"
                         value={nombre_dr}
                         onChange={(e) => setNombre_dr(e.target.value)}
                       />
@@ -178,6 +178,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="nombre_paciente"
+                        name="nombre_paciente"
                         value={nombre_paciente}
                         onChange={(e) => setNombre_paciente(e.target.value)}
                       />
@@ -193,6 +194,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="presion"
+                        name="presion"
                         value={presion}
                         onChange={(e) => setPresion(e.target.value)}
                       />
@@ -206,12 +208,12 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="peso"
+                        name="peso"
                         value={peso}
                         onChange={(e) => setPeso(e.target.value)}
                       />
                     </div>
                   </div>
-
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="ritmo_cardiaco" className="text-black">
@@ -221,6 +223,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="ritmo_cardiaco"
+                        name="ritmo_cardiaco"
                         value={ritmo_cardiaco}
                         onChange={(e) => setRitmo_cardiaco(e.target.value)}
                       />
@@ -234,6 +237,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="temperatura"
+                        name="temperatura"
                         value={temperatura}
                         onChange={(e) => setTemperatura(e.target.value)}
                       />
@@ -248,6 +252,7 @@ const Formulariocitas = ({ citasEditado }) => {
                       <textarea
                         className="form-control"
                         id="sintomas"
+                        name="sintomas"
                         value={sintomas}
                         onChange={(e) => setSintomas(e.target.value)}
                       ></textarea>
@@ -262,6 +267,7 @@ const Formulariocitas = ({ citasEditado }) => {
                       <textarea
                         className="form-control"
                         id="receta"
+                        name="receta"
                         value={receta}
                         onChange={(e) => setReceta(e.target.value)}
                         rows="4"
@@ -277,6 +283,7 @@ const Formulariocitas = ({ citasEditado }) => {
                       <textarea
                         className="form-control"
                         id="observaciones"
+                        name="observaciones"
                         value={observaciones}
                         onChange={(e) => setObservaciones(e.target.value)}
                       ></textarea>
@@ -292,6 +299,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         type="text"
                         className="form-control"
                         id="nombre_medicamento"
+                        name="nombre_medicamento"
                         value={nombre_medicamento}
                         onChange={(e) => setNombre_medicamento(e.target.value)}
                       />
@@ -303,12 +311,14 @@ const Formulariocitas = ({ citasEditado }) => {
                     <div className="col-md-4">
                       <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Cita</button>
                     </div>
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Cita</button>
-                    </div>
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Cita</button>
-                    </div>
+                    {
+                    //<div className="col-md-4">
+                     // <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Cita</button>
+                   // </div>
+                    //<div className="col-md-4">
+                    //  <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Cita</button>
+                   // </div>
+                    }
                   </div>
                 </div>
 

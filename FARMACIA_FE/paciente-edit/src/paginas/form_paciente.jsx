@@ -336,14 +336,15 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     <div className="col-md-4">
                       <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Paciente</button>
                     </div>
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Paciente</button>
-                    </div>
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Paciente</button>
-                    </div>
+                    {//<div className="col-md-4">
+                      //<button type="submit" className="btn btn-primary btn-lg btn-block">Editar Paciente</button>
+                    //</div>
+                    //<div className="col-md-4">
+                      //<button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Paciente</button>
+                    //</div>
+}
                   </div>
-                </div>
+              </div>
 
                   <div className="form-group">
                   <div className="col-md-12">
