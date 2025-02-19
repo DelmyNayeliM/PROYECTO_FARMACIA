@@ -49,7 +49,7 @@ const Formulariocitas = ({ citasEditado }) => {
       observaciones === '' ||
       nombre_medicamento === '' 
     ) {
-      alert('Por favor, complete todos los campos');
+      console.log('Por favor, complete todos los campos');
       return;
     }
 

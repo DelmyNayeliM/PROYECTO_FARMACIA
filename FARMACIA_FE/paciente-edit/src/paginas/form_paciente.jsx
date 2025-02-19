@@ -81,7 +81,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       correo === '' ||
       enfermedad_base === ''
     ) {
-      alert('Por favor, complete todos los campos');
+      console.log('Por favor, complete todos los campos');
       return;
     }
     let fotoPacienteUrl = foto_paciente;
@@ -125,9 +125,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
         });
       }
 
-      console.log(response.data);
-      alert('Paciente guardado exitosamente');
-      
+      console.log(response.data); 
       setTipo_paciente('');
       setTipo_empleado('');
       setNombre_completo('');
@@ -140,6 +138,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
       setCorreo('');
       setEnfermedad('');
       setFotoPreview(null);  
+      alert('Paciente guardado exitosamente');
     } catch (error) {
       console.error('Error al guardar el paciente', error);
       alert('Hubo un error al realizar su accion. Inténtelo nuevamente.');
@@ -170,8 +169,9 @@ const Formulariopaciente = ({ pacienteEditado }) => {
   };
   
 
+  
   return (
-    <div className="site-wrap">
+  <div className="site-wrap">
       <div className="site-section">
         <div className="container">
           <div className="row">
