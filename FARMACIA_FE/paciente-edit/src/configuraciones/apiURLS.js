@@ -14,3 +14,4 @@ export const citasguardar = Servidor + '/citas/guardar';
 export const citaseditar = Servidor + '/citas/editar';  
 export const citaseliminar = Servidor + '/citas/eliminar';  
 export const citaslistar = Servidor + '/citas/listar';  
+export const citasbuscar = Servidor + '/citas/buscar-citas';

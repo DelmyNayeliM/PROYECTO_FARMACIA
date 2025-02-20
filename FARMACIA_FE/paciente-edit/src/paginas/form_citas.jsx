@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { citasguardar, citaseditar } from '../configuraciones/apiURLS';
+import { citasguardar, citaseditar, citasbuscar } from '../configuraciones/apiURLS'; // Asegúrate de tener la URL de la búsqueda configurada
 
 const Formulariocitas = ({ citasEditado }) => {
   const [fecha_cita, setFecha_cita] = useState('');
@@ -15,6 +15,8 @@ const Formulariocitas = ({ citasEditado }) => {
   const [observaciones, setObservaciones] = useState('');
   const [nombre_medicamento, setNombre_medicamento] = useState('');
   const [id, setId] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
+  const [citasResultados, setCitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
   useEffect(() => {
     if (citasEditado) {
@@ -32,6 +34,33 @@ const Formulariocitas = ({ citasEditado }) => {
       setId(citasEditado.id);
     }
   }, [citasEditado]);
+
+  // Función para manejar la búsqueda
+  const handleSearchChange = async (e) => {
+    setSearchTerm(e.target.value);
+    try {
+      const response = await axios.get(`${citasbuscar}?query=${e.target.value}`);
+      setCitasResultados(response.data); // Asume que la API devuelve un array de resultados
+    } catch (error) {
+      console.error('Error al buscar citas', error);
+    }
+  };
+
+  // Función para seleccionar un registro de la búsqueda
+  const handleSelectCita = (cita) => {
+    setFecha_cita(cita.fecha_cita);
+    setNombre_dr(cita.nombre_dr);
+    setNombre_paciente(cita.nombre_paciente);
+    setPresion(cita.presion);
+    setPeso(cita.peso);
+    setRitmo_cardiaco(cita.ritmo_cardiaco);
+    setTemperatura(cita.temperatura);
+    setSintomas(cita.sintomas);
+    setReceta(cita.receta);
+    setObservaciones(cita.observaciones);
+    setNombre_medicamento(cita.nombre_medicamento);
+    setId(cita.id);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -136,9 +165,33 @@ const Formulariocitas = ({ citasEditado }) => {
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Citas</h2>
             </div>
+            
+            {/* Barra de búsqueda */}
+            <div className="col-md-12">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar cita por nombre de paciente o doctor"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <ul className="list-group">
+                {citasResultados.map((cita) => (
+                  <li
+                    key={cita.id}
+                    className="list-group-item"
+                    onClick={() => handleSelectCita(cita)}
+                  >
+                    {cita.nombre_paciente} - {cita.nombre_dr}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Formulario de cita */}
             <div className="col-md-12">
               <form onSubmit={handleSubmit}>
-                <div className="p-3 p-lg-5 border">                   
+                <div className="p-3 p-lg-5 border">
                   {/* Campos del formulario */}
                   <div className="form-group row">
                     <div className="col-md-6">
@@ -154,8 +207,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         onChange={(e) => setFecha_cita(e.target.value)}
                       />
                     </div>
-
-                    <div className="col-md-12">
+                    <div className="col-md-6">
                       <label htmlFor="nombre_dr" className="text-black">
                         Nombre del Doctor: <span className="text-danger">*</span>
                       </label>
