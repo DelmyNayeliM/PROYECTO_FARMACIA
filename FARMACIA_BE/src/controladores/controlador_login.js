@@ -1,30 +1,34 @@
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const usuarios = require('../modelos/usuarios');
+
+// Ruta de login
 exports.login = async (req, res) => {
     const { nombre, password } = req.body;
 
-    console.log('Intentando iniciar sesión con usuario:', nombre); // Log para verificar
+    // Validación de los campos
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     try {
-        const buscarusuario = await usuario.findOne({
-            where: { nombre: nombre }
-        });
-
-        if (!buscarusuario) {
-            console.log("Usuario no encontrado");
-            return res.status(400).json({ error: "Usuario incorrecto" });
+        // Buscar al usuario por su nombre
+        const usuario = await usuarios.findOne({ where: { nombre } });
+        if (!usuario) {
+            return res.status(400).json({ mensaje: 'Usuario no encontrado' });
         }
 
-        console.log('Usuario encontrado:', buscarusuario); // Log de usuario encontrado
-
-        const passwordMatch = await bcrypt.compare(password, buscarusuario.password);
-        if (!passwordMatch) {
-            console.log("Contraseña incorrecta");
-            return res.status(400).json({ error: "Contraseña incorrecta" });
+        // Verificar la contraseña
+        const esValido = await usuario.verificarPassword(password); // Usa el método de verificar contraseña que agregamos en el modelo
+        if (!esValido) {
+            return res.status(400).json({ mensaje: 'Contraseña incorrecta' });
         }
 
-        console.log("Login exitoso");
-        return res.status(200).json({ mensaje: "Inicio de sesión exitoso", usuario: buscarusuario }); // Respuesta clara
+        // Si las credenciales son correctas, responder con un mensaje de éxito
+        res.status(200).json({ mensaje: 'Login exitoso' });
     } catch (error) {
-        console.error("Error en login:", error);
-        return res.status(500).json({ error: "Error interno del servidor" });
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error al intentar hacer login', error });
     }
 };

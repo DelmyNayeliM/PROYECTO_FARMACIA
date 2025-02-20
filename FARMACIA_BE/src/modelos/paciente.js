@@ -5,14 +5,14 @@ const Pacientes = db.define(
     'Paciente',
     {
         tipo_paciente: {
-            type: DataTypes.ENUM('trabajador', 'dependiente'),
+            type: DataTypes.ENUM('Trabajador', 'Dependiente'),
             allowNull: false,
-            defaultValue: 'trabajador',
+            defaultValue: 'Trabajador',
         },
         tipo_empleado: {
-            type: DataTypes.ENUM('temporal', 'permanente'),
+            type: DataTypes.ENUM('Temporal', 'Permanente'),
             allowNull: false,
-            defaultValue: 'permanente',
+            defaultValue: 'Permanente',
         },
         nombre_completo: {
             type: DataTypes.STRING(45),

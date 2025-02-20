@@ -4,8 +4,8 @@ const inventario = db.define(
     'inventario',
     {
         categoria: {
-            type: DataTypes.ENUM('medicamento', 'suplemento', 'material'),
-            defaultValue: 'medicamento',
+            type: DataTypes.ENUM('Medicamento', 'Suplemento', 'Material'),
+            defaultValue: 'Medicamento',
         },
         nombre_medicamento: {
             type: DataTypes.STRING(45),
