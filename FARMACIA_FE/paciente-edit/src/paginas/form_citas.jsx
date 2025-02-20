@@ -47,7 +47,7 @@ const Formulariocitas = ({ citasEditado }) => {
       sintomas === '' ||
       receta === '' ||
       observaciones === '' ||
-      nombre_medicamento === '' 
+      nombre_medicamento === ''
     ) {
       console.log('Por favor, complete todos los campos');
       return;
@@ -85,19 +85,20 @@ const Formulariocitas = ({ citasEditado }) => {
         });
       }
       console.log(response.data);
-    setFecha_cita('');
-    setNombre_dr('');
-    setNombre_paciente('');
-    setPresion('');
-    setPeso('');
-    setRitmo_cardiaco('');
-    setTemperatura('');
-    setSintomas('');
-    setReceta('');
-    setObservaciones('');
-    setNombre_medicamento('');
-    alert('Cita guardada exitosamente');
-  }catch (error) {
+      // Limpiar los campos después de guardar la cita
+      setFecha_cita('');
+      setNombre_dr('');
+      setNombre_paciente('');
+      setPresion('');
+      setPeso('');
+      setRitmo_cardiaco('');
+      setTemperatura('');
+      setSintomas('');
+      setReceta('');
+      setObservaciones('');
+      setNombre_medicamento('');
+      alert('Cita guardada exitosamente');
+    } catch (error) {
       console.error('Error al guardar la cita', error);
       alert('Hubo un error al guardar la cita. Inténtelo nuevamente.');
     }
@@ -136,9 +137,9 @@ const Formulariocitas = ({ citasEditado }) => {
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Citas</h2>
             </div>
             <div className="col-md-12">
-            <form onSubmit={handleSubmit}></form>
-              <form action="#" method="post">
-                <div className="p-3 p-lg-5 border">                  
+              <form onSubmit={handleSubmit}>
+                <div className="p-3 p-lg-5 border">                   
+                  {/* Campos del formulario */}
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="fecha_cita" className="text-black">
@@ -306,26 +307,16 @@ const Formulariocitas = ({ citasEditado }) => {
                     </div>
                   </div>
 
-                  <div className="form-group">
-                  <div className="row">
+                  <div className="form-group row">
                     <div className="col-md-4">
                       <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Cita</button>
                     </div>
-                    {
-                    //<div className="col-md-4">
-                     // <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Cita</button>
-                   // </div>
-                    //<div className="col-md-4">
-                    //  <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Cita</button>
-                   // </div>
-                    }
                   </div>
-                </div>
 
                   <div className="form-group">
-                  <div className="col-md-12">
-                    <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>
-                  </div>
+                    <div className="col-md-12">
+                      <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>
+                    </div>
                   </div>
                 </div>
               </form>
