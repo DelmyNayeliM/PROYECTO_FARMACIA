@@ -367,7 +367,14 @@ const Formulariocitas = ({ citasEditado }) => {
 
                   <div className="form-group">
                     <div className="col-md-12">
-                      <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>
+                    <div>
+                       <button 
+                        type="button" 
+                        className="btn btn-primary btn-lg btn-block" 
+                        onClick={imprimirFormulario}>
+                        Imprimir Datos
+                      </button>
+                    </div>
                     </div>
                   </div>
                 </div>
