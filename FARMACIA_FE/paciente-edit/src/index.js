@@ -25,6 +25,7 @@ import Tablero from './paginas/tablero';
 import FormularioRegistro from './paginas/form_registro'
 import Inicioadmin from './paginas/menu_admin';
 import LoginForm from './paginas/Login';
+import Tableropaciente from './paginas/tablero';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -43,6 +44,7 @@ root.render(
           <Route path="/tablero" element={<Tablero />} />
           <Route path="/formulario" element={<Formulario />} />
           <Route path="/form_registro" element={<FormularioRegistro />} />
+          <Route path="/tablero_paciente" element={<Tableropaciente />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -13,7 +13,7 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar un nuevo Inventario
 exports.guardar = async (req, res) => {
-    const { categoria, nombre_medicamento, descripcion, precio } = req.body;
+    const { categoria, nombre_medicamento, descripcion, precio, cantidad } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -32,7 +32,8 @@ exports.guardar = async (req, res) => {
             categoria, 
             nombre_medicamento, 
             descripcion, 
-            precio
+            precio,
+            cantidad
         });
 
         res.status(201).json(nuevoinventario);
@@ -93,6 +94,7 @@ exports.editar = async (req, res) => {
         inventario.nombre_medicamento = nombre_medicamento || inventario.nombre_medicamento;
         inventario.descripcion = descripcion || inventario.descripcion;
         inventario.precio = precio || inventario.precio;
+        inventario.cantidad = cantidad || inventario.cantidad
 
         // Guardar los cambios
         await inventario.save();

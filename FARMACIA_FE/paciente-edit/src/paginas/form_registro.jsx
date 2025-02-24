@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { medicamentoguardar, medicamentoeditar } from '../configuraciones/apiURLS';
+import { medicamentoguardar, medicamentoeditar, medicamentobuscarinve } from '../configuraciones/apiURLS';
 
 const FormularioRegistro = ({ medicamentoEditado }) => {
   const [categoria, setCategoria] = useState('');
   const [nombre_medicamento, setNombre_Medicamento] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
+  const [cantidad, setCantidad] = useState('');
   const [id, setId] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
+  const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
   // useEffect para llenar el formulario si se edita un medicamento
   useEffect(() => {
@@ -16,15 +19,39 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
       setNombre_Medicamento(medicamentoEditado.nombre_medicamento);
       setDescripcion(medicamentoEditado.descripcion);
       setPrecio(medicamentoEditado.precio);
+      setCantidad(medicamentoEditado.cantidad);
       setId(medicamentoEditado._id);
     }
   }, [medicamentoEditado]);
+
+
+   // Función para manejar la búsqueda
+   const handleSearchChange = async (e) => {
+    setSearchTerm(e.target.value);
+    try {
+      const response = await axios.get(`${medicamentobuscarinve}?query=${e.target.value}`);
+      setmedicamentosResultados(response.data); // Asume que la API devuelve un array de resultados
+    } catch (error) {
+      console.error('Error al buscar el medicamento', error);
+    }
+  };
+
+
+  // Función para seleccionar un registro de la búsqueda
+  const handleSelectmedicamento = (medicamento) => {
+    setCategoria(medicamento.categoria);
+    setNombre_Medicamento(medicamento.nombre_medicamento);
+    setDescripcion(medicamento.descripcion);
+    setPrecio(medicamento.precio);
+    setCantidad(medicamento.cantidad);
+    setId(medicamento.id);
+  };
 
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '') {
+    if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad=== '') {
       console.log('Por favor, complete todos los campos');
       return;
     }
@@ -37,6 +64,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
           nombre_medicamento,
           descripcion,
           precio,
+          cantidad,
         });
       } else {
         // Si no existe un id, se hace un POST para guardar un nuevo medicamento
@@ -45,6 +73,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
           nombre_medicamento,
           descripcion,
           precio,
+          cantidad,
         });
       }
 
@@ -53,6 +82,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
       setNombre_Medicamento('');
       setDescripcion('');
       setPrecio('');
+      setCantidad('');
       alert('Medicamento guardado exitosamente');
     } catch (error) {
       console.error('Error al guardar el medicamento', error);
@@ -80,6 +110,29 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Medicamentos</h2>
             </div>
+
+            {/* Barra de búsqueda */}
+              <div className="col-md-12">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar por nombre del medicamento"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <ul className="list-group">
+                {medicamentosResultados.map((medicamento) => (
+                  <li
+                    key={medicamento.id}
+                    className="list-group-item"
+                    onClick={() => handleSelectmedicamento(medicamento)}
+                  >
+                    {medicamento.nombre_medicamento} 
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <div className="col-md-12">
               <form onSubmit={handleSubmit}>
                 <div className="p-3 p-lg-5 border">
@@ -126,19 +179,33 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                     ></textarea>
                   </div>
 
-                  <div className="col-md-2">
+            
                   <div className="form-group row">
-                    <label htmlFor="precio" className="text-black">
-                      Precio: <span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="precio"
-                      name="precio"
-                      value={precio}
-                      onChange={(e) => setPrecio(e.target.value)}
-                    />
+                    <div className="col-md-6">
+                      <label htmlFor="precio" className="text-black">
+                        Precio: <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="precio"
+                        name="precio"
+                        value={precio}
+                        onChange={(e) => setPrecio(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="cantidad" className="text-black">
+                        Cantidad: <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="cantidad"
+                        name="cantidad"
+                        value={cantidad}
+                        onChange={(e) => setCantidad(e.target.value)}
+                      />
                     </div>
                   </div>
 

@@ -4,7 +4,7 @@ const inventario = db.define(
     'inventario',
     {
         categoria: {
-            type: DataTypes.ENUM('Medicamento', 'Suplemento', 'Material'),
+            type: DataTypes.ENUM('Medicamento', 'Analgesicos', 'Material'),
             defaultValue: 'Medicamento',
         },
         nombre_medicamento: {
@@ -18,11 +18,15 @@ const inventario = db.define(
             type: DataTypes.STRING(45),
             allowNull: false,
             validate: {
-                len: [10, 455],  // Descripción entre 10 y 455 caracteres
+                len: [10, 455],  // Descripción entre 10 y 45 caracteres
             }
         },
         precio: {
             type: DataTypes.DECIMAL(10, 2),  // Precio con hasta 2 decimales
+            allowNull: false
+        },
+        cantidad: {
+            type: DataTypes.STRING(20), 
             allowNull: false
         },
     },

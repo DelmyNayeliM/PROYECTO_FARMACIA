@@ -5,7 +5,6 @@ const Inicioadmin = () => {
   const menuItems = [
     { title: 'Citas', path: '/form_citas' },
     { title: 'Pacientes', path: '/form_paciente' },
-    { title: 'Inventario', path: '/tablero' },
     { title: 'Medicamentos', path: '/form_registro' }
   ];
 

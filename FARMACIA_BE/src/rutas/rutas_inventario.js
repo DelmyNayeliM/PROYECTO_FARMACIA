@@ -101,4 +101,38 @@ rutas.get('/buscar',
     }
 );
 
+// Ruta para buscar medicamentos
+rutas.get('/buscar-medicamentos', 
+    query("nombre_medicamento")
+        .isString()
+        .withMessage("El nombre del medicamento debe ser una cadena de caracteres")
+        .isLength({ min: 3 })
+        .withMessage("El nombre debe tener al menos 3 caracteres"),
+    async (req, res) => {
+        try {
+            const { nombre_medicamento } = req.query;
+
+            // Realizamos la búsqueda con LIKE (insensible a mayúsculas/minúsculas en MySQL)
+            const medicamentos = await Inventario.findAll({
+                where: where(
+                    fn('LOWER', col('nombre_medicamento')),
+                    'LIKE',
+                    `%${nombre_medicamento.toLowerCase()}%`
+                )
+            });
+
+            if (medicamentos.length === 0) {
+                return res.status(404).json({ message: "No se encontraron medicamentos con ese nombre" });
+            }
+
+            return res.status(200).json(medicamentos);
+        } catch (error) {
+            console.error("Error al buscar medicamento:", error); // Imprime el error
+            return res.status(500).json({ message: "Hubo un error al buscar el medicamento" });
+        }
+    }
+);
+
+
+
 module.exports = rutas;
