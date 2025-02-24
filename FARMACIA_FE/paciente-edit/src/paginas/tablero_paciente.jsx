@@ -3,8 +3,15 @@ import React, { useState, useEffect } from 'react';
 const TableroPaciente = () => {
   // Estado para el valor de búsqueda y los pacientes
   const [searchTerm, setSearchTerm] = useState('');
-  const [Paciente, setPacientes] = useState([]);
+  const [pacientes, setPacientes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [nombre_completo, setNombre_completo] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [edad, setEdad] = useState('');
+  const [direccion, setDireccion] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [foto_paciente, setFoto_paciente] = useState(null);
+  const [fotoPreview, setFotoPreview] = useState(null);
 
   // Función para manejar el cambio en la barra de búsqueda
   const handleSearchChange = (e) => {
@@ -33,6 +40,80 @@ const TableroPaciente = () => {
       setPacientes([]); // Limpiar en caso de error
     } finally {
       setLoading(false); // Terminar carga
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFoto_paciente(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFotoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFotoPreview(null);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      nombre_completo === '' ||
+      telefono === '' ||
+      edad === '' ||
+      direccion === '' ||
+      correo === ''
+    ) {
+      console.log('Por favor, complete todos los campos');
+      return;
+    }
+
+    try {
+      let fotoPacienteUrl = foto_paciente;
+      if (foto_paciente && typeof foto_paciente !== 'string') {
+        const formData = new FormData();
+        formData.append('file', foto_paciente);
+        const response = await fetch('/guardarImagenPaciente', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        fotoPacienteUrl = data.imageUrl;
+      }
+
+      const pacienteData = {
+        nombre_completo,
+        telefono,
+        edad,
+        direccion,
+        correo,
+        foto_paciente: fotoPacienteUrl,
+      };
+
+      const response = await fetch('http://localhost:3003/guardarPaciente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pacienteData),
+      });
+
+      if (response.ok) {
+        alert('Paciente registrado correctamente');
+        setNombre_completo('');
+        setTelefono('');
+        setEdad('');
+        setDireccion('');
+        setCorreo('');
+        setFoto_paciente(null);
+        setFotoPreview(null);
+      } else {
+        alert('Hubo un error al registrar el paciente');
+      }
+    } catch (error) {
+      console.error("Error al guardar paciente", error);
+      alert('Hubo un error al guardar el paciente');
     }
   };
 
@@ -87,12 +168,12 @@ const TableroPaciente = () => {
               <tr>
                 <td colSpan="5" className="text-center">Cargando...</td>
               </tr>
-            ) : Paciente.length === 0 ? (
+            ) : pacientes.length === 0 ? (
               <tr>
                 <td colSpan="5" className="text-center">No se encontraron resultados</td>
               </tr>
             ) : (
-              Paciente.map((paciente) => (
+              pacientes.map((paciente) => (
                 <tr key={paciente.id}>
                   <td></td>
                   <td>{paciente.tipo_paciente}</td>
@@ -100,7 +181,15 @@ const TableroPaciente = () => {
                   <td>{paciente.nombre_completo}</td>
                   <td>{paciente.clave_empleado}</td>
                   <td>{paciente.clave_expediente}</td>
-                  <td>{paciente.foto_paciente}</td>
+                  <td>
+                    {paciente.foto_paciente && (
+                      <img
+                        src={paciente.foto_paciente}
+                        alt="Foto paciente"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    )}
+                  </td>
                   <td>{paciente.telefono}</td>
                   <td>{paciente.edad}</td>
                   <td>{paciente.direccion}</td>
@@ -111,6 +200,73 @@ const TableroPaciente = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Formulario para agregar o editar pacientes */}
+      <div className="mt-5">
+        <h3>Registrar Paciente</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Nombre Completo:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={nombre_completo}
+              onChange={(e) => setNombre_completo(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Teléfono:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Edad:</label>
+            <input
+              type="number"
+              className="form-control"
+              value={edad}
+              onChange={(e) => setEdad(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Dirección:</label>
+            <input
+              type="text"
+              className="form-control"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Correo:</label>
+            <input
+              type="email"
+              className="form-control"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Foto del Paciente:</label>
+            <input
+              type="file"
+              className="form-control"
+              onChange={handleFileChange}
+            />
+          </div>
+          {fotoPreview && (
+            <div className="form-group">
+              <h5>Vista Previa de la Foto:</h5>
+              <img src={fotoPreview} alt="Vista previa" className="img-thumbnail" style={{ maxWidth: '200px' }} />
+            </div>
+          )}
+          <button type="submit" className="btn btn-primary">Registrar Paciente</button>
+        </form>
       </div>
     </div>
   );

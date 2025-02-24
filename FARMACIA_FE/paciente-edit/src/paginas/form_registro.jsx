@@ -12,6 +12,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
+
   // useEffect para llenar el formulario si se edita un medicamento
   useEffect(() => {
     if (medicamentoEditado) {
@@ -23,29 +24,6 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
       setId(medicamentoEditado._id);
     }
   }, [medicamentoEditado]);
-
-
-   // Función para manejar la búsqueda
-   const handleSearchChange = async (e) => {
-    setSearchTerm(e.target.value);
-    try {
-      const response = await axios.get(`${medicamentobuscarinve}?query=${e.target.value}`);
-      setmedicamentosResultados(response.data); // Asume que la API devuelve un array de resultados
-    } catch (error) {
-      console.error('Error al buscar el medicamento', error);
-    }
-  };
-
-
-  // Función para seleccionar un registro de la búsqueda
-  const handleSelectmedicamento = (medicamento) => {
-    setCategoria(medicamento.categoria);
-    setNombre_Medicamento(medicamento.nombre_medicamento);
-    setDescripcion(medicamento.descripcion);
-    setPrecio(medicamento.precio);
-    setCantidad(medicamento.cantidad);
-    setId(medicamento.id);
-  };
 
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e) => {

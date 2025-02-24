@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, } from '../configuraciones/apiURLS';
 
 const Formulariopaciente = ({ pacienteEditado }) => {
   const [tipo_paciente, setTipo_paciente] = useState('');
@@ -168,8 +168,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
     ventana.print();
   };
   
-
-  
   return (
   <div className="site-wrap">
       <div className="site-section">
@@ -178,6 +176,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Pacientes</h2>
             </div>
+
             <div className="col-md-12">
               <form onSubmit={handleSubmit}>
                 <div className="p-3 p-lg-5 border">
@@ -336,13 +335,12 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     <div className="col-md-4">
                       <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Paciente</button>
                     </div>
-                    {//<div className="col-md-4">
-                      //<button type="submit" className="btn btn-primary btn-lg btn-block">Editar Paciente</button>
-                    //</div>
-                    //<div className="col-md-4">
-                      //<button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Paciente</button>
-                    //</div>
-}
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Paciente</button>
+                    </div>
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Paciente</button>
+                    </div>
                   </div>
               </div>
 

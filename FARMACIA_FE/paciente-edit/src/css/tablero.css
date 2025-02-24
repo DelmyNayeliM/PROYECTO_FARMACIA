@@ -1,28 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
-
-body{
-    font-family: 'Open Sans', sans-serif;
-    
-}
-.search{
-  
-  top:6px;
-  left:10px;
+.search-input {
+    border: none;
+    padding-left: 32px;
+    width: 80%;  /* Puedes ajustarlo al tamaño que prefieras */
+    max-width: 600px;  /* Esto limita el tamaño máximo a 600px */
 }
 
-.form-control{
-    
-    border:none;
-    padding-left:32px;
+.search {
+    top: 6px;
+    left: 10px;
 }
 
-.form-control:focus{
-    
-    border:none;
-    box-shadow:none;
+
+.green {
+    color: rgb(184, 240, 184);
 }
 
-.green{
-    
-    color:green;
+/* Aplicar table-layout fijo para asegurar que todas las columnas tengan el mismo tamaño */
+.table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Mantener el encabezado de la tabla fijo */
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 2; /* Asegura que el encabezado esté encima de los datos */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Añadir sombra para diferenciarlo */
+}
+
+/* Ajuste para el espaciado entre las columnas */
+.table th, .table td {
+    padding: 12px;
+    text-align: center;
+}
+
+/* Mantener la tabla responsive */
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+/* Asegurarse que las celdas no se compriman demasiado */
+.table td, .table th {
+    vertical-align: middle;
+    min-height: 50px;
+    padding: 10px 15px; /* Ajuste de padding para celdas */
+}
+
+/* Ajustar la fila de "Cargando..." y "No hay resultados" */
+.table tbody .loading, .table tbody .no-results {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Centrado de las celdas de la tabla */
+.table tbody tr td, .table tbody tr th {
+    font-weight: 500;
+}
+
+/* Añadir un espacio de fondo consistente en las filas */
+.table tbody tr {
+    min-height: 50px; /* Mantener la altura de las filas consistente */
 }

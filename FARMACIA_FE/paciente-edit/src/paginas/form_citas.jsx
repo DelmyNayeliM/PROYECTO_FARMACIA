@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { citasguardar, citaseditar, citasbuscar } from '../configuraciones/apiURLS'; // Asegúrate de tener la URL de la búsqueda configurada
+import { citasguardar, citaseditar, citasbuscar } from '../configuraciones/apiURLS';
 
 const Formulariocitas = ({ citasEditado }) => {
   const [fecha_cita, setFecha_cita] = useState('');
@@ -15,8 +15,8 @@ const Formulariocitas = ({ citasEditado }) => {
   const [observaciones, setObservaciones] = useState('');
   const [nombre_medicamento, setNombre_medicamento] = useState('');
   const [id, setId] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
-  const [citasResultados, setCitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
+  const [searchTerm, setSearchTerm] = useState('');
+  const [citasResultados, setCitasResultados] = useState([]);
 
   useEffect(() => {
     if (citasEditado) {
@@ -35,18 +35,16 @@ const Formulariocitas = ({ citasEditado }) => {
     }
   }, [citasEditado]);
 
-  // Función para manejar la búsqueda
   const handleSearchChange = async (e) => {
     setSearchTerm(e.target.value);
     try {
       const response = await axios.get(`${citasbuscar}?query=${e.target.value}`);
-      setCitasResultados(response.data); // Asume que la API devuelve un array de resultados
+      setCitasResultados(response.data);
     } catch (error) {
       console.error('Error al buscar citas', error);
     }
   };
 
-  // Función para seleccionar un registro de la búsqueda
   const handleSelectCita = (cita) => {
     setFecha_cita(cita.fecha_cita);
     setNombre_dr(cita.nombre_dr);
@@ -114,7 +112,6 @@ const Formulariocitas = ({ citasEditado }) => {
         });
       }
       console.log(response.data);
-      // Limpiar los campos después de guardar la cita
       setFecha_cita('');
       setNombre_dr('');
       setNombre_paciente('');
@@ -146,7 +143,7 @@ const Formulariocitas = ({ citasEditado }) => {
       <p><strong>Sintomas:</strong> ${sintomas}</p>
       <p><strong>Receta:</strong> ${receta}</p>
       <p><strong>Observaciones:</strong> ${observaciones}</p>
-      <p><strong>Nombre del Medicamento:</strong>${nombre_medicamento}</p>
+      <p><strong>Nombre del Medicamento:</strong> ${nombre_medicamento}</p>
     `;
     
     const ventana = window.open('', '', 'height=600,width=800');
@@ -166,7 +163,6 @@ const Formulariocitas = ({ citasEditado }) => {
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Citas</h2>
             </div>
             
-            {/* Barra de búsqueda */}
             <div className="col-md-12">
               <input
                 type="text"
@@ -188,11 +184,10 @@ const Formulariocitas = ({ citasEditado }) => {
               </ul>
             </div>
 
-            {/* Formulario de cita */}
             <div className="col-md-12">
               <form onSubmit={handleSubmit}>
                 <div className="p-3 p-lg-5 border">
-                  {/* Campos del formulario */}
+                  {/* Fecha de la cita */}
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="fecha_cita" className="text-black">
@@ -207,6 +202,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         onChange={(e) => setFecha_cita(e.target.value)}
                       />
                     </div>
+                    {/* Nombre del Doctor */}
                     <div className="col-md-6">
                       <label htmlFor="nombre_dr" className="text-black">
                         Nombre del Doctor: <span className="text-danger">*</span>
@@ -222,6 +218,7 @@ const Formulariocitas = ({ citasEditado }) => {
                     </div>
                   </div>
 
+                  {/* Nombre del Paciente */}
                   <div className="form-group row">
                     <div className="col-md-12">
                       <label htmlFor="nombre_paciente" className="text-black">
@@ -238,6 +235,7 @@ const Formulariocitas = ({ citasEditado }) => {
                     </div>
                   </div>
 
+                  {/* Presión */}
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="presion" className="text-black">
@@ -252,7 +250,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         onChange={(e) => setPresion(e.target.value)}
                       />
                     </div>
-
+                    {/* Peso */}
                     <div className="col-md-6">
                       <label htmlFor="peso" className="text-black">
                         Peso: <span className="text-danger">*</span>
@@ -267,6 +265,8 @@ const Formulariocitas = ({ citasEditado }) => {
                       />
                     </div>
                   </div>
+
+                  {/* Ritmo Cardiaco */}
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="ritmo_cardiaco" className="text-black">
@@ -281,7 +281,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         onChange={(e) => setRitmo_cardiaco(e.target.value)}
                       />
                     </div>
-
+                    {/* Temperatura */}
                     <div className="col-md-6">
                       <label htmlFor="temperatura" className="text-black">
                         Temperatura: <span className="text-danger">*</span>
@@ -297,6 +297,7 @@ const Formulariocitas = ({ citasEditado }) => {
                     </div>
                   </div>
 
+                  {/* Sintomas */}
                   <div className="form-group row">
                     <div className="col-md-12">
                       <label htmlFor="sintomas" className="text-black">
@@ -308,14 +309,15 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="sintomas"
                         value={sintomas}
                         onChange={(e) => setSintomas(e.target.value)}
-                      ></textarea>
+                      />
                     </div>
                   </div>
 
+                  {/* Receta */}
                   <div className="form-group row">
                     <div className="col-md-12">
                       <label htmlFor="receta" className="text-black">
-                        Receta: 
+                        Receta: <span className="text-danger">*</span>
                       </label>
                       <textarea
                         className="form-control"
@@ -323,15 +325,15 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="receta"
                         value={receta}
                         onChange={(e) => setReceta(e.target.value)}
-                        rows="4"
-                      ></textarea>
+                      />
                     </div>
                   </div>
 
+                  {/* Observaciones */}
                   <div className="form-group row">
                     <div className="col-md-12">
                       <label htmlFor="observaciones" className="text-black">
-                        Observaciones: 
+                        Observaciones: <span className="text-danger">*</span>
                       </label>
                       <textarea
                         className="form-control"
@@ -339,12 +341,13 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="observaciones"
                         value={observaciones}
                         onChange={(e) => setObservaciones(e.target.value)}
-                      ></textarea>
+                      />
                     </div>
                   </div>
 
+                  {/* Nombre del Medicamento */}
                   <div className="form-group row">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
                       <label htmlFor="nombre_medicamento" className="text-black">
                         Nombre del Medicamento: <span className="text-danger">*</span>
                       </label>
@@ -360,21 +363,22 @@ const Formulariocitas = ({ citasEditado }) => {
                   </div>
 
                   <div className="form-group row">
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Cita</button>
+                    <div className="col-md-6">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block">
+                        Guardar Cita
+                      </button>
                     </div>
                   </div>
 
                   <div className="form-group">
                     <div className="col-md-12">
-                    <div>
-                       <button 
-                        type="button" 
-                        className="btn btn-primary btn-lg btn-block" 
-                        onClick={imprimirFormulario}>
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-lg btn-block"
+                        onClick={imprimirFormulario}
+                      >
                         Imprimir Datos
                       </button>
-                    </div>
                     </div>
                   </div>
                 </div>

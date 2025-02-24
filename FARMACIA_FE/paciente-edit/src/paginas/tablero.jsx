@@ -1,17 +1,15 @@
+import '../css/tablero.css'; // Asegúrate de que el archivo CSS esté importado
 import React, { useState, useEffect } from 'react';
 
 const Tablero = () => {
-  // Estado para el valor de búsqueda y los medicamentos
   const [searchTerm, setSearchTerm] = useState('');
   const [medicamentos, setMedicamentos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Función para manejar el cambio en la barra de búsqueda
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Función para hacer la solicitud de búsqueda
   const handleSearch = async () => {
     if (searchTerm.trim() === '') {
       setMedicamentos([]); // Si no hay término de búsqueda, vaciar resultados
@@ -19,20 +17,20 @@ const Tablero = () => {
     }
 
     try {
-      setLoading(true); // Mostrar carga mientras se hace la solicitud
+      setLoading(true);
       const response = await fetch(`http://localhost:3003/inventario/buscar?nombre_medicamento=${searchTerm}`);
       const data = await response.json();
 
       if (response.status === 200) {
-        setMedicamentos(data); // Si la búsqueda tiene éxito, actualiza los medicamentos
+        setMedicamentos(data);
       } else {
-        setMedicamentos([]); // Si no hay resultados, limpiar la lista
+        setMedicamentos([]);
       }
     } catch (error) {
       console.error("Error al realizar la búsqueda", error);
-      setMedicamentos([]); // Limpiar en caso de error
+      setMedicamentos([]);
     } finally {
-      setLoading(false); // Terminar carga
+      setLoading(false);
     }
   };
 
@@ -40,7 +38,7 @@ const Tablero = () => {
     if (searchTerm.trim() !== '') {
       handleSearch();
     } else {
-      setMedicamentos([]); // Limpiar los resultados si el campo está vacío
+      setMedicamentos([]);
     }
   }, [searchTerm]);
 
@@ -53,26 +51,24 @@ const Tablero = () => {
           </span>
           <input
             type="text"
-            className="form-control w-100"
-            placeholder="Buscar por nombre del medicamento"
+            className="form-control search-input"
+            placeholder="nombre medicamento"
             value={searchTerm}
-            onChange={handleSearchChange} // Captura el texto de la búsqueda
-          />
+            onChange={handleSearchChange}
+        />
+
         </div>
       </div>
 
       <div className="table-responsive">
-        <table className="table table-responsive table-borderless">
+        <table className="table table-borderless">
           <thead>
             <tr className="bg-light">
-              <th scope="col" width="5%"></th>
-              <th scope="col" width="10%" className="text-black">Categoría</th>
-              <th scope="col" width="10%" className="text-black">Nombre del Medicamento</th>
-              <th scope="col" width="10%" className="text-black">Descripción</th>
-              <th scope="col" className="text-end" width="20%">
-                <span className="text-black">Precio</span>
-                <span className="text-black">Cantidad</span>
-              </th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Nombre del Medicamento</th>
+              <th scope="col">Descripción</th>
+              <th scope="col" className="text-end">Precio</th>
+              <th scope="col" className="text-end">Cantidad</th>
             </tr>
           </thead>
 
@@ -88,7 +84,6 @@ const Tablero = () => {
             ) : (
               medicamentos.map((medicamento) => (
                 <tr key={medicamento.id}>
-                  <td></td>
                   <td>{medicamento.categoria}</td>
                   <td>{medicamento.nombre_medicamento}</td>
                   <td>{medicamento.descripcion}</td>
