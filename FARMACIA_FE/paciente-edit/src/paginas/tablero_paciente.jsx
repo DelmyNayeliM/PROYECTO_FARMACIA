@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const TableroPaciente = () => {
-  // Estado para el valor de búsqueda y los medicamentos
+  // Estado para el valor de búsqueda y los pacientes
   const [searchTerm, setSearchTerm] = useState('');
   const [Paciente, setPacientes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ const TableroPaciente = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        setPacientes(data); // Si la búsqueda tiene éxito, actualiza los medicamentos
+        setPacientes(data); // Si la búsqueda tiene éxito, actualiza los pacientes
       } else {
         setPacientes([]); // Si no hay resultados, limpiar la lista
       }
@@ -40,7 +40,7 @@ const TableroPaciente = () => {
     if (searchTerm.trim() !== '') {
       handleSearch();
     } else {
-      setMedicamentos([]); // Limpiar los resultados si el campo está vacío
+      setPacientes([]); // Limpiar los resultados si el campo está vacío
     }
   }, [searchTerm]);
 
@@ -73,9 +73,9 @@ const TableroPaciente = () => {
               <th scope="col" width="10%" className="text-black">Clave expediente</th>
               <th scope="col" width="10%" className="text-black">Foto paciente</th>
               <th scope="col" width="10%" className="text-black">Telefono</th>
-              <th scope="col" width="10%" className="text-black">edad</th>
-              <th scope="col" width="10%" className="text-black">direccion</th>
-              <th scope="col" width="10%" className="text-black">correo</th>
+              <th scope="col" width="10%" className="text-black">Edad</th>
+              <th scope="col" width="10%" className="text-black">Dirección</th>
+              <th scope="col" width="10%" className="text-black">Correo</th>
               <th scope="col" className="text-end" width="20%">
                 <span className="text-black">Enfermedad base</span>
               </th>
@@ -92,20 +92,20 @@ const TableroPaciente = () => {
                 <td colSpan="5" className="text-center">No se encontraron resultados</td>
               </tr>
             ) : (
-              Paciente.map((pacientes) => (
-                <tr key={pacientes.id}>
+              Paciente.map((paciente) => (
+                <tr key={paciente.id}>
                   <td></td>
-                  <td>{pacientes.tipo_paciente}</td>
-                  <td>{pacientes.tipo_empleadp}</td>
-                  <td>{pacientes.nombre_completo}</td>
-                  <td>{pacientes.clave_empleado}</td>
-                  <td>{pacientes.clave_expediente}</td>
-                  <td>{pacientes.foto_paciente}</td>
-                  <td>{pacientes.telefono}</td>
-                  <td>{pacientes.edad}</td>
-                  <td>{pacientes.direccion}</td>
-                  <td>{pacientes.correo}</td>
-                  <td className="text-end">{pacientes.enfermedad_base}</td>
+                  <td>{paciente.tipo_paciente}</td>
+                  <td>{paciente.tipo_empleado}</td>
+                  <td>{paciente.nombre_completo}</td>
+                  <td>{paciente.clave_empleado}</td>
+                  <td>{paciente.clave_expediente}</td>
+                  <td>{paciente.foto_paciente}</td>
+                  <td>{paciente.telefono}</td>
+                  <td>{paciente.edad}</td>
+                  <td>{paciente.direccion}</td>
+                  <td>{paciente.correo}</td>
+                  <td className="text-end">{paciente.enfermedad_base}</td>
                 </tr>
               ))
             )}

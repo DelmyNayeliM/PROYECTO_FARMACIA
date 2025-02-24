@@ -2,7 +2,7 @@ const { Op } = require('sequelize'); // Asegúrate de importar Op
 const { Router } = require('express');
 const { body, query } = require('express-validator');
 const controladorPacientes = require('../controladores/controlador_paciente');
-const paciente = require('../modelos/paciente'); // Modelo de usuario
+const Paciente = require('../modelos/paciente'); // Modelo de usuario
 const { guardarImagenPaciente } = require('../configuraciones/archivo');
 
 const rutas = Router();
@@ -48,7 +48,7 @@ rutas.put('/editar',
         .withMessage('El nombre debe tener entre 3 a 50 caracteres')
         .custom(async (value, { req }) => {
             const pacienteId = req.query.id; // tomamos el ID de la query
-            const pacienteExistente = await paciente.findOne({
+            const pacienteExistente = await Paciente.findOne({
                 where: { nombre_completo: value, id: { [Op.ne]: pacienteId } }
             });
             if (pacienteExistente) {
@@ -74,7 +74,7 @@ rutas.delete('/eliminar',
         .isInt()
         .withMessage("El Id debe ser un número entero")
         .custom(async (value) => {
-            const buscarpacientes = await paciente.findOne({
+            const buscarpacientes = await Paciente.findOne({
                 where: { id: value }
             });
             if (!buscarpacientes) {
@@ -84,5 +84,47 @@ rutas.delete('/eliminar',
     controladorPacientes.eliminar
 );
 
+// Ruta para buscar pacientes
+rutas.get('/buscarpacientes', async (req, res) => {
+  const { expediente, nombre, clave } = req.query;
+
+  try {
+    const whereConditions = {};
+
+    // Filtrar por número de expediente
+    if (expediente) {
+      whereConditions.clave_expediente = expediente;
+    }
+
+    // Filtrar por nombre completo
+    if (nombre) {
+      whereConditions.nombre_completo = {
+        [Op.like]: `%${nombre}%`, // Se usa LIKE para búsqueda parcial
+      };
+    }
+
+    // Filtrar por clave de trabajador
+    if (clave) {
+      whereConditions.clave_empleado = clave;
+    }
+
+    // Buscar pacientes en la base de datos
+    const pacientes = await Paciente.findAll({
+      where: whereConditions,
+    });
+
+    // Verificar si no se encontraron pacientes
+    if (pacientes.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron pacientes.' });
+    }
+
+    // Enviar la respuesta con los pacientes encontrados
+    return res.json(pacientes);
+  } catch (error) {
+    // Manejar el error y devolver un mensaje más detallado
+    console.error('Error al buscar pacientes:', error);
+    return res.status(500).json({ message: 'Error interno del servidor.', error: error.message });
+  }
+});
 
 module.exports = rutas;

@@ -12,18 +12,25 @@ import LoginForm from '../paginas/Login';
 import TableroPaciente from '../paginas/tablero_paciente';
 
 export const routers = createBrowserRouter(
-    createRoutesFromElements(
-    <Route element={<LoginForm />}>
-    <Route element={<Navbar />}>
+  createRoutesFromElements(
+    // Rutas principales de la aplicación
+    <>
+      {/* Ruta Login, que no muestra Navbar */}
+      <Route path="/login" element={<LoginForm />} />
+
+      {/* Rutas protegidas que requieren el Navbar */}
+      <Route element={<Navbar />}>
         <Route path="/" element={<Inicioadmin />} />
-        <Route path="/" element={<Navigate to="/medicamento" />} /> 
         <Route path="/medicamento" element={<Form_medicamento />} />
-        <Route path="/Formulariopaciente" element={<Formulariopaciente />} />
-        <Route path="/Formulariocitas" element={<Formulariocitas />} />
-        <Route path="/Acercade" element={<Acercade />} />
-        <Route path="/Tablero" element={<Tablero />} />
-        <Route path="/Tableropaciente" element={<TableroPaciente />} />
-    </Route>
-    </Route>
-    )
+        <Route path="/form_paciente" element={<Formulariopaciente />} />
+        <Route path="/form_citas" element={<Formulariocitas />} />
+        <Route path="/acercade" element={<Acercade />} />
+        <Route path="/tablero" element={<Tablero />} />
+        <Route path="/tablero_paciente" element={<TableroPaciente />} />
+      </Route>
+
+      {/* Redirección si no se encuentra una ruta específica */}
+      <Route path="*" element={<Navigate to="/" />} />
+    </>
+  )
 );
