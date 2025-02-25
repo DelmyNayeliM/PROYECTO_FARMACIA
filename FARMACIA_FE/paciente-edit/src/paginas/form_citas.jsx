@@ -297,18 +297,19 @@ const Formulariocitas = ({ citasEditado }) => {
                     </div>
                     {/* Nombre del Doctor */}
                     <div className="col-md-6">
-                      <label htmlFor="nombre_dr" className="text-black">
-                        Nombre del Doctor: <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="nombre_dr"
-                        name="nombre_dr"
-                        value={nombre_dr}
-                        onChange={(e) => setNombre_dr(e.target.value)}
-                      />
-                    </div>
+                    <label htmlFor="nombre_dr" className="text-black">
+                      Nombre del Doctor: <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="nombre_dr"
+                      name="nombre_dr"
+                      value={nombre_dr}
+                      onChange={(e) => setNombre_dr(e.target.value)}
+                      title="Ingrese el nombre  del doctor"  
+                    />
+                  </div>
                   </div>
 
                   {/* Nombre del Paciente */}
@@ -324,6 +325,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="nombre_paciente"
                         value={nombre_paciente}
                         onChange={(e) => setNombre_paciente(e.target.value)}
+                        title="Ingrese el nombre  del paciente"  
                       />
                     </div>
                   </div>
@@ -341,12 +343,13 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="presion"
                         value={presion}
                         onChange={(e) => setPresion(e.target.value)}
+                        title="Ejemplo 120/80"  
                       />
                     </div>
                     {/* Peso */}
                     <div className="col-md-6">
                       <label htmlFor="peso" className="text-black">
-                        Peso: <span className="text-danger">*</span>
+                        Peso: Kg<span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -355,6 +358,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="peso"
                         value={peso}
                         onChange={(e) => setPeso(e.target.value)}
+                         title="Ejemplo 70"
                       />
                     </div>
                   </div>
@@ -363,7 +367,7 @@ const Formulariocitas = ({ citasEditado }) => {
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="ritmo_cardiaco" className="text-black">
-                        Ritmo Cardiaco: <span className="text-danger">*</span>
+                        Ritmo Cardiaco: lpm<span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -372,6 +376,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="ritmo_cardiaco"
                         value={ritmo_cardiaco}
                         onChange={(e) => setRitmo_cardiaco(e.target.value)}
+                         title="80 lpm"
                       />
                     </div>
                     {/* Temperatura */}
@@ -386,6 +391,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="temperatura"
                         value={temperatura}
                         onChange={(e) => setTemperatura(e.target.value)}
+                         title="MIN: 35 - MAX: 42"
                       />
                     </div>
                   </div>
@@ -451,6 +457,7 @@ const Formulariocitas = ({ citasEditado }) => {
                         name="nombre_medicamento"
                         value={nombre_medicamento}
                         onChange={(e) => setNombre_medicamento(e.target.value)}
+                         title="Debe tener entre 3-75 caracteres"
                       />
                     </div>
                   </div>

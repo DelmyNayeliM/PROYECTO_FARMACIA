@@ -146,27 +146,93 @@ const Formulariopaciente = ({ pacienteEditado }) => {
   };
 
   const imprimirFormulario = () => {
+    // Obtener fecha y hora actual
+    const fechaHora = new Date();
+    const fecha = `${fechaHora.getDate()}/${fechaHora.getMonth() + 1}/${fechaHora.getFullYear()}`;
+    const hora = `${fechaHora.getHours()}:${fechaHora.getMinutes()}:${fechaHora.getSeconds()}`;
+  
+    // Contenido HTML del expediente
     const contenido = `
-      <h1>Información del Paciente</h1>
-      <p><strong>Tipo de Paciente:</strong> ${tipo_paciente}</p>
-      <p><strong>Tipo de Empleado:</strong> ${tipo_empleado}</p>
-      <p><strong>Nombre Completo:</strong> ${nombre_completo}</p>
-      <p><strong>Clave de Empleado:</strong> ${clave_empleado}</p>
-      <p><strong>Clave de Expediente:</strong> ${clave_expediente}</p>
-      <p><strong>Teléfono:</strong> ${telefono}</p>
-      <p><strong>Edad:</strong> ${edad}</p>
-      <p><strong>Dirección:</strong> ${direccion}</p>
-      <p><strong>Correo:</strong> ${correo}</p>
-      <p><strong>Enfermedad Base:</strong> ${enfermedad_base}</p>
+      <html>
+        <head>
+          <title>Expediente Médico</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              padding: 10px;
+            }
+            h1 {
+              text-align: center;
+              font-size: 24px;
+            }
+            p {
+              font-size: 16px;
+            }
+            .logo {
+              display: block;
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            .info {
+              margin-bottom: 10px;
+            }
+            .footer {
+              font-size: 14px;
+              text-align: right;
+              margin-top: 30px;
+            }
+            .foto-container {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            .foto-container img {
+              width: 150px; /* Puedes ajustar el tamaño */
+              height: 150px; /* Puedes ajustar el tamaño */
+              border-radius: 50%;
+              border: 2px solid #000;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="logo">
+              <img src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" alt="Logo" width="150"/>
+          </div>
+          
+          <div class="foto-container">
+            <img src="${foto_paciente}" alt="Foto del Paciente" />
+          </div>
+  
+          <h1>Expediente del Paciente</h1>
+  
+          <p class="info"><strong>Tipo de Paciente:</strong> ${tipo_paciente}</p>
+          <p class="info"><strong>Tipo de Empleado:</strong> ${tipo_empleado}</p>
+          <p class="info"><strong>Nombre Completo:</strong> ${nombre_completo}</p>
+          <p class="info"><strong>Clave de Empleado:</strong> ${clave_empleado}</p>
+          <p class="info"><strong>Clave de Expediente:</strong> ${clave_expediente}</p>
+          <p class="info"><strong>Teléfono:</strong> ${telefono}</p>
+          <p class="info"><strong>Edad:</strong> ${edad}</p>
+          <p class="info"><strong>Dirección:</strong> ${direccion}</p>
+          <p class="info"><strong>Correo:</strong> ${correo}</p>
+          <p class="info"><strong>Enfermedad Base:</strong> ${enfermedad_base}</p>
+  
+          <!-- Fecha y Hora de la impresión -->
+          <div class="footer">
+            <p><strong>Fecha:</strong> ${fecha}</p>
+            <p><strong>Hora:</strong> ${hora}</p>
+          </div>
+        </body>
+      </html>
     `;
-    
+  
+    // Crear ventana para imprimir
     const ventana = window.open('', '', 'height=600,width=800');
-    ventana.document.write('<html><head><title>Impresión</title></head><body>');
     ventana.document.write(contenido);
-    ventana.document.write('</body></html>');
     ventana.document.close();
     ventana.print();
   };
+  
+  
   
   return (
   <div className="site-wrap">

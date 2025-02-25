@@ -12,7 +12,6 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
-  // useEffect para llenar el formulario si se edita un medicamento
   useEffect(() => {
     if (medicamentoEditado) {
       setCategoria(medicamentoEditado.categoria);
@@ -24,11 +23,11 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
     }
   }, [medicamentoEditado]);
 
-  // useEffect para buscar medicamentos cuando cambia el término de búsqueda
+
   useEffect(() => {
     const fetchMedicamentos = async () => {
       if (searchTerm.trim() === '') {
-        setmedicamentosResultados([]); // Limpiar resultados si no hay texto
+        setmedicamentosResultados([]); // Limpiar resultados 
         return;
       }
 
@@ -88,7 +87,6 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
       }
 
       console.log(response.data);
-      // Limpiar el formulario después de guardar o editar
       setCategoria('');
       setNombre_Medicamento('');
       setDescripcion('');
@@ -134,7 +132,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
               <ul className="list-group">
                 {medicamentosResultados.map((medicamento) => (
                   <li
-                    key={medicamento._id} // Asegúrate de que el id sea único
+                    key={medicamento._id} 
                     className="list-group-item"
                     onClick={() => handleSelectmedicamento(medicamento)}
                   >
@@ -158,6 +156,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                       name="categoria"
                       value={categoria}
                       onChange={(e) => setCategoria(e.target.value)}
+                      title="'Medicamento', 'Analgesicos', 'Material'"
                     />
                   </div>
 
@@ -172,6 +171,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                       name="nombre_medicamento"
                       value={nombre_medicamento}
                       onChange={(e) => setNombre_Medicamento(e.target.value)}
+                      title="El nombre debe tener entre 3 y 75 caracteres"
                     />
                   </div>
 
@@ -187,6 +187,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                       className="form-control"
                       value={descripcion}
                       onChange={(e) => setDescripcion(e.target.value)}
+                      title="Entre 10 y 45 caracteres"
                     ></textarea>
                   </div>
 
@@ -202,6 +203,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                         name="precio"
                         value={precio}
                         onChange={(e) => setPrecio(e.target.value)}
+                        title="Ejemplo 100.00"
                       />
                     </div>
                     <div className="col-md-6">

@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const { validationResult } = require('express-validator');
 const citas = require('../modelos/citas');
+const moment = require('moment');
 
 // Ruta de inicio
 exports.inicio = (req, res) => {
@@ -18,12 +19,10 @@ exports.guardar = async (req, res) => {
     }
 
     try {
-        // Verificar si la cita ya existe
         const citaExistente = await citas.findOne({ where: { fecha_cita, nombre_paciente } });
         if (citaExistente) {
             return res.status(400).json({ mensaje: 'Ya existe una cita programada para este paciente en esta fecha' });
         }
-
         // Crear la nueva cita
         const nuevacita = await citas.create({
             fecha_cita,
@@ -38,7 +37,6 @@ exports.guardar = async (req, res) => {
             observaciones,
             nombre_medicamento
         });
-
         res.status(201).json(nuevacita);
     } catch (error) {
         console.error(error);

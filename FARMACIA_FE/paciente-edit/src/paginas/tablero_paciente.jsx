@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const TableroPaciente = () => {
-  // Estado para el valor de búsqueda y los pacientes
   const [searchTerm, setSearchTerm] = useState('');
   const [pacientes, setPacientes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,7 +26,7 @@ const TableroPaciente = () => {
 
     try {
       setLoading(true); // Mostrar carga mientras se hace la solicitud
-      const response = await fetch(`http://localhost:3003/paciente=${searchTerm}`);
+      const response = await fetch(`http://localhost:3003/pacientes/buscar?Clave=${searchTerm}`);
       const data = await response.json();
 
       if (response.status === 200) {
@@ -121,7 +120,7 @@ const TableroPaciente = () => {
     if (searchTerm.trim() !== '') {
       handleSearch();
     } else {
-      setPacientes([]); // Limpiar los resultados si el campo está vacío
+      setPacientes([]); 
     }
   }, [searchTerm]);
 
@@ -200,73 +199,6 @@ const TableroPaciente = () => {
             )}
           </tbody>
         </table>
-      </div>
-
-      {/* Formulario para agregar o editar pacientes */}
-      <div className="mt-5">
-        <h3>Registrar Paciente</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Nombre Completo:</label>
-            <input
-              type="text"
-              className="form-control"
-              value={nombre_completo}
-              onChange={(e) => setNombre_completo(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Teléfono:</label>
-            <input
-              type="text"
-              className="form-control"
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Edad:</label>
-            <input
-              type="number"
-              className="form-control"
-              value={edad}
-              onChange={(e) => setEdad(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Dirección:</label>
-            <input
-              type="text"
-              className="form-control"
-              value={direccion}
-              onChange={(e) => setDireccion(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Correo:</label>
-            <input
-              type="email"
-              className="form-control"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Foto del Paciente:</label>
-            <input
-              type="file"
-              className="form-control"
-              onChange={handleFileChange}
-            />
-          </div>
-          {fotoPreview && (
-            <div className="form-group">
-              <h5>Vista Previa de la Foto:</h5>
-              <img src={fotoPreview} alt="Vista previa" className="img-thumbnail" style={{ maxWidth: '200px' }} />
-            </div>
-          )}
-          <button type="submit" className="btn btn-primary">Registrar Paciente</button>
-        </form>
       </div>
     </div>
   );
