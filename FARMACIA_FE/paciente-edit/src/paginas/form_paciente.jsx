@@ -248,26 +248,31 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                 <div className="p-3 p-lg-5 border">
                   <div className="form-group row">
                     <label htmlFor="tipo_paciente" className="text-black">Tipo de Paciente:</label>
-                    <input
-                      type="text"
+                    <select
                       className="form-control"
                       id="tipo_paciente"
                       name="tipo_paciente"
                       value={tipo_paciente}
                       onChange={(e) => setTipo_paciente(e.target.value)}
-                    />
+                    >
+                      <option value="">Seleccionar...</option>
+                      <option value="Trabajador">Trabajador</option>
+                      <option value="Dependiente">Dependiente</option>
+                    </select>
                   </div>
-
                   <div className="form-group row">
                     <label htmlFor="tipo_empleado" className="text-black">Tipo de Empleado:</label>
-                    <input
-                      type="text"
+                    <select
                       className="form-control"
                       id="tipo_empleado"
                       name="tipo_empleado"
                       value={tipo_empleado}
                       onChange={(e) => setTipo_empleado(e.target.value)}
-                    />
+                    >
+                      <option value="">Seleccionar...</option>
+                      <option value="Trabajador">Temporal</option>
+                      <option value="Dependiente">Permanente</option>
+                    </select>
                   </div>
 
                   <div className="form-group row">
@@ -280,6 +285,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="nombre_completo"
                         value={nombre_completo}
                         onChange={(e) => setNombre_completo(e.target.value)}
+                         title="Escribir el nombre completo"
                       />
                     </div>
 
@@ -292,6 +298,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="clave_empleado"
                         value={clave_empleado}
                         onChange={(e) => setClave_empleado(e.target.value)}
+                         title="MAX 5"
                       />
                     </div>
                   </div>
@@ -306,6 +313,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="clave_expediente"
                         value={clave_expediente}
                         onChange={(e) => setClave_expediente(e.target.value)}
+                        title="MAX 8"
                       />
                     </div>
 
@@ -340,6 +348,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="telefono"
                         value={telefono}
                         onChange={(e) => setTelefono(e.target.value)}
+                        title="solo numeros"
                       />
                     </div>
 
@@ -378,6 +387,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="correo"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
+                        title="@ que sea un correo válido"
                       />
                     </div>
                   </div>

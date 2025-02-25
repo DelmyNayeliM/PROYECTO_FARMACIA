@@ -170,12 +170,27 @@ const Formulariocitas = ({ citasEditado }) => {
             .formulario td {
               padding: 8px;
               border-bottom: 1px solid #ddd;
+              word-wrap: break-word;
+              white-space: normal;
             }
             .formulario th {
               padding: 10px;
               background-color: #f4f4f4;
               text-align: left;
               border-bottom: 2px solid #ddd;
+            }
+            /* Hacemos que los campos de "Sintomas", "Receta", "Observaciones" sean autoajustables */
+            .auto-ajustable {
+              max-width: 500px;
+              min-width: 200px;
+              white-space: normal;
+              word-wrap: break-word;
+              overflow-wrap: break-word;
+            }
+            /* Permitir scroll si el contenido excede el límite */
+            .campo-largo {
+              max-height: 150px;
+              overflow-y: auto;
             }
           </style>
         </head>
@@ -221,15 +236,15 @@ const Formulariocitas = ({ citasEditado }) => {
             </tr>
             <tr>
               <td><strong>Sintomas:</strong></td>
-              <td>${sintomas}</td>
+              <td class="auto-ajustable campo-largo">${sintomas}</td>
             </tr>
             <tr>
               <td><strong>Receta:</strong></td>
-              <td>${receta}</td>
+              <td class="auto-ajustable campo-largo">${receta}</td>
             </tr>
             <tr>
               <td><strong>Observaciones:</strong></td>
-              <td>${observaciones}</td>
+              <td class="auto-ajustable campo-largo">${observaciones}</td>
             </tr>
             <tr>
               <td><strong>Nombre del Medicamento:</strong></td>
@@ -244,8 +259,8 @@ const Formulariocitas = ({ citasEditado }) => {
     ventana.document.write(contenido);
     ventana.document.close();
     ventana.print();
-  };
-  
+};
+
 
   return (
     <div className="site-wrap">
