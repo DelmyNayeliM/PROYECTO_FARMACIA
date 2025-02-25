@@ -1,11 +1,10 @@
 const { Op, ValidationError } = require('sequelize'); // Asegúrate de importar Op
 const { validationResult } = require('express-validator');
-const pacientes = require('../modelos/paciente');
+const Pacientes = require('../modelos/paciente');
 const {guardarImagenPaciente} = require('../configuraciones/archivo');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-const Pacientes = require('../modelos/paciente');
 
 
 // Ruta de inicio
@@ -17,23 +16,23 @@ exports.inicio = (req, res) => {
 };
 
 // Ruta para guardar un nuevo usuario
+// Ejemplo de validación en la ruta de guardar
 exports.guardar = async (req, res) => {
-    const { tipo_paciente, tipo_empleado, nombre_completo, clave_empleado, clave_expediente, foto_paciente, telefono, edad, direccion, correo, enfermedad_base } = req.body;
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    try {
-        // Verificar si el usuario ya existe
-        const pacienteExistente = await pacientes.findOne({ where: { nombre_completo } });
-        if (pacienteExistente) {
-            return res.status(400).json({ mensaje: 'El paciente ya existe' });
-        }
+    const { tipo_paciente, tipo_empleado, nombre_completo, clave_empleado, clave_expediente, foto_paciente, telefono, edad, direccion, correo, enfermedad_base } = req.body;
 
-        // Crear el nuevo usuario
-        const nuevopaciente = await pacientes.create({
+    // Verifica si el paciente ya existe
+    const pacienteExistente = await Pacientes.findOne({ where: { nombre_completo } });
+    if (pacienteExistente) {
+        return res.status(400).json({ mensaje: 'El paciente ya existe' });
+    }
+
+    try {
+        const nuevopaciente = await Pacientes.create({
             tipo_paciente, 
             tipo_empleado, 
             nombre_completo, 
@@ -54,10 +53,11 @@ exports.guardar = async (req, res) => {
     }
 };
 
+
 // Ruta para listar todos los usuarios
 exports.listar = async (req, res) => {
     try {
-        const listapacientes = await pacientes.findAll();
+        const listapacientes = await Pacientes.findAll();
         res.status(200).json(listapacientes);
     } catch (error) {
         console.error(error);
@@ -77,14 +77,14 @@ exports.editar = async (req, res) => {
 
     try {
         // Buscar el paciente por ID
-        const paciente = await pacientes.findByPk(id);
+        const paciente = await Pacientes.findByPk(id);
         if (!paciente) {
             return res.status(404).json({ mensaje: "El paciente no existe" });
         }
 
         // Verificar si el nombre ya está en uso por otro paciente
         if (nombre_completo) {
-            const pacienteExistente = await pacientes.findOne({
+            const pacienteExistente = await Pacientes.findOne({
                 where: {
                     nombre_completo,
                     id: { [Op.ne]: id } // Verifica que el nombre no pertenezca al mismo paciente
@@ -132,7 +132,7 @@ exports.eliminar = async (req, res) => {
     }
 
     try {
-        const paciente = await pacientes.findByPk(id);
+        const paciente = await Pacientes.findByPk(id);
         if (!paciente) {
             return res.status(404).json({ msj: 'El paciente no existe' });
         }

@@ -22,7 +22,7 @@ rutas.post('/guardar',
             if (!value) {
                 throw new Error("El nombre no permite valores nulos");
             }
-            const buscarpacientes = await paciente.findOne({
+            const buscarpacientes = await Paciente.findOne({
                 where: { nombre_completo: value }
             });
             if (buscarpacientes) {
@@ -31,12 +31,12 @@ rutas.post('/guardar',
         }),
     body("tipo_paciente")
         .optional()
-        .isIn(['trabajador', 'dependiente'])
-        .withMessage('El tipo de paciente debe ser "trabajador" o "depedediente"'),
+        .isIn(['Trabajador', 'Dependiente'])
+        .withMessage('El tipo de paciente debe ser "Trabajador" o "Depedediente"'),
     body("tipo_empleado")
         .optional()
-        .isIn(['temporal', 'permanente'])
-        .withMessage('El tipo de empleado debe ser "temporal" o "permanente"'),
+        .isIn(['Temporal', 'Permanente'])
+        .withMessage('El tipo de empleado debe ser "Temporal" o "Permanente"'),
     controladorPacientes.guardar
 );
 
@@ -57,11 +57,11 @@ rutas.put('/editar',
         }),
     body("tipo_paciente")
         .optional()
-        .isIn(['trabajador', 'dependiente'])
+        .isIn(['Trabajador', 'Dependiente'])
         .withMessage('El tipo de paciente debe ser "trabajador" o "dependiente"'),
     body("tipo_empleado")
         .optional()
-        .isIn(['temporal', 'permanente'])
+        .isIn(['Temporal', 'Permanente'])
         .withMessage('El tipo de empleado debe ser "temporal" o "permanente"'),
     controladorPacientes.editar
 );

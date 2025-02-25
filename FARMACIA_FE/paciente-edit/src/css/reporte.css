@@ -1,0 +1,30 @@
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.logo {
+  width: 100px;
+  height: auto;
+}
+.fecha-hora {
+  text-align: right;
+  font-size: 14px;
+}
+.formulario {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.formulario td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+.formulario th {
+  padding: 10px;
+  background-color: #f4f4f4;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}

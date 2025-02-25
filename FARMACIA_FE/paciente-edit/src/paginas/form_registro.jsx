@@ -12,7 +12,6 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
-
   // useEffect para llenar el formulario si se edita un medicamento
   useEffect(() => {
     if (medicamentoEditado) {
@@ -25,28 +24,61 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
     }
   }, [medicamentoEditado]);
 
+  // useEffect para buscar medicamentos cuando cambia el término de búsqueda
+  useEffect(() => {
+    const fetchMedicamentos = async () => {
+      if (searchTerm.trim() === '') {
+        setmedicamentosResultados([]); // Limpiar resultados si no hay texto
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${medicamentobuscarinve}?search=${searchTerm}`);
+        setmedicamentosResultados(response.data); // Asignar los resultados al estado
+      } catch (error) {
+        console.error('Error al buscar medicamentos', error);
+      }
+    };
+
+    fetchMedicamentos();
+  }, [searchTerm]);
+
+  // Maneja el cambio en la barra de búsqueda
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Función para seleccionar un medicamento de los resultados de búsqueda
+  const handleSelectmedicamento = (medicamento) => {
+    setCategoria(medicamento.categoria);
+    setNombre_Medicamento(medicamento.nombre_medicamento);
+    setDescripcion(medicamento.descripcion);
+    setPrecio(medicamento.precio);
+    setCantidad(medicamento.cantidad);
+    setId(medicamento._id); // Asumí que el medicamento tiene un campo _id
+  };
+
   // Maneja el envío del formulario para guardar o editar el medicamento
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, action) => {
     e.preventDefault();
 
-    if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad=== '') {
+    if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad === '') {
       console.log('Por favor, complete todos los campos');
       return;
     }
 
     try {
       let response;
-      if (id) {
-        response = await axios.put(`${medicamentoeditar}/${id}`, {
+      if (action === 'guardar') {
+        response = await axios.post(medicamentoguardar, {
           categoria,
           nombre_medicamento,
           descripcion,
           precio,
           cantidad,
         });
-      } else {
-        // Si no existe un id, se hace un POST para guardar un nuevo medicamento
-        response = await axios.post(medicamentoguardar, {
+      } else if (action === 'editar' && id) {
+        response = await axios.put(`${medicamentoeditar}/${id}`, {
           categoria,
           nombre_medicamento,
           descripcion,
@@ -56,14 +88,15 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
       }
 
       console.log(response.data);
+      // Limpiar el formulario después de guardar o editar
       setCategoria('');
       setNombre_Medicamento('');
       setDescripcion('');
       setPrecio('');
       setCantidad('');
-      alert('Medicamento guardado exitosamente');
+      alert('Medicamento guardado o editado exitosamente');
     } catch (error) {
-      console.error('Error al guardar el medicamento', error);
+      console.error('Error al guardar o editar el medicamento', error);
     }
   };
 
@@ -90,7 +123,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
             </div>
 
             {/* Barra de búsqueda */}
-              <div className="col-md-12">
+            <div className="col-md-12">
               <input
                 type="text"
                 className="form-control"
@@ -101,18 +134,18 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
               <ul className="list-group">
                 {medicamentosResultados.map((medicamento) => (
                   <li
-                    key={medicamento.id}
+                    key={medicamento._id} // Asegúrate de que el id sea único
                     className="list-group-item"
                     onClick={() => handleSelectmedicamento(medicamento)}
                   >
-                    {medicamento.nombre_medicamento} 
+                    {medicamento.nombre_medicamento}
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="col-md-12">
-              <form onSubmit={handleSubmit}>
+              <form>
                 <div className="p-3 p-lg-5 border">
                   <div className="form-group row">
                     <label htmlFor="categoria" className="text-black">
@@ -157,7 +190,6 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                     ></textarea>
                   </div>
 
-            
                   <div className="form-group row">
                     <div className="col-md-6">
                       <label htmlFor="precio" className="text-black">
@@ -188,18 +220,38 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                   </div>
 
                   <div className="form-group">
-                  <div className="row">
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Medicamento</button>
-                    </div>
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Editar Medicamento</button>
-                    </div>
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Medicamento</button>
+                    <div className="row">
+                      <div className="col-md-4">
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-block"
+                          onClick={(e) => handleSubmit(e, 'guardar')}
+                        >
+                          Guardar Medicamento
+                        </button>
+                      </div>
+                      <div className="col-md-4">
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-block"
+                          onClick={(e) => handleSubmit(e, 'editar')}
+                        >
+                          Editar Medicamento
+                        </button>
+                      </div>
+                      <div className="col-md-4">
+                        {id && (
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-lg btn-block"
+                            onClick={handleEliminar}
+                          >
+                            Eliminar Medicamento
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
                 </div>
               </form>
             </div>

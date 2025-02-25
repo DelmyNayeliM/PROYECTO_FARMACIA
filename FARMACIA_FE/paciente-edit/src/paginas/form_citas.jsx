@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { citasguardar, citaseditar, citasbuscar } from '../configuraciones/apiURLS';
+//import '../css/reporte.css';
 
 const Formulariocitas = ({ citasEditado }) => {
   const [fecha_cita, setFecha_cita] = useState('');
@@ -131,28 +132,120 @@ const Formulariocitas = ({ citasEditado }) => {
   };
 
   const imprimirFormulario = () => {
+    const fecha_cita = new Date().toLocaleDateString(); 
+    const hora_cita = new Date().toLocaleTimeString();
+  
     const contenido = `
-      <h1>Información de la Cita</h1>
-      <p><strong>Fecha de cita:</strong> ${fecha_cita}</p>
-      <p><strong>Nombre del Doctor: Dr.</strong> ${nombre_dr}</p>
-      <p><strong>Nombre del Paciente:</strong> ${nombre_paciente}</p>
-      <p><strong>Presion:</strong> ${presion}</p>
-      <p><strong>Peso:</strong> ${peso}</p>
-      <p><strong>Ritmo Cardiaco:</strong> ${ritmo_cardiaco}</p>
-      <p><strong>Temperatura:</strong> ${temperatura}</p>
-      <p><strong>Sintomas:</strong> ${sintomas}</p>
-      <p><strong>Receta:</strong> ${receta}</p>
-      <p><strong>Observaciones:</strong> ${observaciones}</p>
-      <p><strong>Nombre del Medicamento:</strong> ${nombre_medicamento}</p>
+      <html>
+        <head>
+          <title>Impresión de Cita Médica</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              color: #333;
+            }
+            h1 {
+              text-align: center;
+            }
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+            }
+            .logo {
+              width: 100px;
+              height: auto;
+            }
+            .fecha-hora {
+              text-align: right;
+              font-size: 14px;
+            }
+            .formulario {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+            }
+            .formulario td {
+              padding: 8px;
+              border-bottom: 1px solid #ddd;
+            }
+            .formulario th {
+              padding: 10px;
+              background-color: #f4f4f4;
+              text-align: left;
+              border-bottom: 2px solid #ddd;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <img class="logo" src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" alt="Logo">
+            <div class="fecha-hora">
+              <p><strong>Fecha:</strong> ${fecha_cita}</p>
+              <p><strong>Hora:</strong> ${hora_cita}</p>
+            </div>
+          </div>
+          
+          <h1>Información de la Cita</h1>
+          
+          <table class="formulario">
+            <tr>
+              <th>Campo</th>
+              <th>Detalle</th>
+            </tr>
+            <tr>
+              <td><strong>Nombre del Doctor:</strong></td>
+              <td>Dr. ${nombre_dr}</td>
+            </tr>
+            <tr>
+              <td><strong>Nombre del Paciente:</strong></td>
+              <td>${nombre_paciente}</td>
+            </tr>
+            <tr>
+              <td><strong>Presión:</strong></td>
+              <td>${presion}</td>
+            </tr>
+            <tr>
+              <td><strong>Peso:</strong></td>
+              <td>${peso}</td>
+            </tr>
+            <tr>
+              <td><strong>Ritmo Cardiaco:</strong></td>
+              <td>${ritmo_cardiaco}</td>
+            </tr>
+            <tr>
+              <td><strong>Temperatura:</strong></td>
+              <td>${temperatura}</td>
+            </tr>
+            <tr>
+              <td><strong>Sintomas:</strong></td>
+              <td>${sintomas}</td>
+            </tr>
+            <tr>
+              <td><strong>Receta:</strong></td>
+              <td>${receta}</td>
+            </tr>
+            <tr>
+              <td><strong>Observaciones:</strong></td>
+              <td>${observaciones}</td>
+            </tr>
+            <tr>
+              <td><strong>Nombre del Medicamento:</strong></td>
+              <td>${nombre_medicamento}</td>
+            </tr>
+          </table>
+        </body>
+      </html>
     `;
     
     const ventana = window.open('', '', 'height=600,width=800');
-    ventana.document.write('<html><head><title>Impresión</title></head><body>');
     ventana.document.write(contenido);
-    ventana.document.write('</body></html>');
     ventana.document.close();
     ventana.print();
   };
+  
 
   return (
     <div className="site-wrap">

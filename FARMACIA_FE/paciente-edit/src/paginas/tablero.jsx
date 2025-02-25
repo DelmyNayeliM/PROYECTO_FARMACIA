@@ -1,4 +1,4 @@
-import '../css/tablero.css'; // Asegúrate de que el archivo CSS esté importado
+import '../css/tablero.css'; 
 import React, { useState, useEffect } from 'react';
 
 const Tablero = () => {
