@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { medicamentoguardar, medicamentoeditar, medicamentobuscarinve } from '../configuraciones/apiURLS';
+import { medicamentoguardar, medicamentoeditar, medicamentobuscar} from '../configuraciones/apiURLS';
 
-const FormularioRegistro = ({ medicamentoEditado }) => {
+const FormularioRegistro = ({ medicamentoid }) => {
   const [categoria, setCategoria] = useState('');
   const [nombre_medicamento, setNombre_Medicamento] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -13,26 +13,41 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
   useEffect(() => {
-    if (medicamentoEditado) {
-      setCategoria(medicamentoEditado.categoria);
-      setNombre_Medicamento(medicamentoEditado.nombre_medicamento);
-      setDescripcion(medicamentoEditado.descripcion);
-      setPrecio(medicamentoEditado.precio);
-      setCantidad(medicamentoEditado.cantidad);
-      setId(medicamentoEditado._id);
-    }
-  }, [medicamentoEditado]);
+    const fetchMedicamento = async () => {
+      if (!id) return; // Si no hay ID, no hacer nada
+  
+      try {
+        const response = await axios.get(`${medicamentoid}/${id}`); 
+        if (response.status === 200){
+        const medicamento = response.data;
 
+        setCategoria(medicamento.categoria);
+        setNombre_Medicamento(medicamento.nombre_medicamento);
+        setDescripcion(medicamento.descripcion);
+        setPrecio(medicamento.precio);
+        setCantidad(medicamento.cantidad);
+        }else{
+          console.error("No se encontro el medicamento");
+        }
+      } catch (error) {
+        console.error('Error al obtener el medicamento', error);
+        alert('No se encontró el medicamento con ese ID');
+      }
+    };
+  
+    fetchMedicamento();
+  }, [id]); // Esto se ejecuta cada vez que el id cambia
+  
 
   useEffect(() => {
     const fetchMedicamentos = async () => {
       if (searchTerm.trim() === '') {
-        setmedicamentosResultados([]); // Limpiar resultados 
+        setmedicamentosResultados([]); // Limpiar resultados si la búsqueda está vacía
         return;
       }
 
       try {
-        const response = await axios.get(`${medicamentobuscarinve}?search=${searchTerm}`);
+        const response = await axios.get(`${medicamentobuscar}?search=${searchTerm}`);
         setmedicamentosResultados(response.data); // Asignar los resultados al estado
       } catch (error) {
         console.error('Error al buscar medicamentos', error);
@@ -40,7 +55,7 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
     };
 
     fetchMedicamentos();
-  }, [searchTerm]);
+  }, [searchTerm]); 
 
   // Maneja el cambio en la barra de búsqueda
   const handleSearchChange = (event) => {
@@ -60,12 +75,12 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
     e.preventDefault();
-
+  
     if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad === '') {
       console.log('Por favor, complete todos los campos');
       return;
     }
-
+  
     try {
       let response;
       if (action === 'guardar') {
@@ -85,19 +100,20 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
           cantidad,
         });
       }
-
+  
       console.log(response.data);
       setCategoria('');
       setNombre_Medicamento('');
       setDescripcion('');
       setPrecio('');
       setCantidad('');
+      setId(''); // Limpiamos el ID
       alert('Medicamento guardado o editado exitosamente');
     } catch (error) {
       console.error('Error al guardar o editar el medicamento', error);
     }
   };
-
+  
   // Función para eliminar el medicamento
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
@@ -142,6 +158,20 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
               </ul>
             </div>
 
+            <div className="form-group row">
+            <label htmlFor="id" className="text-black">
+              ID del Medicamento: <span className="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="id"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="Ingrese el ID del medicamento"
+            />
+          </div>
+
             <div className="col-md-12">
               <form>
                 <div className="p-3 p-lg-5 border">
@@ -149,15 +179,18 @@ const FormularioRegistro = ({ medicamentoEditado }) => {
                     <label htmlFor="categoria" className="text-black">
                       Categoría: <span className="text-danger">*</span>
                     </label>
-                    <input
-                      type="text"
+                    <select
                       className="form-control"
                       id="categoria"
                       name="categoria"
                       value={categoria}
                       onChange={(e) => setCategoria(e.target.value)}
-                      title="'Medicamento', 'Analgesicos', 'Material'"
-                    />
+                    >
+                      <option value="">Seleccionar...</option>
+                      <option value="Medicameto">Medicameto</option>
+                      <option value="Analgesicos">Analgesicos</option>
+                      <option value="Material">Material</option>
+                    </select>
                   </div>
 
                   <div className="form-group row">

@@ -3,9 +3,6 @@ const { Router } = require('express');
 const { body, query } = require('express-validator');
 const controladorinventarios = require('../controladores/controlador_inventario');
 const Inventario = require('../modelos/inventario'); // Modelo 
-const inventario = require('../modelos/inventario');
-
-
 
 const rutas = Router();
 
@@ -134,5 +131,26 @@ rutas.get('/buscar-medicamentos',
 );
 
 
+
+// Ruta GET para buscar un medicamento por su ID
+rutas.get('/buscar/:id', async (req, res) => {
+  try {
+    const { id } = req.params;  // Tomamos el ID desde los parámetros de la URL
+
+    // Buscar el medicamento por ID usando `findByPk`
+    const medicamento = await Inventario.findByPk(id);
+
+    // Si no se encuentra el medicamento, devolvemos un error 404
+    if (!medicamento) {
+      return res.status(404).json({ error: 'Medicamento no encontrado' });
+    }
+
+    // Si encontramos el medicamento, lo devolvemos en la respuesta
+    return res.status(200).json({ medicamento });
+  } catch (error) {
+    console.error('Error al buscar medicamento:', error);
+    return res.status(500).json({ error: 'Error al buscar medicamento' });
+  }
+});
 
 module.exports = rutas;

@@ -1,4 +1,11 @@
-
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  color: #333;
+}
+h1 {
+  text-align: center;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -21,10 +28,25 @@
 .formulario td {
   padding: 8px;
   border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+  white-space: normal;
 }
 .formulario th {
   padding: 10px;
   background-color: #f4f4f4;
   text-align: left;
   border-bottom: 2px solid #ddd;
+}
+/* Hacemos que los campos de "Sintomas", "Receta", "Observaciones" sean autoajustables */
+.auto-ajustable {
+  max-width: 500px;
+  min-width: 200px;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+/* Permitir scroll si el contenido excede el límite */
+.campo-largo {
+  max-height: 150px;
+  overflow-y: auto;
 }

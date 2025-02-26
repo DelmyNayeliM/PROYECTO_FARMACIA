@@ -139,62 +139,62 @@ const Formulariocitas = ({ citasEditado }) => {
       <html>
         <head>
           <title>Impresión de Cita Médica</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              margin: 20px;
-              color: #333;
-            }
-            h1 {
-              text-align: center;
-            }
-            .header {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              margin-bottom: 20px;
-            }
-            .logo {
-              width: 100px;
-              height: auto;
-            }
-            .fecha-hora {
-              text-align: right;
-              font-size: 14px;
-            }
-            .formulario {
-              width: 100%;
-              border-collapse: collapse;
-              margin-top: 20px;
-            }
-            .formulario td {
-              padding: 8px;
-              border-bottom: 1px solid #ddd;
-              word-wrap: break-word;
-              white-space: normal;
-            }
-            .formulario th {
-              padding: 10px;
-              background-color: #f4f4f4;
-              text-align: left;
-              border-bottom: 2px solid #ddd;
-            }
-            /* Hacemos que los campos de "Sintomas", "Receta", "Observaciones" sean autoajustables */
-            .auto-ajustable {
-              max-width: 500px;
-              min-width: 200px;
-              white-space: normal;
-              word-wrap: break-word;
-              overflow-wrap: break-word;
-            }
-            /* Permitir scroll si el contenido excede el límite */
-            .campo-largo {
-              max-height: 150px;
-              overflow-y: auto;
-            }
-          </style>
         </head>
         <body>
+        <style>
+        body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  color: #333;
+}
+h1 {
+  text-align: center;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.logo {
+  width: 100px;
+  height: auto;
+}
+.fecha-hora {
+  text-align: right;
+  font-size: 14px;
+}
+.formulario {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.formulario td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.formulario th {
+  padding: 10px;
+  background-color: #f4f4f4;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+/* Hacemos que los campos de "Sintomas", "Receta", "Observaciones" sean autoajustables */
+.auto-ajustable {
+  max-width: 500px;
+  min-width: 200px;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+/* Permitir scroll si el contenido excede el límite */
+.campo-largo {
+  max-height: 150px;
+  overflow-y: auto;
+}
+        </style>
           <div class="header">
             <img class="logo" src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" alt="Logo">
             <div class="fecha-hora">
@@ -211,7 +211,7 @@ const Formulariocitas = ({ citasEditado }) => {
               <th>Detalle</th>
             </tr>
             <tr>
-              <td><strong>Nombre del Doctor:</strong></td>
+              <td div><strong>Nombre del Doctor:</strong></td>
               <td>Dr. ${nombre_dr}</td>
             </tr>
             <tr>
