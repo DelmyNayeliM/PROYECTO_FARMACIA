@@ -63,6 +63,10 @@ const citas = db.define(
                 len: [3, 75],  // El nombre debe tener entre 3 y 75 caracteres
             }
         },
+        cantidadventa: {
+            type: DataTypes.STRING(20), 
+            allowNull: false
+        },
     },
     {
         tableName: 'citas',

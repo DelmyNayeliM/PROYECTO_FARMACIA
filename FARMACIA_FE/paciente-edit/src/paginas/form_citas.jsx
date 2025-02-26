@@ -15,9 +15,11 @@ const Formulariocitas = ({ citasEditado }) => {
   const [receta, setReceta] = useState('');
   const [observaciones, setObservaciones] = useState('');
   const [nombre_medicamento, setNombre_medicamento] = useState('');
+  const [cantidadventa, setCantidadVenta] = useState('');
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [citasResultados, setCitasResultados] = useState([]);
+  const [selectedCita, setSelectedCita] = useState(null);
 
   useEffect(() => {
     if (citasEditado) {
@@ -32,6 +34,7 @@ const Formulariocitas = ({ citasEditado }) => {
       setReceta(citasEditado.receta);
       setObservaciones(citasEditado.observaciones);
       setNombre_medicamento(citasEditado.nombre_medicamento);
+      setCantidadVenta(citasEditado.cantidadventa);
       setId(citasEditado.id);
     }
   }, [citasEditado]);
@@ -58,7 +61,9 @@ const Formulariocitas = ({ citasEditado }) => {
     setReceta(cita.receta);
     setObservaciones(cita.observaciones);
     setNombre_medicamento(cita.nombre_medicamento);
+    setCantidadVenta(cita.cantidadventa);
     setId(cita.id);
+    setCitasResultados([]); 
   };
 
   const handleSubmit = async (e) => {
@@ -75,7 +80,8 @@ const Formulariocitas = ({ citasEditado }) => {
       sintomas === '' ||
       receta === '' ||
       observaciones === '' ||
-      nombre_medicamento === ''
+      nombre_medicamento === '' ||
+      cantidadventa === ''
     ) {
       console.log('Por favor, complete todos los campos');
       return;
@@ -96,6 +102,7 @@ const Formulariocitas = ({ citasEditado }) => {
           receta,
           observaciones,
           nombre_medicamento,
+          cantidadventa,
         });
       } else {
         response = await axios.post(citasguardar, {
@@ -110,6 +117,7 @@ const Formulariocitas = ({ citasEditado }) => {
           receta,
           observaciones,
           nombre_medicamento,
+          cantidadventa,
         });
       }
       console.log(response.data);
@@ -124,6 +132,7 @@ const Formulariocitas = ({ citasEditado }) => {
       setReceta('');
       setObservaciones('');
       setNombre_medicamento('');
+      setCantidadVenta('');
       alert('Cita guardada exitosamente');
     } catch (error) {
       console.error('Error al guardar la cita', error);
@@ -132,7 +141,7 @@ const Formulariocitas = ({ citasEditado }) => {
   };
 
   const imprimirFormulario = () => {
-    const fecha_cita = new Date().toLocaleDateString(); 
+    const fechaactual_cita = new Date().toLocaleDateString(); 
     const hora_cita = new Date().toLocaleTimeString();
   
     const contenido = `
@@ -198,7 +207,7 @@ h1 {
           <div class="header">
             <img class="logo" src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" alt="Logo">
             <div class="fecha-hora">
-              <p><strong>Fecha:</strong> ${fecha_cita}</p>
+              <p><strong>Fecha:</strong> ${fechaactual_cita}</p>
               <p><strong>Hora:</strong> ${hora_cita}</p>
             </div>
           </div>
@@ -210,6 +219,10 @@ h1 {
               <th>Campo</th>
               <th>Detalle</th>
             </tr>
+            <tr>
+              <td div><strong>Fecha de la cita:</strong></td>
+              <td>${fecha_cita}</td>
+            </tr
             <tr>
               <td div><strong>Nombre del Doctor:</strong></td>
               <td>Dr. ${nombre_dr}</td>
@@ -224,15 +237,15 @@ h1 {
             </tr>
             <tr>
               <td><strong>Peso:</strong></td>
-              <td>${peso}</td>
+              <td>${peso} Kg</td>
             </tr>
             <tr>
               <td><strong>Ritmo Cardiaco:</strong></td>
-              <td>${ritmo_cardiaco}</td>
+              <td>${ritmo_cardiaco} lpm</td>
             </tr>
             <tr>
               <td><strong>Temperatura:</strong></td>
-              <td>${temperatura}</td>
+              <td>${temperatura} °</td>
             </tr>
             <tr>
               <td><strong>Sintomas:</strong></td>
@@ -249,6 +262,10 @@ h1 {
             <tr>
               <td><strong>Nombre del Medicamento:</strong></td>
               <td>${nombre_medicamento}</td>
+            </tr>
+            <tr>
+              <td><strong>Cantidad:</strong></td>
+              <td>${cantidadventa}</td>
             </tr>
           </table>
         </body>
@@ -280,17 +297,21 @@ h1 {
                 onChange={handleSearchChange}
               />
               <ul className="list-group">
-                {citasResultados.map((cita) => (
-                  <li
-                    key={cita.id}
-                    className="list-group-item"
-                    onClick={() => handleSelectCita(cita)}
-                  >
-                    {cita.nombre_paciente} - {cita.nombre_dr}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {citasResultados.length > 0 ? (
+            citasResultados.map((cita) => (
+              <li
+                key={cita.id}
+                className="list-group-item"
+                onClick={() => handleSelectCita(cita)}
+              >
+                {cita.nombre_paciente} - {cita.nombre_dr} 
+              </li>
+            ))
+          ) : (
+            <li className="list-group-item">No se encontraron resultados</li>
+          )}
+        </ul>
+      </div>
 
             <div className="col-md-12">
               <form onSubmit={handleSubmit}>
@@ -459,11 +480,10 @@ h1 {
                     </div>
                   </div>
 
-                  {/* Nombre del Medicamento */}
                   <div className="form-group row">
-                    <div className="col-md-12">
+                    <div className="col-md-6">
                       <label htmlFor="nombre_medicamento" className="text-black">
-                        Nombre del Medicamento: <span className="text-danger">*</span>
+                        Medicamento: <span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -472,11 +492,23 @@ h1 {
                         name="nombre_medicamento"
                         value={nombre_medicamento}
                         onChange={(e) => setNombre_medicamento(e.target.value)}
-                         title="Debe tener entre 3-75 caracteres"
+                        title="Debe tener entre 3-75 caracteres"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="cantidadventa" className="text-black">
+                        Cantidad: <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="cantidadventa"
+                        name="cantidadventa"
+                        value={cantidadventa}
+                        onChange={(e) => setCantidadVenta(e.target.value)}
                       />
                     </div>
                   </div>
-
                   <div className="form-group row">
                     <div className="col-md-6">
                       <button type="submit" className="btn btn-primary btn-lg btn-block">

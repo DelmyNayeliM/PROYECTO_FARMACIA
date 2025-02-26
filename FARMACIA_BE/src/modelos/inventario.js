@@ -15,10 +15,10 @@ const inventario = db.define(
             }
         },
         descripcion: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(200),
             allowNull: false,
             validate: {
-                len: [10, 455],  // Descripción entre 10 y 45 caracteres
+                len: [10, 200],  // Descripción entre 10 y 45 caracteres
             }
         },
         precio: {

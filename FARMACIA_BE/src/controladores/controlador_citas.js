@@ -11,7 +11,7 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar una nueva cita
 exports.guardar = async (req, res) => {
-    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento } = req.body;
+    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -35,7 +35,8 @@ exports.guardar = async (req, res) => {
             sintomas,
             receta,
             observaciones,
-            nombre_medicamento
+            nombre_medicamento,
+            cantidadventa
         });
         res.status(201).json(nuevacita);
     } catch (error) {
@@ -58,7 +59,7 @@ exports.listar = async (req, res) => {
 // Ruta para editar una cita
 exports.editar = async (req, res) => {
     const { id } = req.query;
-    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento } = req.body;
+    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -95,6 +96,7 @@ exports.editar = async (req, res) => {
         cita.receta = receta || cita.receta;
         cita.observaciones = observaciones || cita.observaciones;
         cita.nombre_medicamento = nombre_medicamento || cita.nombre_medicamento;
+        cita.cantidad= cantidad || cita.cantidad;
 
         await cita.save();
         res.status(200).json({ mensaje: "Cita actualizada correctamente", cita });

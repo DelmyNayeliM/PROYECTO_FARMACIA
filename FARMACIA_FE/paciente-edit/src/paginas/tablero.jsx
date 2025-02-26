@@ -22,7 +22,12 @@ const Tablero = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        setMedicamentos(data);
+        // Aquí calculamos la cantidad restante (cantidad - cantidad_venta)
+        const medicamentosConCantidadRestante = data.map(medicamento => ({
+          ...medicamento,
+          cantidadRestante: medicamento.cantidad - medicamento.cantidadventa // Realizamos la resta
+        }));
+        setMedicamentos(medicamentosConCantidadRestante);
       } else {
         setMedicamentos([]);
       }
@@ -55,8 +60,7 @@ const Tablero = () => {
             placeholder="nombre medicamento"
             value={searchTerm}
             onChange={handleSearchChange}
-        />
-
+          />
         </div>
       </div>
 
@@ -68,7 +72,7 @@ const Tablero = () => {
               <th scope="col">Nombre del Medicamento</th>
               <th scope="col">Descripción</th>
               <th scope="col" className="text-end">Precio</th>
-              <th scope="col" className="text-end">Cantidad</th>
+              <th scope="col" className="text-end">Cantidad Restante</th>
             </tr>
           </thead>
 
@@ -88,7 +92,7 @@ const Tablero = () => {
                   <td>{medicamento.nombre_medicamento}</td>
                   <td>{medicamento.descripcion}</td>
                   <td>L.{medicamento.precio}</td>
-                  <td className="text-end">{medicamento.cantidad}</td>
+                  <td className="text-end">{medicamento.cantidadRestante}</td>
                 </tr>
               ))
             )}
