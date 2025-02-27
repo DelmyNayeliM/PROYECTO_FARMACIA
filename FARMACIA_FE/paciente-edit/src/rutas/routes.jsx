@@ -10,6 +10,7 @@ import Tablero from '../paginas/tablero';
 import Inicioadmin from '../paginas/menu_admin';
 import LoginForm from '../paginas/Login';
 import TableroPaciente from '../paginas/tablero_paciente';
+import FormularioRegistro from '../paginas/form_registro';
 
 export const routers = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ export const routers = createBrowserRouter(
         <Route path="/acercade" element={<Acercade />} />
         <Route path="/tablero" element={<Tablero />} />
         <Route path="/tablero_paciente" element={<TableroPaciente />} />
+        <Route path="/form_registro" element={<FormularioRegistro />} />
       </Route>
 
       {/* Redirección si no se encuentra una ruta específica */}

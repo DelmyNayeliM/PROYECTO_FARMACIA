@@ -8,36 +8,34 @@ const FormularioRegistro = ({ medicamentoid }) => {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [cantidad, setCantidad] = useState('');
-  const [id, setId] = useState('');
+  const [id, setId] = useState();
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
-  useEffect(() => {
-    const fetchMedicamento = async () => {
-      if (!id) return; // Si no hay ID, no hacer nada
-  
-      try {
-        const response = await axios.get(`${medicamentoid}/${id}`); 
-        if (response.status === 200){
-        const medicamento = response.data;
 
+useEffect(() => {
+  const fetchMedicamento = async () => {
+    if (!id) return; // Si no hay ID, no hacer nada
+    try {
+      const response = await axios.get(`${medicamentoid}/${id}`);
+      if (response.status === 200) {
+        const medicamento = response.data;
         setCategoria(medicamento.categoria);
         setNombre_Medicamento(medicamento.nombre_medicamento);
         setDescripcion(medicamento.descripcion);
         setPrecio(medicamento.precio);
         setCantidad(medicamento.cantidad);
-        }else{
-          console.error("No se encontro el medicamento");
-        }
-      } catch (error) {
-        console.error('Error al obtener el medicamento', error);
-        alert('No se encontró el medicamento con ese ID');
+      } else {
+        console.error("No se encontró el medicamento");
       }
-    };
-  
-    fetchMedicamento();
-  }, [id]); // Esto se ejecuta cada vez que el id cambia
-  
+    } catch (error) {
+      console.error('Error al obtener el medicamento', error);
+      alert('No se encontró el medicamento con ese ID');
+    }
+  };
+
+  if (id) fetchMedicamento(); // Solo ejecutar si el ID es válido
+}, [id, medicamentoid]); // Asegúrate de que id esté en las dependencias
 
   useEffect(() => {
     const fetchMedicamentos = async () => {
@@ -158,9 +156,11 @@ const FormularioRegistro = ({ medicamentoid }) => {
               </ul>
             </div>
 
+            {/* Barra de ID */}
+            <div className="col-md-12"></div>
             <div className="form-group row">
             <label htmlFor="id" className="text-black">
-              ID del Medicamento: <span className="text-danger">*</span>
+             <span className="text-danger">*</span>
             </label>
             <input
               type="text"

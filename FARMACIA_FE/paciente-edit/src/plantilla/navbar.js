@@ -24,7 +24,7 @@ const Navbar = () => {
                   <Link to="/tablero">Inventario</Link>
                 </li>
                 <li>
-                  <Link to="/tablero_paciente">Medicamentos</Link>
+                  <Link to="/form_registro">Medicamentos</Link>
                 </li>
                 <li>
                   <Link to="/form_citas">Citas</Link>
