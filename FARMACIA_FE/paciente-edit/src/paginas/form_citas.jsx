@@ -117,6 +117,7 @@ useEffect(() => {
             nombre_medicamento,
             cantidadventa,
         });
+        console.log('Respuesta del servidor:', response);
       } else if (action === 'editar' && id) {
         response = await axios.put(`${citaseditar}/${id}`, {
           fecha_cita,
@@ -539,7 +540,7 @@ h1 {
                   </div>
                   <div className="form-group row">
                     <div className="col-md-6">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block" onClick={(e) => handleSubmit(e, 'guardar')}>
                         Guardar Cita
                       </button>
                     </div>
