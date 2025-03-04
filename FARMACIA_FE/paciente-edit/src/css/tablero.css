@@ -1,3 +1,4 @@
+/* Estilo para el campo de búsqueda */
 .search-input {
     border: none;
     padding-left: 32px;
@@ -5,29 +6,48 @@
     max-width: 600px;  /* Esto limita el tamaño máximo a 600px */
 }
 
+/* Posicionamiento del icono de búsqueda */
 .search {
     top: 6px;
     left: 10px;
 }
 
-
+/* Estilo para la clase .green */
 .green {
     color: rgb(184, 240, 184);
 }
 
-/* Aplicar table-layout fijo para asegurar que todas las columnas tengan el mismo tamaño */
+/* Estilo para la tabla con layout fijo */
 .table {
-    table-layout: fixed;
+    table-layout: auto;  /* Permite que las celdas se ajusten automáticamente al contenido */
     width: 100%;
 }
 
-/* Mantener el encabezado de la tabla fijo */
+/* Estilo para las celdas de la tabla */
+.table td {
+    word-wrap: break-word;  /* Esto hace que el texto largo se divida automáticamente en varias líneas */
+    white-space: normal;    /* Permite que el texto de una celda ocupe más de una línea */
+    overflow: hidden;       /* Asegura que el contenido largo no desborde fuera de la celda */
+    padding: 10px 15px;     /* Ajuste de padding para celdas */
+    vertical-align: middle; /* Alineación vertical de las celdas */
+}
+
+/* Estilo específico para la columna de descripción */
+.table td:nth-child(3) {  /* Esto selecciona la tercera columna, que es la de descripción */
+    max-width: 250px;  /* Ajusta el ancho de la columna de descripción según lo que necesites */
+    word-wrap: break-word;  /* Permite que el texto largo se divida automáticamente */
+    white-space: normal;    /* Permite que el texto ocupe varias líneas */
+}
+
+/* Estilo para el encabezado de la tabla */
 .table thead th {
     position: sticky;
     top: 0;
     background-color: #f8f9fa;
-    z-index: 2; /* Asegura que el encabezado esté encima de los datos */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Añadir sombra para diferenciarlo */
+    z-index: 2;  /* Asegura que el encabezado esté encima de los datos */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);  /* Añadir sombra para diferenciarlo */
+    padding: 12px;
+    text-align: center;
 }
 
 /* Ajuste para el espaciado entre las columnas */
@@ -36,7 +56,7 @@
     text-align: center;
 }
 
-/* Mantener la tabla responsive */
+/* Mantener la tabla responsiva */
 .table-responsive {
     overflow-x: auto;
     margin-top: 10px;
@@ -46,7 +66,7 @@
 .table td, .table th {
     vertical-align: middle;
     min-height: 50px;
-    padding: 10px 15px; /* Ajuste de padding para celdas */
+    padding: 10px 15px;  /* Ajuste de padding para celdas */
 }
 
 /* Ajustar la fila de "Cargando..." y "No hay resultados" */
@@ -55,6 +75,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 16px;  /* Ajuste del tamaño de fuente para que se vea más grande */
 }
 
 /* Centrado de las celdas de la tabla */
@@ -64,5 +85,20 @@
 
 /* Añadir un espacio de fondo consistente en las filas */
 .table tbody tr {
-    min-height: 50px; /* Mantener la altura de las filas consistente */
+    min-height: 50px;  /* Mantener la altura de las filas consistente */
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+    .table td, .table th {
+        font-size: 14px;
+    }
+
+    .table td:nth-child(3) {
+        max-width: 150px;  /* Reduce el ancho de la columna en pantallas más pequeñas */
+    }
+
+    .search-input {
+        width: 100%;  /* Hace que el input de búsqueda ocupe todo el ancho */
+    }
 }
