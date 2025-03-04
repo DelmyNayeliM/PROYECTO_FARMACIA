@@ -1,115 +1,102 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar, } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, medicamentoeliminar, pacientebuscar } from '../configuraciones/apiURLS';
 
-const Formulariopaciente = ({ pacienteEditado }) => {
-  const [tipo_paciente, setTipo_paciente] = useState('');
-  const [tipo_empleado, setTipo_empleado] = useState('');
-  const [nombre_completo, setNombre_completo] = useState('');
-  const [clave_empleado, setClave_empleado] = useState('');
-  const [clave_expediente, setClave_expediente] = useState('');
-  const [foto_paciente, setFoto_paciente] = useState('');
+const Formulariopaciente = ({ pacienteid }) => {
+  const [tipo_paciente, setTipoPaciente] = useState('');
+  const [tipo_empleado, setTipoEmpleado] = useState('');
+  const [nombre_completo, setNombreComp] = useState('');
+  const [clave_empleado, setClaveEmpl] = useState('');
+  const [clave_expediente, setClaveExpe] = useState('');
+  const [foto_paciente, setFotopaciente] = useState('');
   const [telefono, setTelefono] = useState('');
   const [edad, setEdad] = useState('');
   const [direccion, setDireccion] = useState('');
   const [correo, setCorreo] = useState('');
   const [enfermedad_base, setEnfermedad] = useState('');
-  const [id, setId] = useState('');
-  const [fotoPreview, setFotoPreview] = useState(null); 
+  const [id, setId] = useState();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pacienteResultados, setPacienteResultados] = useState([]);
+  const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
 
   useEffect(() => {
-    if (pacienteEditado) {
-      setTipo_paciente(pacienteEditado.tipo_paciente);
-      setTipo_empleado(pacienteEditado.tipo_empleado);
-      setNombre_completo(pacienteEditado.nombre_completo);
-      setClave_empleado(pacienteEditado.clave_empleado);
-      setClave_expediente(pacienteEditado.clave_expediente);
-      setFoto_paciente(pacienteEditado.foto_paciente);
-      setTelefono(pacienteEditado.telefono);
-      setEdad(pacienteEditado.edad);
-      setDireccion(pacienteEditado.direccion);
-      setCorreo(pacienteEditado.correo);
-      setEnfermedad(pacienteEditado.enfermedad_base);
-      setId(pacienteEditado.id);
-    }
-  }, [pacienteEditado]);
+    const fetchPaciente = async () => {
+      if (!id) return;
+      try {
+        const response = await axios.get(`${pacienteid}/${id}`);
+        if (response.status === 200) {
+          const paciente = response.data;
+          setTipoPaciente(paciente.tipo_paciente);
+          setTipoEmpleado(paciente.tipo_empleado);
+          setNombreComp(paciente.nombre_completo);
+          setClaveEmpl(paciente.clave_empleado);
+          setClaveExpe(paciente.clave_expediente);
+          setFotopaciente(paciente.foto_paciente);
+          setTelefono(paciente.telefono);
+          setEdad(paciente.edad);
+          setDireccion(paciente.direccion);
+          setCorreo(paciente.correo);
+          setEnfermedad(paciente.enfermedad_base);
+        } else {
+          console.error("No se encontró el paciente");
+        }
+      } catch (error) {
+        console.error('Error al obtener el paciente', error);
+        alert('No se encontró el paciente con ese ID');
+      }
+    };
 
-  const handleFileUpload = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
+    if (id) fetchPaciente();
+  }, [id, pacienteid]);
 
-    try {
-      const response = await axios.post('/guardarImagenPaciente', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data.imageUrl;
-    } catch (error) {
-      console.error('Error al subir la imagen', error);
-      return null;  
-    }
-  };
-
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFoto_paciente(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFotoPreview(reader.result); 
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setFotoPreview(null); 
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (
-      tipo_paciente === '' ||
-      tipo_empleado === '' ||
-      nombre_completo === '' ||
-      clave_empleado === '' ||
-      clave_expediente === '' ||
-      telefono === '' ||
-      edad === '' ||
-      direccion === '' ||
-      correo === '' ||
-      enfermedad_base === ''
-    ) {
-      console.log('Por favor, complete todos los campos');
-      return;
-    }
-    let fotoPacienteUrl = foto_paciente;
-    if (foto_paciente && typeof foto_paciente !== 'string') {
-      fotoPacienteUrl = await handleFileUpload(foto_paciente);
-      if (!fotoPacienteUrl) {
-        alert('Hubo un problema al subir la imagen');
+  useEffect(() => {
+    const fetchPacientes = async () => {
+      if (searchTerm.trim() === '') {
+        setPacienteResultados([]);
         return;
       }
+
+      try {
+        const response = await axios.get(`${pacientebuscar}?search=${searchTerm}`);
+        setPacienteResultados(response.data);
+      } catch (error) {
+        console.error('Error al buscar pacientes', error);
+      }
+    };
+
+    fetchPacientes();
+  }, [searchTerm]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSelectpacientes = (paciente) => {
+    setTipoPaciente(paciente.tipo_paciente);
+    setTipoEmpleado(paciente.tipo_empleado);
+    setNombreComp(paciente.nombre_completo);
+    setClaveEmpl(paciente.clave_empleado);
+    setClaveExpe(paciente.clave_expediente);
+    setFotopaciente(paciente.foto_paciente);
+    setTelefono(paciente.telefono);
+    setEdad(paciente.edad);
+    setDireccion(paciente.direccion);
+    setCorreo(paciente.correo);
+    setEnfermedad(paciente.enfermedad_base);
+    setId(paciente._id);
+  };
+
+  const handleSubmit = async (e, action) => {
+    e.preventDefault();
+
+    if (tipo_paciente === '' || tipo_empleado === '' || nombre_completo === '' || clave_empleado === '' || clave_expediente === '' || telefono === '' || edad === '' || direccion === '' || correo === '' || enfermedad_base === '') {
+      console.log('Por favor, complete todos los campos');
+      return;
     }
 
     try {
       let response;
-      if (id) {
-        response = await axios.put(`${pacienteeditar}/${id}`, {
-          tipo_paciente,
-          tipo_empleado,
-          nombre_completo,
-          clave_empleado,
-          clave_expediente,
-          foto_paciente,
-          telefono,
-          edad,
-          direccion,
-          correo,
-          enfermedad_base,
-        });
-      } else {
+      if (action === 'guardar') {
         response = await axios.post(pacienteguardar, {
           tipo_paciente,
           tipo_empleado,
@@ -121,29 +108,71 @@ const Formulariopaciente = ({ pacienteEditado }) => {
           edad,
           direccion,
           correo,
-          enfermedad_base,
+          enfermedad_base
+        });
+      } else if (action === 'editar' && id) {
+        response = await axios.put(`${pacienteeditar}/${id}`, {
+          tipo_paciente,
+          tipo_empleado,
+          nombre_completo,
+          clave_empleado,
+          clave_expediente,
+          foto_paciente,
+          telefono,
+          edad,
+          direccion,
+          correo,
+          enfermedad_base
         });
       }
 
-      console.log(response.data); 
-      setTipo_paciente('');
-      setTipo_empleado('');
-      setNombre_completo('');
-      setClave_empleado('');
-      setClave_expediente('');
-      setFoto_paciente('');
+      console.log(response.data);
+      setTipoPaciente('');
+      setTipoEmpleado('');
+      setNombreComp('');
+      setClaveEmpl('');
+      setClaveExpe('');
+      setFotopaciente('');
       setTelefono('');
       setEdad('');
       setDireccion('');
       setCorreo('');
       setEnfermedad('');
-      setFotoPreview(null);  
-      alert('Paciente guardado exitosamente');
+      setId('');
+      alert('Paciente guardado o editado exitosamente');
     } catch (error) {
-      console.error('Error al guardar el paciente', error);
-      alert('Hubo un error al realizar su accion. Inténtelo nuevamente.');
+      console.error('Error al guardar o editar el Paciente', error);
     }
   };
+
+  const handleEliminar = async () => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este Paciente?')) {
+      try {
+        const response = await axios.delete(`${medicamentoeliminar}/${id}`);
+        console.log(response.data);
+        alert('Paciente eliminado exitosamente');
+      } catch (error) {
+        console.error('Error al eliminar el paciente', error);
+      }
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFotopaciente(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFotoPreview(reader.result); // Mostrar la vista previa de la imagen
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  //const imprimirFormulario = () => {
+   // window.print(); // Imprime el formulario
+ // };
+
 
   const imprimirFormulario = () => {
     // Obtener fecha y hora actual
@@ -234,8 +263,10 @@ const Formulariopaciente = ({ pacienteEditado }) => {
   
   
   
+
+
   return (
-  <div className="site-wrap">
+    <div className="site-wrap">
       <div className="site-section">
         <div className="container">
           <div className="row">
@@ -253,7 +284,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                       id="tipo_paciente"
                       name="tipo_paciente"
                       value={tipo_paciente}
-                      onChange={(e) => setTipo_paciente(e.target.value)}
+                      onChange={(e) => setTipoPaciente(e.target.value)}
                     >
                       <option value="">Seleccionar...</option>
                       <option value="Trabajador">Trabajador</option>
@@ -267,11 +298,11 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                       id="tipo_empleado"
                       name="tipo_empleado"
                       value={tipo_empleado}
-                      onChange={(e) => setTipo_empleado(e.target.value)}
+                      onChange={(e) => setTipoEmpleado(e.target.value)}
                     >
                       <option value="">Seleccionar...</option>
-                      <option value="Trabajador">Temporal</option>
-                      <option value="Dependiente">Permanente</option>
+                      <option value="Temporal">Temporal</option>
+                      <option value="Permanente">Permanente</option>
                     </select>
                   </div>
 
@@ -284,8 +315,7 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         id="nombre_completo"
                         name="nombre_completo"
                         value={nombre_completo}
-                        onChange={(e) => setNombre_completo(e.target.value)}
-                         title="Escribir el nombre completo"
+                        onChange={(e) => setNombreComp(e.target.value)}
                       />
                     </div>
 
@@ -297,23 +327,21 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         id="clave_empleado"
                         name="clave_empleado"
                         value={clave_empleado}
-                        onChange={(e) => setClave_empleado(e.target.value)}
-                         title="MAX 5"
+                        onChange={(e) => setClaveEmpl(e.target.value)}
                       />
                     </div>
                   </div>
 
                   <div className="form-group row">
                     <div className="col-md-6">
-                      <label className="text-black"  htmlFor="clave_expediente">Clave del Expediente:</label>
+                      <label className="text-black" htmlFor="clave_expediente">Clave del Expediente:</label>
                       <input
                         type="text"
                         className="form-control"
                         id="clave_expediente"
                         name="clave_expediente"
                         value={clave_expediente}
-                        onChange={(e) => setClave_expediente(e.target.value)}
-                        title="MAX 8"
+                        onChange={(e) => setClaveExpe(e.target.value)}
                       />
                     </div>
 
@@ -348,12 +376,11 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="telefono"
                         value={telefono}
                         onChange={(e) => setTelefono(e.target.value)}
-                        title="solo numeros"
                       />
                     </div>
 
                     <div className="col-md-6">
-                      <label  className="text-black" htmlFor="edad">Edad:</label>
+                      <label className="text-black" htmlFor="edad">Edad:</label>
                       <input
                         type="number"
                         className="form-control"
@@ -387,7 +414,6 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                         name="correo"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
-                        title="@ que sea un correo válido"
                       />
                     </div>
                   </div>
@@ -406,26 +432,23 @@ const Formulariopaciente = ({ pacienteEditado }) => {
                     </div>
                   </div>
 
-                  <div className="form-group">
-                  <div className="row">
-                    <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block">Guardar Paciente</button>
+                  <div className="form-group row">
+                    <div className="col-md-6">
+                      <button type="submit" className="btn btn-primary btn-lg btn-block" onClick={(e) => handleSubmit(e, 'guardar')}>Guardar Paciente</button>
                     </div>
-             {
-             //<div className="col-md-4">
-                      //<button type="submit" className="btn btn-primary btn-lg btn-block">Editar Paciente</button>
-                    //</div>
-                    //<div className="col-md-4">
-                     // <button type="submit" className="btn btn-primary btn-lg btn-block">Eliminar Paciente</button>
-                   // </div>
-                  //</div>
-            }   
-              </div>
-              </div>
+                    <div className="col-md-6">
+                      <button type="submit" className="btn btn-warning btn-lg btn-block" onClick={(e) => handleSubmit(e, 'editar')}>Editar Paciente</button>
+                    </div>
+                  </div>
 
                   <div className="form-group">
+                    <div className="col-md-12">
+                      <button type="button" className="btn btn-danger btn-lg btn-block" onClick={handleEliminar}>Eliminar Paciente</button>
+                    </div>
+                    <div className="form-group">
                   <div className="col-md-12">
                     <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>
+                  </div>
                   </div>
                   </div>
                 </div>

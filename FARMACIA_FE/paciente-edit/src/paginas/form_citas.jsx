@@ -1,95 +1,123 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { citasguardar, citaseditar, citasbuscar } from '../configuraciones/apiURLS';
-//import '../css/reporte.css';
+import { citasguardar, citaseditar, citasbuscar} from '../configuraciones/apiURLS';
 
-const Formulariocitas = ({ citasEditado }) => {
-  const [fecha_cita, setFecha_cita] = useState('');
-  const [nombre_dr, setNombre_dr] = useState('');
-  const [nombre_paciente, setNombre_paciente] = useState('');
+const Formulariocitas = ({ citaid }) => {
+  const [fecha_cita, setFechaCita] = useState('');
+  const [nombre_dr, setNombreDR] = useState('');
+  const [nombre_paciente, setNombrepaciente] = useState('');
   const [presion, setPresion] = useState('');
   const [peso, setPeso] = useState('');
-  const [ritmo_cardiaco, setRitmo_cardiaco] = useState('');
+  const [ritmo_cardiaco, setRitmo] = useState('');
   const [temperatura, setTemperatura] = useState('');
   const [sintomas, setSintomas] = useState('');
   const [receta, setReceta] = useState('');
   const [observaciones, setObservaciones] = useState('');
-  const [nombre_medicamento, setNombre_medicamento] = useState('');
-  const [cantidadventa, setCantidadVenta] = useState('');
-  const [id, setId] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [citasResultados, setCitasResultados] = useState([]);
-  const [selectedCita, setSelectedCita] = useState(null);
+  const [nombre_medicamento, setNombreM] = useState('');
+  const [cantidadventa, setCantidadv] = useState('');
+  const [id, setId] = useState();
+  const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
+  const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
-  useEffect(() => {
-    if (citasEditado) {
-      setFecha_cita(citasEditado.fecha_cita);
-      setNombre_dr(citasEditado.nombre_dr);
-      setNombre_paciente(citasEditado.nombre_paciente);
-      setPresion(citasEditado.presion);
-      setPeso(citasEditado.peso);
-      setRitmo_cardiaco(citasEditado.ritmo_cardiaco);
-      setTemperatura(citasEditado.temperatura);
-      setSintomas(citasEditado.sintomas);
-      setReceta(citasEditado.receta);
-      setObservaciones(citasEditado.observaciones);
-      setNombre_medicamento(citasEditado.nombre_medicamento);
-      setCantidadVenta(citasEditado.cantidadventa);
-      setId(citasEditado.id);
-    }
-  }, [citasEditado]);
 
-  const handleSearchChange = async (e) => {
-    setSearchTerm(e.target.value);
+useEffect(() => {
+  const fetchCita = async () => {
+    if (!id) return; // Si no hay ID, no hacer nada
     try {
-      const response = await axios.get(`${citasbuscar}?query=${e.target.value}`);
-      setCitasResultados(response.data);
+      const response = await axios.get(`${citaid}/${id}`);
+      if (response.status === 200) {
+        const cita = response.data;
+        setFechaCita(cita.fecha_cita);
+        setNombreDR(cita.nombre_dr);
+        setNombrepaciente(cita.nombre_paciente);
+        setPresion(cita.presion);
+        setPeso(cita.peso);
+        setRitmo(cita.ritmo_cardiaco);
+        setTemperatura(cita.temperatura);
+        setSintomas(cita.sintomas);
+        setReceta(cita.receta);
+        setObservaciones(cita.observaciones);
+        setNombreM(cita.nombre_medicamento);
+        setCantidadv(cita.cantidadventa);
+      } else {
+        console.error("No se encontró la cita");
+      }
     } catch (error) {
-      console.error('Error al buscar citas', error);
+      console.error('Error al obtener la cita', error);
+      alert('No se encontró la cita con ese ID');
     }
   };
 
-  const handleSelectCita = (cita) => {
-    setFecha_cita(cita.fecha_cita);
-    setNombre_dr(cita.nombre_dr);
-    setNombre_paciente(cita.nombre_paciente);
+  if (id) fetchCita(); // Solo ejecutar si el ID es válido
+}, [id, citaid]); // Asegúrate de que id esté en las dependencias
+
+  useEffect(() => {
+    const fetchCita = async () => {
+      if (searchTerm.trim() === '') {
+        setcitasResultados([]); // Limpiar resultados si la búsqueda está vacía
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${citasbuscar}?search=${searchTerm}`);
+        setcitasResultados(response.data); // Asignar los resultados al estado
+      } catch (error) {
+        console.error('Error al buscar la cita', error);
+      }
+    };
+
+    fetchCita();
+  }, [searchTerm]); 
+
+  // Maneja el cambio en la barra de búsqueda
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Función para seleccionar un medicamento de los resultados de búsqueda
+  const handleSelectcita = (cita) => {
+    setFechaCita(cita.fecha_cita);
+    setNombreDR(cita.nombre_dr);
+    setNombrepaciente(cita.nombre_paciente);
     setPresion(cita.presion);
     setPeso(cita.peso);
-    setRitmo_cardiaco(cita.ritmo_cardiaco);
+    setRitmo(cita.ritmo_cardiaco);
     setTemperatura(cita.temperatura);
     setSintomas(cita.sintomas);
     setReceta(cita.receta);
     setObservaciones(cita.observaciones);
-    setNombre_medicamento(cita.nombre_medicamento);
-    setCantidadVenta(cita.cantidadventa);
-    setId(cita.id);
-    setCitasResultados([]); 
+    setNombreM(cita.nombre_medicamento);
+    setCantidadv(cita.cantidadventa);
+    setId(cita._id); // Asumí que el medicamento tiene un campo _id
   };
 
-  const handleSubmit = async (e) => {
+  // Maneja el envío del formulario para guardar o editar el medicamento
+  const handleSubmit = async (e, action) => {
     e.preventDefault();
-
-    if (
-      fecha_cita === '' ||
-      nombre_dr === '' ||
-      nombre_paciente === '' ||
-      presion === '' ||
-      peso === '' ||
-      ritmo_cardiaco === '' ||
-      temperatura === '' ||
-      sintomas === '' ||
-      receta === '' ||
-      observaciones === '' ||
-      nombre_medicamento === '' ||
-      cantidadventa === ''
-    ) {
+  
+    if (fecha_cita === '' || nombre_dr === '' || nombre_paciente === '' || presion === '' || peso === '' || ritmo_cardiaco === '' || temperatura === '' || sintomas === '' || receta === '' || observaciones === ''|| nombre_medicamento === '' || cantidadventa === '') {
       console.log('Por favor, complete todos los campos');
       return;
     }
-
+  
     try {
       let response;
-      if (id) {
+      if (action === 'guardar') {
+        response = await axios.post(citasguardar, {
+          fecha_cita,
+            nombre_dr,
+            nombre_paciente,
+            presion,
+            peso,
+            ritmo_cardiaco,
+            temperatura,
+            sintomas,
+            receta,
+            observaciones,
+            nombre_medicamento,
+            cantidadventa,
+        });
+      } else if (action === 'editar' && id) {
         response = await axios.put(`${citaseditar}/${id}`, {
           fecha_cita,
           nombre_dr,
@@ -102,43 +130,43 @@ const Formulariocitas = ({ citasEditado }) => {
           receta,
           observaciones,
           nombre_medicamento,
-          cantidadventa,
-        });
-      } else {
-        response = await axios.post(citasguardar, {
-          fecha_cita,
-          nombre_dr,
-          nombre_paciente,
-          presion,
-          peso,
-          ritmo_cardiaco,
-          temperatura,
-          sintomas,
-          receta,
-          observaciones,
-          nombre_medicamento,
-          cantidadventa,
+          cantidadventa
         });
       }
+  
       console.log(response.data);
-      setFecha_cita('');
-      setNombre_dr('');
-      setNombre_paciente('');
+      setFechaCita('');
+      setNombreDR('');
+      setNombrepaciente('');
       setPresion('');
       setPeso('');
-      setRitmo_cardiaco('');
+      setRitmo('');
       setTemperatura('');
       setSintomas('');
       setReceta('');
       setObservaciones('');
-      setNombre_medicamento('');
-      setCantidadVenta('');
-      alert('Cita guardada exitosamente');
+      setNombreM('');
+      setCantidadv('');
+      setId(''); // Limpiamos el ID
+      alert('Cita guardada o editada exitosamente');
     } catch (error) {
-      console.error('Error al guardar la cita', error);
-      alert('Hubo un error al guardar la cita. Inténtelo nuevamente.');
+      console.error('Error al guardar o editar la cita', error);
     }
   };
+  
+  // Función para eliminar el medicamento
+  const handleEliminar = async () => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+      try {
+        const response = await axios.delete(`${citaseditar}/${id}`);
+        console.log(response.data);
+        alert('Cita eliminada exitosamente');
+      } catch (error) {
+        console.error('Error al eliminar la cita', error);
+      }
+    }
+  };
+
 
   const imprimirFormulario = () => {
     const fechaactual_cita = new Date().toLocaleDateString(); 
@@ -279,7 +307,7 @@ h1 {
 };
 
 
-  return (
+    return (
     <div className="site-wrap">
       <div className="site-section">
         <div className="container">
@@ -302,7 +330,7 @@ h1 {
               <li
                 key={cita.id}
                 className="list-group-item"
-                onClick={() => handleSelectCita(cita)}
+                onClick={() => handleSelectcita(cita)}
               >
                 {cita.nombre_paciente} - {cita.nombre_dr} 
               </li>
@@ -328,7 +356,7 @@ h1 {
                         id="fecha_cita"
                         name="fecha_cita"
                         value={fecha_cita}
-                        onChange={(e) => setFecha_cita(e.target.value)}
+                        onChange={(e) => setFechaCita(e.target.value)}
                       />
                     </div>
                     {/* Nombre del Doctor */}
@@ -342,7 +370,7 @@ h1 {
                       id="nombre_dr"
                       name="nombre_dr"
                       value={nombre_dr}
-                      onChange={(e) => setNombre_dr(e.target.value)}
+                      onChange={(e) => setNombreDR(e.target.value)}
                       title="Ingrese el nombre  del doctor"  
                     />
                   </div>
@@ -360,7 +388,7 @@ h1 {
                         id="nombre_paciente"
                         name="nombre_paciente"
                         value={nombre_paciente}
-                        onChange={(e) => setNombre_paciente(e.target.value)}
+                        onChange={(e) => setNombrepaciente(e.target.value)}
                         title="Ingrese el nombre  del paciente"  
                       />
                     </div>
@@ -411,7 +439,7 @@ h1 {
                         id="ritmo_cardiaco"
                         name="ritmo_cardiaco"
                         value={ritmo_cardiaco}
-                        onChange={(e) => setRitmo_cardiaco(e.target.value)}
+                        onChange={(e) => setRitmo(e.target.value)}
                          title="80 lpm"
                       />
                     </div>
@@ -491,7 +519,7 @@ h1 {
                         id="nombre_medicamento"
                         name="nombre_medicamento"
                         value={nombre_medicamento}
-                        onChange={(e) => setNombre_medicamento(e.target.value)}
+                        onChange={(e) => setNombreM(e.target.value)}
                         title="Debe tener entre 3-75 caracteres"
                       />
                     </div>
@@ -505,7 +533,7 @@ h1 {
                         id="cantidadventa"
                         name="cantidadventa"
                         value={cantidadventa}
-                        onChange={(e) => setCantidadVenta(e.target.value)}
+                        onChange={(e) => setCantidadv(e.target.value)}
                       />
                     </div>
                   </div>
@@ -539,3 +567,6 @@ h1 {
 };
 
 export default Formulariocitas;
+
+
+

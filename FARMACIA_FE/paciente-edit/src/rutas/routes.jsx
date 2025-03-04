@@ -22,7 +22,6 @@ export const routers = createBrowserRouter(
       {/* Rutas protegidas que requieren el Navbar */}
       <Route element={<Navbar />}>
         <Route path="/" element={<Inicioadmin />} />
-        <Route path="/medicamento" element={<Form_medicamento />} />
         <Route path="/form_paciente" element={<Formulariopaciente />} />
         <Route path="/form_citas" element={<Formulariocitas />} />
         <Route path="/acercade" element={<Acercade />} />
