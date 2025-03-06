@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { medicamentoguardar, medicamentoeditar, medicamentobuscar} from '../configuraciones/apiURLS';
+import { medicamentoguardar, medicamentoeditar, medicamentobuscar, medicamentoid, medicamentoeliminar} from '../configuraciones/apiURLS';
 
 const FormularioRegistro = ({ medicamentoid }) => {
   const [categoria, setCategoria] = useState('');
@@ -67,7 +67,7 @@ useEffect(() => {
     setDescripcion(medicamento.descripcion);
     setPrecio(medicamento.precio);
     setCantidad(medicamento.cantidad);
-    setId(medicamento._id); // Asumí que el medicamento tiene un campo _id
+    setId(medicamento.id); 
   };
 
   // Maneja el envío del formulario para guardar o editar el medicamento
@@ -116,7 +116,7 @@ useEffect(() => {
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
       try {
-        const response = await axios.delete(`${medicamentoeditar}/${id}`);
+        const response = await axios.delete(`${medicamentoeliminar}/${id}`);
         console.log(response.data);
         alert('Medicamento eliminado exitosamente');
       } catch (error) {

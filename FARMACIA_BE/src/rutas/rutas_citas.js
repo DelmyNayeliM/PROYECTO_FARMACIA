@@ -158,4 +158,25 @@ rutas.get('/buscar-citas',
     }
 );
 
+// Ruta GET para buscar un medicamento por su ID
+rutas.get('/buscarid/:id', async (req, res) => {
+    try {
+      const { id } = req.params;  // Tomamos el ID desde los parámetros de la URL
+  
+      // Buscar el medicamento por ID usando `findByPk`
+      const citas = await Cita.findByPk(id);
+  
+      // Si no se encuentra la cita, devolvemos un error 404
+      if (!citas) {
+        return res.status(404).json({ error: 'Cita no encontrada' });
+      }
+  
+      // Si encontramos la cita, lo devolvemos en la respuesta
+      return res.status(200).json({ citas });
+    } catch (error) {
+      console.error('Error al buscar la cita:', error);
+      return res.status(500).json({ error: 'Error al buscar cita' });
+    }
+  });
+
 module.exports = rutas;

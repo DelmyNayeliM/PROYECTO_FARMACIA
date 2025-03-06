@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { citasguardar, citaseditar, citasbuscar} from '../configuraciones/apiURLS';
+import { citasguardar, citaseditar, citasbuscar, citasbuscarid} from '../configuraciones/apiURLS';
+
 
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState('');
@@ -24,7 +25,7 @@ useEffect(() => {
   const fetchCita = async () => {
     if (!id) return; // Si no hay ID, no hacer nada
     try {
-      const response = await axios.get(`${citaid}/${id}`);
+      const response = await axios.get(`${citasbuscarid}/${id}`);
       if (response.status === 200) {
         const cita = response.data;
         setFechaCita(cita.fecha_cita);
@@ -74,7 +75,7 @@ useEffect(() => {
     setSearchTerm(event.target.value);
   };
 
-  // Función para seleccionar un medicamento de los resultados de búsqueda
+  // Función para seleccionar una cita de los resultados de búsqueda
   const handleSelectcita = (cita) => {
     setFechaCita(cita.fecha_cita);
     setNombreDR(cita.nombre_dr);
@@ -88,7 +89,7 @@ useEffect(() => {
     setObservaciones(cita.observaciones);
     setNombreM(cita.nombre_medicamento);
     setCantidadv(cita.cantidadventa);
-    setId(cita._id); // Asumí que el medicamento tiene un campo _id
+    setId(cita.id); 
   };
 
   // Maneja el envío del formulario para guardar o editar el medicamento
@@ -315,6 +316,18 @@ h1 {
           <div className="row">
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Citas</h2>
+            </div>
+            {/* Campo para ingresar ID */}
+            <div className="col-md-12">
+              <label htmlFor="citaid" className="text-black">
+                Ingrese ID de la Cita:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+              />
             </div>
             
             <div className="col-md-12">
