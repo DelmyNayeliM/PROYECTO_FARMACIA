@@ -117,7 +117,7 @@ rutas.get('/buscar-citas',
         .withMessage("El nombre del paciente debe tener al menos 3 caracteres"),
 
     async (req, res) => {
-        // Verificar si la validación pasó
+        // Verificar si la validación 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });

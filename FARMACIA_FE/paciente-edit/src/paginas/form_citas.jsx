@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { citasguardar, citaseditar, citasbuscar, citasbuscarid} from '../configuraciones/apiURLS';
+import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar} from '../configuraciones/apiURLS';
 
 
 const Formulariocitas = ({ citaid }) => {
@@ -19,7 +19,7 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState();
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-
+  
 
 useEffect(() => {
   const fetchCita = async () => {
@@ -160,7 +160,7 @@ useEffect(() => {
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
       try {
-        const response = await axios.delete(`${citaseditar}/${id}`);
+        const response = await axios.delete(`${citaseliminar}/${id}`);
         console.log(response.data);
         alert('Cita eliminada exitosamente');
       } catch (error) {
@@ -171,9 +171,9 @@ useEffect(() => {
 
 
   const imprimirFormulario = () => {
-    const fechaactual_cita = new Date().toLocaleDateString(); 
+    const fechaactual_cita = new Date().toLocaleDateString();
     const hora_cita = new Date().toLocaleTimeString();
-  
+
     const contenido = `
       <html>
         <head>
@@ -182,57 +182,55 @@ useEffect(() => {
         <body>
         <style>
         body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  color: #333;
-}
-h1 {
-  text-align: center;
-}
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.logo {
-  width: 100px;
-  height: auto;
-}
-.fecha-hora {
-  text-align: right;
-  font-size: 14px;
-}
-.formulario {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-.formulario td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-  word-wrap: break-word;
-  white-space: normal;
-}
-.formulario th {
-  padding: 10px;
-  background-color: #f4f4f4;
-  text-align: left;
-  border-bottom: 2px solid #ddd;
-}
-/* Hacemos que los campos de "Sintomas", "Receta", "Observaciones" sean autoajustables */
-.auto-ajustable {
-  max-width: 500px;
-  min-width: 200px;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-/* Permitir scroll si el contenido excede el límite */
-.campo-largo {
-  max-height: 150px;
-  overflow-y: auto;
-}
+          font-family: Arial, sans-serif;
+          margin: 20px;
+          color: #333;
+        }
+        h1 {
+          text-align: center;
+        }
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        }
+        .logo {
+          width: 100px;
+          height: auto;
+        }
+        .fecha-hora {
+          text-align: right;
+          font-size: 14px;
+        }
+        .formulario {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        .formulario td {
+          padding: 8px;
+          border-bottom: 1px solid #ddd;
+          word-wrap: break-word;
+          white-space: normal;
+        }
+        .formulario th {
+          padding: 10px;
+          background-color: #f4f4f4;
+          text-align: left;
+          border-bottom: 2px solid #ddd;
+        }
+        .auto-ajustable {
+          max-width: 500px;
+          min-width: 200px;
+          white-space: normal;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+        .campo-largo {
+          max-height: 150px;
+          overflow-y: auto;
+        }
         </style>
           <div class="header">
             <img class="logo" src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" alt="Logo">
@@ -246,15 +244,11 @@ h1 {
           
           <table class="formulario">
             <tr>
-              <th>Campo</th>
-              <th>Detalle</th>
+              <td><strong>Fecha de la cita:</strong></td>
+              <td>${fecha_cita}</td>
             </tr>
             <tr>
-              <td div><strong>Fecha de la cita:</strong></td>
-              <td>${fecha_cita}</td>
-            </tr
-            <tr>
-              <td div><strong>Nombre del Doctor:</strong></td>
+              <td><strong>Nombre del Doctor:</strong></td>
               <td>Dr. ${nombre_dr}</td>
             </tr>
             <tr>
@@ -306,7 +300,8 @@ h1 {
     ventana.document.write(contenido);
     ventana.document.close();
     ventana.print();
-};
+  };
+
 
 
     return (
@@ -557,6 +552,16 @@ h1 {
                         Guardar Cita
                       </button>
                     </div>
+                  </div>
+
+                  <div className="col-md-6">
+                  <button
+                      type="button"
+                      className="btn btn-danger btn-lg btn-block"
+                      onClick={() => handleEliminar(citaid)} // Llamar a la función de eliminar
+                    >
+                      Eliminar Cita
+                    </button>
                   </div>
 
                   <div className="form-group">
