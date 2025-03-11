@@ -69,7 +69,7 @@ rutas.delete('/eliminar',
 );
 
 // Ruta para buscar medicamentos
-rutas.get('/buscar-medicamentos', 
+/*rutas.get('/buscar-medicamentos', 
     query("nombre_medicamento")
         .isString()
         .withMessage("El nombre del medicamento debe ser una cadena de caracteres")
@@ -98,7 +98,7 @@ rutas.get('/buscar-medicamentos',
             return res.status(500).json({ message: "Hubo un error al buscar el medicamento" });
         }
     }
-);
+);*/
 
 // Ruta para buscar citas
 rutas.get('/buscar-citas', 
@@ -158,7 +158,7 @@ rutas.get('/buscar-citas',
     }
 );
 
-// Ruta GET para buscar un medicamento por su ID
+// Ruta GET para buscar un cita por su ID
 rutas.get('/buscarid/:id', async (req, res) => {
     try {
       const { id } = req.params;  // Tomamos el ID desde los parámetros de la URL

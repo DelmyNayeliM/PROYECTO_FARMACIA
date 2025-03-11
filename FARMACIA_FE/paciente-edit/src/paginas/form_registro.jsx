@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { medicamentoguardar, medicamentoeditar, medicamentobuscar, medicamentoid, medicamentoeliminar} from '../configuraciones/apiURLS';
+import { medicamentoguardar, medicamentoeditar, medicamentobuscar, medicamentoeliminar} from '../configuraciones/apiURLS';
 
 const FormularioRegistro = ({ medicamentoid }) => {
   const [categoria, setCategoria] = useState('');
@@ -67,8 +67,8 @@ useEffect(() => {
     setDescripcion(medicamento.descripcion);
     setPrecio(medicamento.precio);
     setCantidad(medicamento.cantidad);
-    setId(medicamento.id); 
   };
+  
 
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
@@ -143,13 +143,9 @@ useEffect(() => {
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <ul className="list-group">
+              <ul>
                 {medicamentosResultados.map((medicamento) => (
-                  <li
-                    key={medicamento._id} 
-                    className="list-group-item"
-                    onClick={() => handleSelectmedicamento(medicamento)}
-                  >
+                  <li key={medicamento.id} onClick={() => handleSelectmedicamento(medicamento)}>
                     {medicamento.nombre_medicamento}
                   </li>
                 ))}
