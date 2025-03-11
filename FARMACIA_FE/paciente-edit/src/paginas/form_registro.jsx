@@ -13,30 +13,6 @@ const FormularioRegistro = ({ medicamentoid }) => {
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
 
-useEffect(() => {
-  const fetchMedicamento = async () => {
-    if (!id) return; // Si no hay ID, no hacer nada
-    try {
-      const response = await axios.get(`${medicamentoid}/${id}`);
-      if (response.status === 200) {
-        const medicamento = response.data;
-        setCategoria(medicamento.categoria);
-        setNombre_Medicamento(medicamento.nombre_medicamento);
-        setDescripcion(medicamento.descripcion);
-        setPrecio(medicamento.precio);
-        setCantidad(medicamento.cantidad);
-      } else {
-        console.error("No se encontró el medicamento");
-      }
-    } catch (error) {
-      console.error('Error al obtener el medicamento', error);
-      alert('No se encontró el medicamento con ese ID');
-    }
-  };
-
-  if (id) fetchMedicamento(); // Solo ejecutar si el ID es válido
-}, [id, medicamentoid]); // Asegúrate de que id esté en las dependencias
-
   useEffect(() => {
     const fetchMedicamentos = async () => {
       if (searchTerm.trim() === '') {
@@ -67,7 +43,8 @@ useEffect(() => {
     setDescripcion(medicamento.descripcion);
     setPrecio(medicamento.precio);
     setCantidad(medicamento.cantidad);
-  };
+    setSearchTerm(''); // Limpiar el searchTerm para que desaparezca la lista
+  }
   
 
   // Maneja el envío del formulario para guardar o editar el medicamento
@@ -105,7 +82,6 @@ useEffect(() => {
       setDescripcion('');
       setPrecio('');
       setCantidad('');
-      setId(''); // Limpiamos el ID
       alert('Medicamento guardado o editado exitosamente');
     } catch (error) {
       console.error('Error al guardar o editar el medicamento', error);
@@ -151,22 +127,6 @@ useEffect(() => {
                 ))}
               </ul>
             </div>
-
-            {/* Barra de ID */}
-            <div className="col-md-12"></div>
-            <div className="form-group row">
-            <label htmlFor="id" className="text-black">
-             <span className="text-danger">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="id"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              placeholder="Ingrese el ID del medicamento"
-            />
-          </div>
 
             <div className="col-md-12">
               <form>

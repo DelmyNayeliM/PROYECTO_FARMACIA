@@ -56,7 +56,7 @@ exports.listar = async (req, res) => {
 
 exports.editar = async (req, res) => {
     const { id } = req.query; // Obtener id de la query
-    const { categoria, nombre_medicamento, descripcion, precio } = req.body;
+    const { categoria, nombre_medicamento, descripcion, precio, cantidad} = req.body;
 
     // Validar errores de Express Validator
     const errors = validationResult(req);

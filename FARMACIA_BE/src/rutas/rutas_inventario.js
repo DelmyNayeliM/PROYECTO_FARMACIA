@@ -39,7 +39,7 @@ rutas.put('/editar',
         .withMessage('El nombre debe tener entre 3 a 50 caracteres')
         .custom(async (value, { req }) => {
             const inventarioId = req.query.id; //tomamos el ID de la query
-            const inventarioExistente = await inventario.findOne({
+            const inventarioExistente = await Inventario.findOne({
                 where: { nombre_medicamento: value, id: { [Op.ne]:inventarioId } }
             });
             if (inventarioExistente) {
@@ -100,54 +100,39 @@ rutas.get('/buscar',
 
 // Ruta para buscar medicamentos
 rutas.get('/buscar-medicamentos', 
-    query('nombre_medicamento')
-        .optional()
+    query("nombre_medicamento")
         .isString()
         .withMessage("El nombre del medicamento debe ser una cadena de caracteres")
-        .isLength({ min: 3, max: 50 })
-        .withMessage('El nombre debe tener entre 3 a 50 caracteres'),
-
-    async (req, res) => {
-        // Verificar si la validación 
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+        .isLength({ min: 3 })
+        .withMessage("El nombre debe tener al menos 3 caracteres"),
+        async (req, res) => {
+            try {
+                const { nombre_medicamento } = req.query;
+    
+                // Construir condiciones de búsqueda dinámicamente
+                const whereConditions = {};
+    
+                if (nombre_medicamento) {
+                    whereConditions.nombre_medicamento = nombre_medicamento.toLowerCase(); // Búsqueda exacta
+                }
+                // Realizar la búsqueda en la base de datos con Sequelize
+                const Inventarios = await Inventario.findAll({
+                    where: whereConditions
+                });
+    
+                if (Inventarios.length === 0) {
+                    return res.status(404).json({ message: "No se encontro el medicamento" });
+                }
+    
+                return res.status(200).json(Inventarios);
+            } catch (error) {
+                console.error("Error al buscar medicamentos:", error); // Imprime el error
+                return res.status(500).json({ message: "Hubo un error al buscar los medicamentos " });
+            }
         }
+    );
+    
 
-        try {
-            const { nombre_dr, nombre_paciente } = req.query;
-
-            // Construir condiciones de búsqueda dinámicamente
-            const whereConditions = {};
-
-            if (nombre_dr) {
-                whereConditions.nombre_dr = {
-                    [Op.like]: `%${nombre_dr.toLowerCase()}%`
-                };
-            }
-
-            if (nombre_paciente) {
-                whereConditions.nombre_paciente = {
-                    [Op.like]: `%${nombre_paciente.toLowerCase()}%`
-                };
-            }
-
-            // Realizar la búsqueda en la base de datos con Sequelize
-            const citas = await Cita.findAll({
-                where: whereConditions
-            });
-
-            if (citas.length === 0) {
-                return res.status(404).json({ message: "No se encontraron citas con esos criterios" });
-            }
-
-            return res.status(200).json(citas);
-        } catch (error) {
-            console.error("Error al buscar citas:", error); // Imprime el error
-            return res.status(500).json({ message: "Hubo un error al buscar las citas" });
-        }
-    }
-);
 
 
 // Ruta GET para buscar un medicamento por su ID

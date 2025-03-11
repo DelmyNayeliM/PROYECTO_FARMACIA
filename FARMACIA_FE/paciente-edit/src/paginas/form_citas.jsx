@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar} from '../configuraciones/apiURLS';
-
+import { format, parseISO } from 'date-fns';
 
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState('');
@@ -20,6 +20,30 @@ const Formulariocitas = ({ citaid }) => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
   
+  function TuComponente() {
+    const [fecha_cita, setFechaCita] = useState('');
+  
+    const formatearFecha = (fecha) => {
+      if (!fecha) return '';
+      try {
+        const fechaObj = parseISO(fecha); // Convierte la cadena ISO a un objeto Date
+        return format(fechaObj, 'yyyy-MM-dd'); // Formatea el objeto Date
+      } catch (error) {
+        console.error("Error al formatear la fecha:", error);
+        return '';
+      }
+    };
+    useEffect(() => {
+      const fechaDesdeAPI = "2025-02-27T00:00:00.000Z";
+      setFechaCita(formatearFecha(fechaDesdeAPI));
+    }, []);
+  
+    return (
+      <div className="col-md-6">
+        {/* ... (el resto del código) ... */}
+      </div>
+    );
+  }
 
 useEffect(() => {
   const fetchCita = async () => {
@@ -90,6 +114,7 @@ useEffect(() => {
     setNombreM(cita.nombre_medicamento);
     setCantidadv(cita.cantidadventa);
     setId(cita.id); 
+    setSearchTerm('');
   };
 
   // Maneja el envío del formulario para guardar o editar el medicamento

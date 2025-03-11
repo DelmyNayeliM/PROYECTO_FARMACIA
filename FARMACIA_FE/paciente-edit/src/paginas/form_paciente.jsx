@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar, medicamentoeliminar, pacientebuscar } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar } from '../configuraciones/apiURLS';
 
 const Formulariopaciente = ({ pacienteid }) => {
   const [tipo_paciente, setTipoPaciente] = useState('');
@@ -18,6 +18,45 @@ const Formulariopaciente = ({ pacienteid }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pacienteResultados, setPacienteResultados] = useState([]);
   const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
+
+
+    useEffect(() => {
+      const fetchPacientes = async () => {
+        if (searchTerm.trim() === '') {
+          setPacienteResultados([]); // Limpiar resultados si la búsqueda está vacía
+          return;
+        }
+  
+        try {
+          const response = await axios.get(`${pacientebuscar}?search=${searchTerm}`);
+          setPacienteResultados(response.data); // Asignar los resultados al estado
+        } catch (error) {
+          console.error('Error al buscar el paciente', error);
+        }
+      };
+  
+      fetchPacientes();
+    }, [searchTerm]); 
+  
+    // Maneja el cambio en la barra de búsqueda
+    const handleSearchChange = (event) => {
+      setSearchTerm(event.target.value);
+    };
+  
+    // Función para seleccionar un medicamento de los resultados de búsqueda
+    const handleSelectpacientes = (pacientes) => {
+      setTipoPaciente(pacientes.tipo_paciente);
+      setTipoEmpleado(pacientes.tipo_empleado);
+      setNombreComp(pacientes.nombre_completo);
+      setClaveEmpl(pacientes.clave_empleado);
+      setClaveExpe(pacientes.clave_expediente);
+      setTelefono(pacientes.telefono);
+      setEdad(pacientes.edad);
+      setDireccion(pacientes.direccion);
+      setCorreo(pacientes.correo);
+      setEnfermedad(pacientes.enfermedad_base);
+      setSearchTerm(''); // Limpiar el searchTerm para que desaparezca la lista
+    }
 
   useEffect(() => {
     const fetchPaciente = async () => {
@@ -66,25 +105,6 @@ const Formulariopaciente = ({ pacienteid }) => {
 
     fetchPacientes();
   }, [searchTerm]);
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSelectpacientes = (paciente) => {
-    setTipoPaciente(paciente.tipo_paciente);
-    setTipoEmpleado(paciente.tipo_empleado);
-    setNombreComp(paciente.nombre_completo);
-    setClaveEmpl(paciente.clave_empleado);
-    setClaveExpe(paciente.clave_expediente);
-    setFotopaciente(paciente.foto_paciente);
-    setTelefono(paciente.telefono);
-    setEdad(paciente.edad);
-    setDireccion(paciente.direccion);
-    setCorreo(paciente.correo);
-    setEnfermedad(paciente.enfermedad_base);
-    setId(paciente._id);
-  };
 
   const handleSubmit = async (e, action) => {
     e.preventDefault();
@@ -148,7 +168,7 @@ const Formulariopaciente = ({ pacienteid }) => {
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este Paciente?')) {
       try {
-        const response = await axios.delete(`${medicamentoeliminar}/${id}`);
+        const response = await axios.delete(`${pacienteeliminar}/${id}`);
         console.log(response.data);
         alert('Paciente eliminado exitosamente');
       } catch (error) {
@@ -272,6 +292,24 @@ const Formulariopaciente = ({ pacienteid }) => {
           <div className="row">
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Pacientes</h2>
+            </div>
+
+              {/* Barra de búsqueda */}
+              <div className="col-md-12">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar por nombre del paciente"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {pacienteResultados.map((paciente) => (
+                  <li key={paciente.id} onClick={() => handleSelectpacientes(paciente)}>
+                    {paciente.nombre_paciente}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="col-md-12">
