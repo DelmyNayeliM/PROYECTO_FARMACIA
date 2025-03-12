@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar} from '../configuraciones/apiURLS';
-import { format, parseISO } from 'date-fns';
+//import { format, parseISO } from 'date-fns';
 
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState('');
@@ -19,32 +19,8 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState();
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  
-  function TuComponente() {
-    const [fecha_cita, setFechaCita] = useState('');
-  
-    const formatearFecha = (fecha) => {
-      if (!fecha) return '';
-      try {
-        const fechaObj = parseISO(fecha); // Convierte la cadena ISO a un objeto Date
-        return format(fechaObj, 'yyyy-MM-dd'); // Formatea el objeto Date
-      } catch (error) {
-        console.error("Error al formatear la fecha:", error);
-        return '';
-      }
-    };
-    useEffect(() => {
-      const fechaDesdeAPI = "2025-02-27T00:00:00.000Z";
-      setFechaCita(formatearFecha(fechaDesdeAPI));
-    }, []);
-  
-    return (
-      <div className="col-md-6">
-        {/* ... (el resto del código) ... */}
-      </div>
-    );
-  }
 
+  
 useEffect(() => {
   const fetchCita = async () => {
     if (!id) return; // Si no hay ID, no hacer nada
@@ -120,12 +96,22 @@ useEffect(() => {
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
     e.preventDefault();
-  
-    if (fecha_cita === '' || nombre_dr === '' || nombre_paciente === '' || presion === '' || peso === '' || ritmo_cardiaco === '' || temperatura === '' || sintomas === '' || receta === '' || observaciones === ''|| nombre_medicamento === '' || cantidadventa === '') {
+
+    if (fecha_cita === '' || nombre_dr === '' || nombre_paciente === '' || presion === '' || peso === '' || ritmo_cardiaco === '' || temperatura === '' || sintomas === '' || receta === '' || observaciones === '' || nombre_medicamento === '' || cantidadventa === '') {
       console.log('Por favor, complete todos los campos');
       return;
     }
-  
+
+    // Imprimir los valores del medicamento para depuración
+    console.log('Guardando o editando cita con los siguientes datos de medicamento:');
+    console.log('fecha cita:', fecha_cita);
+    console.log('Nombre DR:', nombre_dr, 'Nombre Pac:', nombre_paciente);
+    console.log('Presion:', presion, 'peso:', peso);
+    console.log('Ritmo C:', ritmo_cardiaco, 'Temper:', temperatura);
+    console.log('sintomas:', sintomas, 'Receta:', receta);
+    console.log('Observaciones:', observaciones, 'Medicamento:', nombre_medicamento);
+    console.log('Medicamento:', nombre_medicamento, 'Cantidad:', cantidadventa);
+
     try {
       let response;
       if (action === 'guardar') {
@@ -159,6 +145,7 @@ useEffect(() => {
           nombre_medicamento,
           cantidadventa
         });
+        console.log('Cita editada:', response.data);
       }
   
       console.log(response.data);
@@ -580,10 +567,10 @@ useEffect(() => {
                   </div>
 
                   <div className="col-md-6">
-                  <button
+                    <button
                       type="button"
                       className="btn btn-danger btn-lg btn-block"
-                      onClick={() => handleEliminar(citaid)} // Llamar a la función de eliminar
+                      onClick={handleEliminar} // Llamar a la función de eliminar
                     >
                       Eliminar Cita
                     </button>

@@ -15,6 +15,32 @@ const FormularioRegistro = ({ medicamentoid }) => {
 
   useEffect(() => {
     const fetchMedicamentos = async () => {
+      if (!id) return; // Si no hay ID, no hacer nada
+      try {
+        const response = await axios.get(`${medicamentoid}/${id}`);
+        if (response.status === 200) {
+          const medicamento = response.data;
+          setId(medicamento.id);
+          setCategoria(medicamento.categoria);
+          setNombre_Medicamento(medicamento.nombre_medicamento);
+          setDescripcion(medicamento.descripcion);
+          setPrecio(medicamento.precio);
+          setCantidad(medicamento.cantidad);
+        } else {
+          console.error("No se encontró el medicamento");
+        }
+      } catch (error) {
+        console.error('Error al obtener el medicamento', error);
+        alert('No se encontró el medicamento con ese ID');
+      }
+    };
+  
+    if (id) fetchMedicamentos(); // Solo ejecutar si el ID es válido
+  }, [id, medicamentoid]); // Asegúrate de que id esté en las dependencias
+
+
+  useEffect(() => {
+    const fetchMedicamentos = async () => {
       if (searchTerm.trim() === '') {
         setmedicamentosResultados([]); // Limpiar resultados si la búsqueda está vacía
         return;
@@ -38,6 +64,7 @@ const FormularioRegistro = ({ medicamentoid }) => {
 
   // Función para seleccionar un medicamento de los resultados de búsqueda
   const handleSelectmedicamento = (medicamento) => {
+    setId(medicamento.id);
     setCategoria(medicamento.categoria);
     setNombre_Medicamento(medicamento.nombre_medicamento);
     setDescripcion(medicamento.descripcion);
@@ -58,6 +85,11 @@ const FormularioRegistro = ({ medicamentoid }) => {
   
     try {
       let response;
+  
+      // Comprobación de las URLs para verificar si están correctas
+      console.log('URL de guardar medicamento:', medicamentoguardar);
+      console.log('URL de editar medicamento:', medicamentoeditar);
+  
       if (action === 'guardar') {
         response = await axios.post(medicamentoguardar, {
           categoria,
@@ -74,19 +106,39 @@ const FormularioRegistro = ({ medicamentoid }) => {
           precio,
           cantidad,
         });
-      }
+      } 
+        console.log('Medicamento Editado:', response.data);
   
-      console.log(response.data);
-      setCategoria('');
-      setNombre_Medicamento('');
-      setDescripcion('');
-      setPrecio('');
-      setCantidad('');
-      alert('Medicamento guardado o editado exitosamente');
+      // Verificación de que la respuesta tiene la propiedad "data"
+      if (response && response.data) {
+        console.log(response.data); // Muestra los datos de la respuesta
+        setCategoria('');
+        setNombre_Medicamento('');
+        setDescripcion('');
+        setPrecio('');
+        setCantidad('');
+        alert('Medicamento guardado o editado exitosamente');
+      } else {
+        console.error('La respuesta de la API no contiene "data"');
+      }
     } catch (error) {
       console.error('Error al guardar o editar el medicamento', error);
+    
+      if (error.response) {
+        // El servidor respondió, pero con un código de error
+        console.error('Respuesta del servidor:', error.response);
+        console.error('Datos del error:', error.response.data); // Aquí puedes ver más detalles de la respuesta del servidor
+      } else if (error.request) {
+        // La solicitud fue realizada pero no se recibió respuesta
+        console.error('No se recibió respuesta del servidor:', error.request);
+      } else {
+        // Algo ocurrió al configurar la solicitud
+        console.error('Error al configurar la solicitud:', error.message);
+      }
     }
   };
+    
+  
   
   // Función para eliminar el medicamento
   const handleEliminar = async () => {
@@ -108,6 +160,18 @@ const FormularioRegistro = ({ medicamentoid }) => {
           <div className="row">
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Medicamentos</h2>
+            </div>
+
+            {/* Campo para ingresar ID */}
+              <div className="col-md-12">
+              <label htmlFor="medicamentoid" className="text-black">
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+              />
             </div>
 
             {/* Barra de búsqueda */}
@@ -230,6 +294,7 @@ const FormularioRegistro = ({ medicamentoid }) => {
                           Editar Medicamento
                         </button>
                       </div>
+
                       <div className="col-md-4">
                         {id && (
                           <button
