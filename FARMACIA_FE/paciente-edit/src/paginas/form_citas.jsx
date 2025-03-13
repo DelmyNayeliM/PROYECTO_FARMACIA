@@ -50,7 +50,7 @@ useEffect(() => {
   };
 
   if (id) fetchCita(); // Solo ejecutar si el ID es válido
-}, [id, citaid]); // Asegúrate de que id esté en las dependencias
+}, [id]); // Asegúrate de que id esté en las dependencias
 
   useEffect(() => {
     const fetchCita = async () => {
@@ -558,15 +558,28 @@ useEffect(() => {
                       />
                     </div>
                   </div>
-                  <div className="form-group row">
-                    <div className="col-md-6">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block" onClick={(e) => handleSubmit(e, 'guardar')}>
+
+                  <div className="form-group">
+                  <div className="row">
+                    <div className="col-md-4">
+                      <button 
+                      type="button" 
+                      className="btn btn-primary btn-lg btn-block" 
+                      onClick={(e) => handleSubmit(e, 'guardar')}>
                         Guardar Cita
                       </button>
                     </div>
-                  </div>
+                    <div className="col-md-4">
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-block"
+                          onClick={(e) => handleSubmit(e, 'editar')}
+                        >
+                          Editar cita
+                        </button>
+                      </div> 
 
-                  <div className="col-md-6">
+                      <div className="col-md-4">
                     <button
                       type="button"
                       className="btn btn-danger btn-lg btn-block"
@@ -574,7 +587,11 @@ useEffect(() => {
                     >
                       Eliminar Cita
                     </button>
+                  </div>  
                   </div>
+                </div>
+
+               
 
                   <div className="form-group">
                     <div className="col-md-12">

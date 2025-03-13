@@ -98,7 +98,7 @@ const FormularioRegistro = ({ medicamentoid }) => {
           precio,
           cantidad,
         });
-      } else if (action === 'editar' && id) {
+      } else if (action === 'editar' && id && medicamentoeditar) {
         response = await axios.put(`${medicamentoeditar}/${id}`, {
           categoria,
           nombre_medicamento,
@@ -106,7 +106,10 @@ const FormularioRegistro = ({ medicamentoid }) => {
           precio,
           cantidad,
         });
-      } 
+      } else {
+        console.error('No se puede editar el medicamento. Falta información.');
+        return;
+      }
         console.log('Medicamento Editado:', response.data);
   
       // Verificación de que la respuesta tiene la propiedad "data"
