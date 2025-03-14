@@ -8,35 +8,35 @@ const FormularioRegistro = ({ medicamentoid }) => {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [cantidad, setCantidad] = useState('');
-  const [id, setId] = useState();
+  const [id, setId] = useState("");
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
 
   useEffect(() => {
     const fetchMedicamentos = async () => {
-      if (!id) return; // Si no hay ID, no hacer nada
+      if (!id || !medicamentoid) return; // Si no hay ID, no hacer nada
       try {
         const response = await axios.get(`${medicamentoid}/${id}`);
         if (response.status === 200) {
           const medicamento = response.data;
-          setId(medicamento.id);
-          setCategoria(medicamento.categoria);
-          setNombre_Medicamento(medicamento.nombre_medicamento);
-          setDescripcion(medicamento.descripcion);
-          setPrecio(medicamento.precio);
-          setCantidad(medicamento.cantidad);
-        } else {
-          console.error("No se encontró el medicamento");
-        }
-      } catch (error) {
-        console.error('Error al obtener el medicamento', error);
-        alert('No se encontró el medicamento con ese ID');
+            if (medicamento) {
+              setCategoria(medicamento.categoria);
+              setNombre_Medicamento(medicamento.nombre_medicamento);
+              setDescripcion(medicamento.descripcion);
+              setPrecio(medicamento.precio);
+              setCantidad(medicamento.cantidad);
+            } else {
+          }
+      } else {
       }
-    };
+  } catch (error) {
+      console.error('Error al obtener el medicamento', error);
+  }
+};
   
-    if (id) fetchMedicamentos(); // Solo ejecutar si el ID es válido
-  }, [id, medicamentoid]); // Asegúrate de que id esté en las dependencias
+fetchMedicamentos(); // Solo ejecutar si el ID es válido
+}, [id, medicamentoid]); // Asegúrate de que id esté en las dependencias
 
 
   useEffect(() => {
@@ -98,6 +98,7 @@ const FormularioRegistro = ({ medicamentoid }) => {
           precio,
           cantidad,
         });
+        alert('Medicamento creado exitosamente');
       } else if (action === 'editar' && id && medicamentoeditar) {
         response = await axios.put(`${medicamentoeditar}/${id}`, {
           categoria,
@@ -106,11 +107,12 @@ const FormularioRegistro = ({ medicamentoid }) => {
           precio,
           cantidad,
         });
+        alert('Medicamento editado exitosamente');
       } else {
-        console.error('No se puede editar el medicamento. Falta información.');
+        alert('No se puede editar el medicamento. Falta información.');
         return;
       }
-        console.log('Medicamento Editado:', response.data);
+      console.log('Respuesta del servidor:', response.data);
   
       // Verificación de que la respuesta tiene la propiedad "data"
       if (response && response.data) {
@@ -129,20 +131,22 @@ const FormularioRegistro = ({ medicamentoid }) => {
     
       if (error.response) {
         // El servidor respondió, pero con un código de error
-        console.error('Respuesta del servidor:', error.response);
-        console.error('Datos del error:', error.response.data); // Aquí puedes ver más detalles de la respuesta del servidor
+         alert(`Error ${error.response.status}: 
+          ${error.response.statusText}`);
+          console.error('Respuesta del servidor:', error.response);
+          console.error('Datos del error:', error.response.data); // Aquí puedes ver más detalles de la respuesta del servidor
       } else if (error.request) {
-        // La solicitud fue realizada pero no se recibió respuesta
-        console.error('No se recibió respuesta del servidor:', error.request);
+        // La solicitud fue realizada pero no se recibió respuestaalert('No se recibió respuesta del servidor');
+            console.error('No se recibió respuesta del servidor:', error.request);
+            console.error('No se recibió respuesta del servidor:', error.request);
       } else {
-        // Algo ocurrió al configurar la solicitud
-        console.error('Error al configurar la solicitud:', error.message);
-      }
-    }
-  };
+       // Algo ocurrió al configurar la solicitud
+       alert('Error al configurar la solicitud');
+       console.error('Error al configurar la solicitud:', error.message);
+   }
+}
+};
     
-  
-  
   // Función para eliminar el medicamento
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {

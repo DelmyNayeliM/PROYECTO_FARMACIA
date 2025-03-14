@@ -46,41 +46,50 @@ const Acercade = () => {
       </div>
 
       <div className="container py-5">
-        <div className="row justify-content-center mb-4">
-          <div className="title-section text-center col-md-8">
-            <h2>Nuestros <strong className="text-primary">Médicos</strong></h2>
-          </div>
+  <div className="row justify-content-center mb-4">
+    <div className="title-section text-center col-md-8">
+      <h2>Nuestros <strong className="text-primary">Médicos</strong></h2>
+    </div>
+  </div>
+  <div className="row gy-4 justify-content-center">
+    <div className="col-md-6 col-lg-4">
+      <div className="block-38 text-center">
+        <div className="block-38-header">
+          <p className="block-38 fw-bold h4 text-black">Dr. Cristian Audatto Muñoz</p>
         </div>
-        <div className="row gy-4">
-          <div className="col-md-6 col-lg-4">
-            <div className="block-38 text-center">
-              <div className="block-38-header">
-                <h3 className="block-38-heading">1</h3>
-                <p className="block-38">Dr. Cristian Audatto Muñoz</p>
-              </div>
-              <div className="block-38-body">
-                <p className="no-space">Egresado de la universidad:</p>
-                <p className="no-space">Especialidad:</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-6 col-lg-4">
-            <div className="text-center">
-              <div className="block-38-header">
-                <h3 className="block-38-heading h4">2</h3>
-                <p className="block-38-subheading">Dr. Kevin Heney Llanes</p>
-              </div>
-              <div>
-                <p className="no-space">Egresado de la universidad:</p>
-                <p className="no-space">Especialidad:</p>
-              </div>
-            </div>
-          </div>
+        <div className="block-38-body">
+        <p className="no-space">
+        <span className="fw-bold ">Egresado de la universidad:</span>
+        <span className="text-gray-600 text-black"> Universidad</span>
+        </p>
+          <p className="no-space">
+        <span className="fw-bold ">Especialidad:</span>
+        <span className="text-gray-600 text-black"> Medico General</span>
+      </p>
         </div>
       </div>
-
     </div>
+
+    <div className="col-md-6 col-lg-4">
+      <div className="block-38 text-center">
+        <div className="block-38-header">
+          <p className="block-38 fw-bold h4 text-black">Dr. Kevin Heney Llanes</p>
+        </div>
+        <div className="block-38-body">
+        <p className="no-space">
+        <span className="fw-bold ">Egresado de la universidad:</span>
+        <span className="text-gray-600 text-black"> Universidad</span>
+      </p>
+      <p className="no-space">
+        <span className="fw-bold ">Especialidad:</span>
+        <span className="text-gray-600 text-black"> Medico General</span>
+      </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
   );
 };
 

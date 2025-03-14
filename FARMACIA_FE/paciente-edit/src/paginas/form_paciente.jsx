@@ -14,11 +14,42 @@ const Formulariopaciente = ({ pacienteid }) => {
   const [direccion, setDireccion] = useState('');
   const [correo, setCorreo] = useState('');
   const [enfermedad_base, setEnfermedad] = useState('');
-  const [id, setId] = useState();
+  const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [pacienteResultados, setPacienteResultados] = useState([]);
   const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
 
+
+  useEffect(() => {
+    const fetchPacientes = async () => {
+      if (!id) return; // Si no hay ID, no hacer nada
+      try {
+        const response = await axios.get(`${pacienteid}/${id}`);
+        if (response.status === 200) {
+          const paciente = response.data;
+          setTipoPaciente(paciente.tipo_paciente);
+          setTipoEmpleado(paciente.tipo_empleado);
+          setNombreComp(paciente.nombre_completo);
+          setClaveEmpl(paciente.clave_empleado);
+          setClaveExpe(paciente.clave_expediente);
+          setFotopaciente(paciente.foto_paciente);
+          setTelefono(paciente.telefono);
+          setEdad(paciente.edad);
+          setDireccion(paciente.direccion);
+          setCorreo(paciente.correo);
+          setEnfermedad(paciente.enfermedad_base);
+        } else {
+          console.error("No se encontró el paciente");
+        }
+      } catch (error) {
+        console.error('Error al obtener el paciente', error);
+        alert('No se encontró el paciente con ese ID');
+      }
+    };
+  
+    if (id) fetchPacientes(); // Solo ejecutar si el ID es válido
+  }, [id]); // Asegúrate de que id esté en las dependencias
+  
 
     useEffect(() => {
       const fetchPacientes = async () => {
@@ -55,6 +86,7 @@ const Formulariopaciente = ({ pacienteid }) => {
       setDireccion(pacientes.direccion);
       setCorreo(pacientes.correo);
       setEnfermedad(pacientes.enfermedad_base);
+      setId(pacientes.id);
       setSearchTerm(''); // Limpiar el searchTerm para que desaparezca la lista
     }
 
@@ -292,6 +324,18 @@ const Formulariopaciente = ({ pacienteid }) => {
           <div className="row">
             <div className="col-md-12">
               <h2 className="h3 mb-5 text-black">Formulario de Registro de Pacientes</h2>
+            </div>
+
+             {/* Campo para ingresar ID */}
+             <div className="col-md-12">
+              <label htmlFor="pacienteid" className="text-black">
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+              />
             </div>
 
               {/* Barra de búsqueda */}

@@ -16,7 +16,7 @@ const Formulariocitas = ({ citaid }) => {
   const [observaciones, setObservaciones] = useState('');
   const [nombre_medicamento, setNombreM] = useState('');
   const [cantidadventa, setCantidadv] = useState('');
-  const [id, setId] = useState();
+  const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
 

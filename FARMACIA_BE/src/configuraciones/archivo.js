@@ -16,6 +16,6 @@ const almacenaPaciente = multer.diskStorage({
 exports.guardarImagenPaciente = multer({
     storage: almacenaPaciente,
     limits: {
-        filesize: 1000000,
+        fileSize: 1000000,
     }
 }).single('img');

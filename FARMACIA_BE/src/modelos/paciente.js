@@ -80,4 +80,4 @@ const Pacientes = db.define('Paciente', {
     timestamps: true, // Agrega createdAt y updatedAt automáticamente
 });
 
-module.exports = Pacientes;
+module.exports = Pacientes;                    

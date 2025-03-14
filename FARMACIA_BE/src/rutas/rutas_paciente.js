@@ -127,4 +127,17 @@ rutas.get('/buscarpacientes', async (req, res) => {
   }
 });
 
+rutas.post('/guardarImagenPaciente', guardarImagenPaciente, (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ mensaje: 'No se ha subido ninguna imagen' });
+        }
+        const rutaImagen = req.file.path;
+        res.status(201).json({ mensaje: 'Imagen subida correctamente', ruta: rutaImagen });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error al subir la imagen', error });
+    }
+});
+
 module.exports = rutas;

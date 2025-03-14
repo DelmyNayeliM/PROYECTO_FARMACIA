@@ -55,8 +55,12 @@ exports.listar = async (req, res) => {
 };
 
 exports.editar = async (req, res) => {
-    const { id } = req.query; // Obtener id de la query
-    const { categoria, nombre_medicamento, descripcion, precio, cantidad} = req.body;
+    console.log("Petición PUT a /editar");
+    console.log("req.query:", req.query);
+    console.log("req.body:", req.body);
+
+    const { id } = req.query;
+    const { categoria, nombre_medicamento, descripcion, precio, cantidad } = req.body;
 
     // Validar errores de Express Validator
     const errors = validationResult(req);
@@ -65,23 +69,20 @@ exports.editar = async (req, res) => {
     }
 
     try {
-        // Verificar si el id es válido
         if (!id) {
             return res.status(400).json({ mensaje: "El ID es necesario" });
         }
 
-        // Buscar el inventario por ID
         const inventario = await inventarios.findByPk(id);
         if (!inventario) {
             return res.status(404).json({ mensaje: "El inventario no existe" });
         }
 
-        // Verificar si el nombre ya está en uso por otro medicamento
         if (nombre_medicamento) {
-            const inventarioExistente = await inventarios.findOne({ // Cambié inventario por inventarios
+            const inventarioExistente = await inventarios.findOne({
                 where: {
                     nombre_medicamento,
-                    id: { [Op.ne]: id } // Verifica que el nombre no pertenezca al mismo medicamento
+                    id: { [Op.ne]: id }
                 }
             });
             if (inventarioExistente) {
@@ -89,22 +90,19 @@ exports.editar = async (req, res) => {
             }
         }
 
-        // Actualizar los campos
         inventario.categoria = categoria || inventario.categoria;
         inventario.nombre_medicamento = nombre_medicamento || inventario.nombre_medicamento;
         inventario.descripcion = descripcion || inventario.descripcion;
         inventario.precio = precio || inventario.precio;
         inventario.cantidad = cantidad || inventario.cantidad
 
-        // Guardar los cambios
         await inventario.save();
 
-        // Responder con el inventario actualizado
         res.json({ mensaje: "Inventario actualizado correctamente", inventario });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ mensaje: "Error al editar el inventario", error });
+        console.error("Error al editar el inventario:", error);
+        res.status(500).json({ mensaje: "Error al editar el inventario", error: error.message });
     }
 };
 
