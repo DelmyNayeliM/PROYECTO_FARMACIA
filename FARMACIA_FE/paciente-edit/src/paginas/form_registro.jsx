@@ -77,76 +77,78 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
     e.preventDefault();
-  
+
     if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad === '') {
-      console.log('Por favor, complete todos los campos');
-      return;
-    }
-  
-    try {
-      let response;
-  
-      // Comprobación de las URLs para verificar si están correctas
-      console.log('URL de guardar medicamento:', medicamentoguardar);
-      console.log('URL de editar medicamento:', medicamentoeditar);
-  
-      if (action === 'guardar') {
-        response = await axios.post(medicamentoguardar, {
-          categoria,
-          nombre_medicamento,
-          descripcion,
-          precio,
-          cantidad,
-        });
-        alert('Medicamento creado exitosamente');
-      } else if (action === 'editar' && id && medicamentoeditar) {
-        response = await axios.put(`${medicamentoeditar}/${id}`, {
-          categoria,
-          nombre_medicamento,
-          descripcion,
-          precio,
-          cantidad,
-        });
-        alert('Medicamento editado exitosamente');
-      } else {
-        alert('No se puede editar el medicamento. Falta información.');
+        alert('Por favor, complete todos los campos');
         return;
-      }
-      console.log('Respuesta del servidor:', response.data);
-  
-      // Verificación de que la respuesta tiene la propiedad "data"
-      if (response && response.data) {
-        console.log(response.data); // Muestra los datos de la respuesta
-        setCategoria('');
-        setNombre_Medicamento('');
-        setDescripcion('');
-        setPrecio('');
-        setCantidad('');
-        alert('Medicamento guardado o editado exitosamente');
-      } else {
-        console.error('La respuesta de la API no contiene "data"');
-      }
+    }
+
+    try {
+        let response;
+
+        if (action === 'guardar') {
+            response = await axios.post(medicamentoguardar, {
+                categoria,
+                nombre_medicamento,
+                descripcion,
+                precio: parseFloat(precio), // Asegúrate de que sea un número
+                cantidad: parseInt(cantidad), // Asegúrate de que sea un número entero
+            });
+            alert('Medicamento creado exitosamente');
+        } else if (action === 'editar' && id && medicamentoeditar) {
+            response = await axios.put(`${medicamentoeditar}/${id}`, {
+                categoria,
+                nombre_medicamento,
+                descripcion,
+                precio: parseFloat(precio),
+                cantidad: parseInt(cantidad),
+            });
+            alert('Medicamento editado exitosamente');
+        } else {
+            alert('No se puede editar el medicamento. Falta información.');
+            return;
+        }
+
+        console.log('Respuesta del servidor:', response.data);
+
+        if (response && response.data) {
+            console.log(response.data);
+            setCategoria('');
+            setNombre_Medicamento('');
+            setDescripcion('');
+            setPrecio('');
+            setCantidad('');
+            alert('Medicamento guardado o editado exitosamente');
+        } else {
+            console.error('La respuesta de la API no contiene "data"');
+        }
     } catch (error) {
-      console.error('Error al guardar o editar el medicamento', error);
-    
-      if (error.response) {
-        // El servidor respondió, pero con un código de error
-         alert(`Error ${error.response.status}: 
-          ${error.response.statusText}`);
-          console.error('Respuesta del servidor:', error.response);
-          console.error('Datos del error:', error.response.data); // Aquí puedes ver más detalles de la respuesta del servidor
-      } else if (error.request) {
-        // La solicitud fue realizada pero no se recibió respuestaalert('No se recibió respuesta del servidor');
+        console.error('Error al guardar o editar el medicamento', error);
+
+        if (error.response) {
+            // El servidor respondió, pero con un código de error
+            alert(`Error ${error.response.status}: ${error.response.statusText}`);
+            console.error('Respuesta del servidor:', error.response);
+
+            if (error.response.data && error.response.data.errors) {
+                // Mostrar los errores específicos si están disponibles
+                error.response.data.errors.forEach((error) => {
+                    console.error('Error específico:', error);
+                    alert(`Error: ${error.message}`);
+                });
+            }
+        } else if (error.request) {
+            // La solicitud fue realizada pero no se recibió respuesta
+            alert('No se recibió respuesta del servidor');
             console.error('No se recibió respuesta del servidor:', error.request);
-            console.error('No se recibió respuesta del servidor:', error.request);
-      } else {
-       // Algo ocurrió al configurar la solicitud
-       alert('Error al configurar la solicitud');
-       console.error('Error al configurar la solicitud:', error.message);
-   }
-}
+        } else {
+            // Algo ocurrió al configurar la solicitud
+            alert('Error al configurar la solicitud');
+            console.error('Error al configurar la solicitud:', error.message);
+        }
+    }
 };
-    
+
   // Función para eliminar el medicamento
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {

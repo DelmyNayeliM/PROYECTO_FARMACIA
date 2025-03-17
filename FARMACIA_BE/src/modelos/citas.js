@@ -5,7 +5,7 @@ const citas = db.define(
     'citas',
     {        
         fecha_cita: {
-        type: DataTypes.DATE,  
+        type: DataTypes.DATEONLY,  
         allowNull: false,      
         validate: {
             isDate: true,      

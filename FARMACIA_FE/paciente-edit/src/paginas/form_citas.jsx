@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar} from '../configuraciones/apiURLS';
-//import { format, parseISO } from 'date-fns';
 
 const Formulariocitas = ({ citaid }) => {
-  const [fecha_cita, setFechaCita] = useState('');
+  const [fecha_cita, setFechaCita] = useState("");
   const [nombre_dr, setNombreDR] = useState('');
   const [nombre_paciente, setNombrepaciente] = useState('');
   const [presion, setPresion] = useState('');
@@ -20,7 +19,6 @@ const Formulariocitas = ({ citaid }) => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
-  
 useEffect(() => {
   const fetchCita = async () => {
     if (!id) return; // Si no hay ID, no hacer nada
@@ -102,16 +100,6 @@ useEffect(() => {
       return;
     }
 
-    // Imprimir los valores del medicamento para depuración
-    console.log('Guardando o editando cita con los siguientes datos de medicamento:');
-    console.log('fecha cita:', fecha_cita);
-    console.log('Nombre DR:', nombre_dr, 'Nombre Pac:', nombre_paciente);
-    console.log('Presion:', presion, 'peso:', peso);
-    console.log('Ritmo C:', ritmo_cardiaco, 'Temper:', temperatura);
-    console.log('sintomas:', sintomas, 'Receta:', receta);
-    console.log('Observaciones:', observaciones, 'Medicamento:', nombre_medicamento);
-    console.log('Medicamento:', nombre_medicamento, 'Cantidad:', cantidadventa);
-
     try {
       let response;
       if (action === 'guardar') {
@@ -168,23 +156,65 @@ useEffect(() => {
     }
   };
   
-  // Función para eliminar el medicamento
-  const handleEliminar = async () => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
-      try {
-        const response = await axios.delete(`${citaseliminar}/${id}`);
-        console.log(response.data);
+  // Función para eliminar el medicamento (en realidad parece ser para eliminar una cita)
+const handleEliminar = async () => {
+  // Verificar si el 'id' y la URL para eliminar están definidos
+  if (!id || !citaseliminar) {
+    console.error('Faltan datos necesarios: id o citaseliminar no están definidos.');
+    alert('No se puede eliminar, datos faltantes.');
+    return;
+  }
+
+  // Confirmar la eliminación de la cita
+  if (window.confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+    try {
+      // Realizar la solicitud DELETE
+      const response = await axios.delete(`${citaseliminar}/${id}`);
+
+      // Comprobar si la respuesta es exitosa
+      if (response.status === 200) {
+        console.log('Cita eliminada:', response.data);
         alert('Cita eliminada exitosamente');
-      } catch (error) {
-        console.error('Error al eliminar la cita', error);
+        // Aquí podrías actualizar la lista de citas si es necesario
+      } else {
+        // Si el servidor responde con algo distinto a 200, manejarlo aquí
+        console.error('Error al eliminar la cita:', response.data);
+        alert('Hubo un problema al eliminar la cita.');
+      }
+    } catch (error) {
+      // Capturar y mostrar el error si algo falla en la solicitud
+      console.error('Error al eliminar la cita', error);
+      if (error.response) {
+        // Si hay una respuesta del servidor, mostrarla
+        console.error('Error del servidor:', error.response.data);
+        alert('Ocurrió un error al intentar eliminar la cita. Intenta de nuevo más tarde.');
+      } else {
+        // Si no hay respuesta del servidor, mostrar el error general
+        console.error('Error general:', error.message);
+        alert('Ocurrió un error al intentar eliminar la cita. Intenta de nuevo más tarde.');
       }
     }
-  };
+  }
+}
+
 
 
   const imprimirFormulario = () => {
     const fechaactual_cita = new Date().toLocaleDateString();
     const hora_cita = new Date().toLocaleTimeString();
+
+    const fecha_cita = document.getElementById('fecha_cita').value;  // Si el valor proviene de un campo de formulario
+    const nombre_dr = document.getElementById('nombre_dr').value;
+    const nombre_paciente = document.getElementById('nombre_paciente').value;
+    const presion = document.getElementById('presion').value;
+    const peso = document.getElementById('peso').value;
+    const ritmo_cardiaco = document.getElementById('ritmo_cardiaco').value;
+    const temperatura = document.getElementById('temperatura').value;
+    const sintomas = document.getElementById('sintomas').value;
+    const receta = document.getElementById('receta').value;
+    const observaciones = document.getElementById('observaciones').value;
+    const nombre_medicamento = document.getElementById('nombre_medicamento').value;
+    const cantidadventa = document.getElementById('cantidadventa').value;
 
     const contenido = `
       <html>
@@ -309,13 +339,10 @@ useEffect(() => {
     `;
     
     const ventana = window.open('', '', 'height=600,width=800');
-    ventana.document.write(contenido);
-    ventana.document.close();
-    ventana.print();
-  };
-
-
-
+  ventana.document.write(contenido);
+  ventana.document.close();
+  ventana.print();
+};
     return (
     <div className="site-wrap">
       <div className="site-section">
