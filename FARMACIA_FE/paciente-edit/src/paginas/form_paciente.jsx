@@ -129,7 +129,7 @@ const Formulariopaciente = ({ pacienteid }) => {
           enfermedad_base
         });
       } else if (action === 'editar' && id) {
-        response = await axios.put(`${pacienteeditar}/${id}`, {
+        response = await axios.put(`${pacienteeditar}?id=${id}`, {
           tipo_paciente,
           tipo_empleado,
           nombre_completo,
@@ -191,7 +191,7 @@ const Formulariopaciente = ({ pacienteid }) => {
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este Paciente?')) {
       try {
-        const response = await axios.delete(`${pacienteeliminar}/${id}`);
+        const response = await axios.delete(`${pacienteeliminar}?id=${id}`);
         console.log(response.data);
         alert('Paciente eliminado exitosamente');
       } catch (error) {
@@ -211,11 +211,6 @@ const Formulariopaciente = ({ pacienteid }) => {
       reader.readAsDataURL(file);
     }
   };
-
-  //const imprimirFormulario = () => {
-   // window.print(); // Imprime el formulario
- // };
-
 
  const imprimirFormulario = () => {
 

@@ -5,6 +5,7 @@ const Tablero = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [medicamentos, setMedicamentos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [cita,setCita] = useState([]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -15,18 +16,22 @@ const Tablero = () => {
       setMedicamentos([]); // Si no hay término de búsqueda, vaciar resultados
       return;
     }
-
+  
     try {
       setLoading(true);
       const response = await fetch(`http://localhost:3003/inventario/buscar?nombre_medicamento=${searchTerm}`);
       const data = await response.json();
-
+  
       if (response.status === 200) {
-        // Aquí calculamos la cantidad restante (cantidad - cantidad_venta)
+        // Si `cita` es un array, acceder al primer valor de `cantidadventa` (o a la cantidad correcta si hay más de uno)
+        const cantidadVenta = cita.length > 0 ? parseInt(cita[0].cantidadventa) : 0; // Aseguramos que sea un número
+
         const medicamentosConCantidadRestante = data.map(medicamento => ({
           ...medicamento,
-          cantidadRestante: medicamento.cantidad - medicamento.cantidadventa // Realizamos la resta
+          cantidadRestante: medicamento.cantidad - cantidadVenta // Realizamos la resta correctamente
         }));
+  
+        // Asegurarnos de que la cantidad restante sea un número, en caso de algún error
         setMedicamentos(medicamentosConCantidadRestante);
       } else {
         setMedicamentos([]);
@@ -34,11 +39,13 @@ const Tablero = () => {
     } catch (error) {
       console.error("Error al realizar la búsqueda", error);
       setMedicamentos([]);
+      setCita([]); // Limpiar también la cita en caso de error
     } finally {
       setLoading(false);
     }
   };
-
+  
+   
   useEffect(() => {
     if (searchTerm.trim() !== '') {
       handleSearch();

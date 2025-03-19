@@ -58,8 +58,13 @@ exports.listar = async (req, res) => {
 
 // Ruta para editar una cita
 exports.editar = async (req, res) => {
-    const { id } = req.query;
+    const { id } = req.query;  // Se obtiene el id de la query string
     const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa } = req.body;
+
+    // Validar que el id esté presente y sea un número
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ mensaje: "El ID es obligatorio y debe ser un número entero" });
+    }
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -67,7 +72,11 @@ exports.editar = async (req, res) => {
     }
 
     try {
-        const cita = await citas.findByPk(id);
+        // Convertir el id a entero
+        const idCita = parseInt(id, 10);
+
+        // Buscar la cita por id
+        const cita = await citas.findByPk(idCita);
         if (!cita) {
             return res.status(404).json({ mensaje: "La cita no existe" });
         }
@@ -77,7 +86,7 @@ exports.editar = async (req, res) => {
                 where: {
                     fecha_cita,
                     nombre_paciente,
-                    id: { [Op.ne]: id }
+                    id: { [Op.ne]: idCita }
                 }
             });
             if (citaExistente) {
@@ -85,6 +94,7 @@ exports.editar = async (req, res) => {
             }
         }
 
+        // Actualización de la cita
         cita.fecha_cita = fecha_cita || cita.fecha_cita;
         cita.nombre_dr = nombre_dr || cita.nombre_dr;
         cita.nombre_paciente = nombre_paciente || cita.nombre_paciente;
@@ -96,8 +106,9 @@ exports.editar = async (req, res) => {
         cita.receta = receta || cita.receta;
         cita.observaciones = observaciones || cita.observaciones;
         cita.nombre_medicamento = nombre_medicamento || cita.nombre_medicamento;
-        cita.cantidadventa= cantidadventa || cita.cantidadventa;
+        cita.cantidadventa = cantidadventa || cita.cantidadventa;
 
+        // Guardar cambios
         await cita.save();
         res.status(200).json({ mensaje: "Cita actualizada correctamente", cita });
     } catch (error) {

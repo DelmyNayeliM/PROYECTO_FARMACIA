@@ -119,7 +119,7 @@ useEffect(() => {
         });
         console.log('Respuesta del servidor:', response);
       } else if (action === 'editar' && id) {
-        response = await axios.put(`${citaseditar}/${id}`, {
+        response = await axios.put(`${citaseditar}?id=${id}`, {
           fecha_cita,
           nombre_dr,
           nombre_paciente,
@@ -169,7 +169,7 @@ const handleEliminar = async () => {
   if (window.confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
     try {
       // Realizar la solicitud DELETE
-      const response = await axios.delete(`${citaseliminar}/${id}`);
+      const response = await axios.delete(`${citaseliminar}?id=${id}`);
 
       // Comprobar si la respuesta es exitosa
       if (response.status === 200) {

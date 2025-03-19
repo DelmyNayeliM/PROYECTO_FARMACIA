@@ -96,29 +96,29 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
             });
             alert('Medicamento creado exitosamente');
         } else if (action === 'editar' && id && medicamentoeditar) {
-            response = await axios.put(`${medicamentoeditar}/${id}`, {
+          response = await axios.put(`${medicamentoeditar}?id=${id}`, {
                 categoria,
                 nombre_medicamento,
                 descripcion,
                 precio: parseFloat(precio),
                 cantidad: parseInt(cantidad),
             });
-            alert('Medicamento editado exitosamente');
-        } else {
-            alert('No se puede editar el medicamento. Falta información.');
-            return;
-        }
-
-        console.log('Respuesta del servidor:', response.data);
+            if (response && response.data && response.data.success) {
+              alert('Medicamento editado exitosamente');
+          }
+      } else {
+          alert('No se puede editar el medicamento. Falta información.');
+          return;
+      }
 
         if (response && response.data) {
-            console.log(response.data);
+            console.log('Respuesta del servidor:',response.data);
             setCategoria('');
             setNombre_Medicamento('');
             setDescripcion('');
             setPrecio('');
             setCantidad('');
-            alert('Medicamento guardado o editado exitosamente');
+            alert('Medicamento editado exitosamente');
         } else {
             console.error('La respuesta de la API no contiene "data"');
         }
@@ -126,34 +126,32 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
         console.error('Error al guardar o editar el medicamento', error);
 
         if (error.response) {
-            // El servidor respondió, pero con un código de error
-            alert(`Error ${error.response.status}: ${error.response.statusText}`);
-            console.error('Respuesta del servidor:', error.response);
+          alert(`Error ${error.response.status}: ${error.response.statusText}`);
+          console.error('Respuesta del servidor:', error.response);
 
-            if (error.response.data && error.response.data.errors) {
-                // Mostrar los errores específicos si están disponibles
-                error.response.data.errors.forEach((error) => {
-                    console.error('Error específico:', error);
-                    alert(`Error: ${error.message}`);
-                });
-            }
-        } else if (error.request) {
-            // La solicitud fue realizada pero no se recibió respuesta
-            alert('No se recibió respuesta del servidor');
-            console.error('No se recibió respuesta del servidor:', error.request);
-        } else {
-            // Algo ocurrió al configurar la solicitud
-            alert('Error al configurar la solicitud');
-            console.error('Error al configurar la solicitud:', error.message);
-        }
-    }
+          if (error.response.data && error.response.data.errors) {
+              error.response.data.errors.forEach((err) => {
+                  console.error('Error específico:', err);
+                  alert(`Error: ${err.message}`);
+              });
+          }
+      } else if (error.request) {
+          // Solicitud realizada, pero no se recibió respuesta
+          alert('No se recibió respuesta del servidor');
+          console.error('No se recibió respuesta del servidor:', error.request);
+      } else {
+          // Error al configurar la solicitud
+          alert('Error al configurar la solicitud');
+          console.error('Error al configurar la solicitud:', error.message);
+      }
+  }
 };
 
   // Función para eliminar el medicamento
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
       try {
-        const response = await axios.delete(`${medicamentoeliminar}/${id}`);
+        const response = await axios.delete(`${medicamentoeliminar}?id=${id}`);
         console.log(response.data);
         alert('Medicamento eliminado exitosamente');
       } catch (error) {
@@ -216,7 +214,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
                       onChange={(e) => setCategoria(e.target.value)}
                     >
                       <option value="">Seleccionar...</option>
-                      <option value="Medicameto">Medicameto</option>
+                      <option value="Medicamento">Medicamento</option>
                       <option value="Analgesicos">Analgesicos</option>
                       <option value="Material">Material</option>
                     </select>
@@ -249,7 +247,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
                       className="form-control"
                       value={descripcion}
                       onChange={(e) => setDescripcion(e.target.value)}
-                      title="Entre 10 y 45 caracteres"
+                      title="Entre 10 y 200 caracteres"
                     ></textarea>
                   </div>
 
@@ -284,39 +282,37 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
                   </div>
 
                   <div className="form-group">
-                    <div className="row">
-                      <div className="col-md-4">
+                <div className="row">
+                    <div className="col-md-4">
                         <button
-                          type="button"
-                          className="btn btn-primary btn-lg btn-block"
-                          onClick={(e) => handleSubmit(e, 'guardar')}
-                        >
-                          Guardar Medicamento
-                        </button>
-                      </div>
-                      <div className="col-md-4">
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-lg btn-block"
-                          onClick={(e) => handleSubmit(e, 'editar')}
-                        >
-                          Editar Medicamento
-                        </button>
-                      </div>
-
-                      <div className="col-md-4">
-                        {id && (
-                          <button
                             type="button"
-                            className="btn btn-danger btn-lg btn-block"
-                            onClick={handleEliminar}
-                          >
-                            Eliminar Medicamento
-                          </button>
-                        )}
-                      </div>
+                            className="btn btn-primary btn-lg btn-block"
+                            onClick={(e) => handleSubmit(e, 'guardar')}
+                        >
+                            Guardar Medicamento
+                        </button>
                     </div>
-                  </div>
+                    <div className="col-md-4">
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-lg btn-block"
+                            onClick={(e) => handleSubmit(e, 'editar')}
+                            disabled={!id}  // Deshabilitar si no hay un ID
+                        >
+                            Editar Medicamento
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-block"
+                          onClick={(e) => handleEliminar(e, 'eliminar')}
+                          disabled={!id}  // Deshabilitar si no hay un ID
+                      >
+                          Eliminar Medicamento
+                      </button>
+                    </div>
+                </div>
+            </div>
+            
                 </div>
               </form>
             </div>
