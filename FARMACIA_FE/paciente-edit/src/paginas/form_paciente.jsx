@@ -518,6 +518,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                       type="button"
                       className="btn btn-primary btn-lg btn-block" 
                       onClick={(e) => handleSubmit(e, 'editar')}
+                      disabled={!id}  // Deshabilitar si no hay un ID
                     >
                       Editar Paciente
                     </button>
@@ -526,7 +527,9 @@ const Formulariopaciente = ({ pacienteid }) => {
                     <button 
                       type="button" 
                       className="btn btn-danger btn-lg btn-block"  
-                      onClick={handleEliminar}>
+                      onClick={handleEliminar}
+                      disabled={!id}  // Deshabilitar si no hay un ID  
+                      >
                       Eliminar Paciente
                     </button>
                   </div>
