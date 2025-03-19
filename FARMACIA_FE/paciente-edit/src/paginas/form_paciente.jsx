@@ -503,31 +503,40 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
                   </div>
 
-                  <div className="form-group row">
-                    <div className="col-md-6">
-                      <button type="submit" className="btn btn-primary btn-lg btn-block" onClick={(e) => handleSubmit(e, id ? 'editar' : 'guardar')}>Guardar Paciente</button>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-lg btn-block"
-                          onClick={(e) => handleSubmit(e, 'editar')}
-                        >
-                          Editar cita
-                        </button>
-                      </div> 
-
                   <div className="form-group">
-                    <div className="col-md-12">
-                      <button type="button" className="btn btn-danger btn-lg btn-block" onClick={handleEliminar}>Eliminar Paciente</button>
-                    </div>
-                    <div className="form-group">
+                  <div className="row">
+                    <div className="col-md-4">
+                    <button 
+                      type="button" 
+                      className="btn btn-primary btn-lg btn-block" 
+                      onClick={(e) => handleSubmit(e, 'guardar')}>
+                      Guardar Paciente
+                    </button>
+                  </div>
+                  <div className="col-md-4">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-lg btn-block" 
+                      onClick={(e) => handleSubmit(e, 'editar')}
+                    >
+                      Editar Paciente
+                    </button>
+                  </div>
+                  <div className="col-md-4">
+                    <button 
+                      type="button" 
+                      className="btn btn-danger btn-lg btn-block"  
+                      onClick={handleEliminar}>
+                      Eliminar Paciente
+                    </button>
+                  </div>
+                </div>
+              </div>
+                <div className="form-group">
                   <div className="col-md-12">
                     <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>
                   </div>
-                  </div>
-                  </div>
+                </div>
                 </div>
               </form>
             </div>

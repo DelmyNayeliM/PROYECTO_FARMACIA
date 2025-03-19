@@ -311,7 +311,7 @@ const handleEliminar = async () => {
                         </button>
                         <button
                             type="button"
-                            className="btn btn-primary btn-lg"
+                            className="btn btn-danger btn-lg"
                             onClick={(e) => handleEliminar(e, 'eliminar')}
                             disabled={!id}  // Deshabilitar si no hay un ID
                         >

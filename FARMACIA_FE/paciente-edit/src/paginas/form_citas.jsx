@@ -601,6 +601,7 @@ const handleEliminar = async () => {
                           type="button"
                           className="btn btn-primary btn-lg btn-block"
                           onClick={(e) => handleSubmit(e, 'editar')}
+                          disabled={!id}  // Deshabilitar si no hay un ID
                         >
                           Editar cita
                         </button>
@@ -610,6 +611,7 @@ const handleEliminar = async () => {
                       type="button"
                       className="btn btn-danger btn-lg btn-block"
                       onClick={handleEliminar} // Llamar a la función de eliminar
+                      disabled={!id}  // Deshabilitar si no hay un ID
                     >
                       Eliminar Cita
                     </button>
