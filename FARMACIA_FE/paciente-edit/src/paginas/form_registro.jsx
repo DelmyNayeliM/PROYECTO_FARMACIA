@@ -113,6 +113,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
 
         if (response && response.data) {
             console.log('Respuesta del servidor:',response.data);
+            setId('');
             setCategoria('');
             setNombre_Medicamento('');
             setDescripcion('');
@@ -147,18 +148,28 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
   }
 };
 
-  // Función para eliminar el medicamento
-  const handleEliminar = async () => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
-      try {
-        const response = await axios.delete(`${medicamentoeliminar}?id=${id}`);
-        console.log(response.data);
-        alert('Medicamento eliminado exitosamente');
-      } catch (error) {
-        console.error('Error al eliminar el medicamento', error);
-      }
+const handleEliminar = async () => {
+  if (window.confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
+    try {
+      const response = await axios.delete(`${medicamentoeliminar}?id=${id}`);
+      console.log(response.data);
+      alert('Medicamento eliminado exitosamente');
+      
+      // Resetear los campos del formulario
+      setId('');
+      setCategoria('');
+      setNombre_Medicamento('');
+      setDescripcion('');
+      setPrecio('');
+      setCantidad('');
+      // Resetear otros campos...
+      setId(null); // Si tienes un estado para el ID
+    } catch (error) {
+      console.error('Error al eliminar el medicamento', error);
     }
-  };
+  }
+};
+
 
   return (
     <div className="site-wrap">
@@ -281,38 +292,35 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
                     </div>
                   </div>
 
-                  <div className="form-group">
+              <div className="form-group">
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-12 d-flex justify-content-around">
                         <button
                             type="button"
-                            className="btn btn-primary btn-lg btn-block"
-                            onClick={(e) => handleSubmit(e, 'guardar')}
-                        >
+                            className="btn btn-primary btn-lg"
+                            onClick={(e) => handleSubmit(e, 'guardar')}>
                             Guardar Medicamento
                         </button>
-                    </div>
-                    <div className="col-md-4">
                         <button
                             type="button"
-                            className="btn btn-primary btn-lg btn-block"
+                            className="btn btn-primary btn-lg"
                             onClick={(e) => handleSubmit(e, 'editar')}
-                            disabled={!id}  // Deshabilitar si no hay un ID
+                            disabled={!id}  // Deshabilitar si no hay un ID 
                         >
                             Editar Medicamento
                         </button>
                         <button
-                          type="button"
-                          className="btn btn-primary btn-lg btn-block"
-                          onClick={(e) => handleEliminar(e, 'eliminar')}
-                          disabled={!id}  // Deshabilitar si no hay un ID
-                      >
-                          Eliminar Medicamento
-                      </button>
+                            type="button"
+                            className="btn btn-primary btn-lg"
+                            onClick={(e) => handleEliminar(e, 'eliminar')}
+                            disabled={!id}  // Deshabilitar si no hay un ID
+                        >
+                            Eliminar Medicamento
+                        </button>
                     </div>
                 </div>
             </div>
-            
+
                 </div>
               </form>
             </div>

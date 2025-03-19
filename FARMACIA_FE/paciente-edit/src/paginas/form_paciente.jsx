@@ -508,6 +508,15 @@ const Formulariopaciente = ({ pacienteid }) => {
                       <button type="submit" className="btn btn-primary btn-lg btn-block" onClick={(e) => handleSubmit(e, id ? 'editar' : 'guardar')}>Guardar Paciente</button>
                     </div>
                   </div>
+                  <div className="col-md-6">
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-lg btn-block"
+                          onClick={(e) => handleSubmit(e, 'editar')}
+                        >
+                          Editar cita
+                        </button>
+                      </div> 
 
                   <div className="form-group">
                     <div className="col-md-12">

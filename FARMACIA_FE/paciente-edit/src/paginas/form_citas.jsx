@@ -150,7 +150,7 @@ useEffect(() => {
       setNombreM('');
       setCantidadv('');
       setId(''); // Limpiamos el ID
-      alert('Cita guardada o editada exitosamente');
+      alert('Cita guardada ');
     } catch (error) {
       console.error('Error al guardar o editar la cita', error);
     }
@@ -605,7 +605,6 @@ const handleEliminar = async () => {
                           Editar cita
                         </button>
                       </div> 
-
                       <div className="col-md-4">
                     <button
                       type="button"
@@ -616,10 +615,8 @@ const handleEliminar = async () => {
                     </button>
                   </div>  
                   </div>
-                </div>
-
-               
-
+                  </div>
+                  
                   <div className="form-group">
                     <div className="col-md-12">
                       <button
