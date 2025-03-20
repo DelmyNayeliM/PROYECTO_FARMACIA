@@ -34,7 +34,7 @@ rutas.post('/guardar',
 );
 
 // Ruta para editar una cita
-rutas.put('/editar/:id',
+rutas.put('/editar',
     query("id").isInt().withMessage("El ID debe ser un número entero"),
     body("nombre_completo")
         .optional()
@@ -49,6 +49,7 @@ rutas.put('/editar/:id',
                 throw new Error('El nombre del paciente ya existe');
             }
         }),
+    controladorcitas.editar
 );
 
 // Ruta para eliminar una cita

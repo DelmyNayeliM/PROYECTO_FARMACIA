@@ -55,12 +55,21 @@ exports.listar = async (req, res) => {
 };
 
 exports.editar = async (req, res) => {
-    console.log("Petición PUT a /editar");
-    console.log("req.query:", req.query);
-    console.log("req.body:", req.body);
-
     const { id } = req.query;
-    const { categoria, nombre_medicamento, descripcion, precio, cantidad } = req.body;
+    const {
+        fecha_cita,
+        nombre_dr,
+        nombre_paciente,
+        presion,
+        peso,
+        ritmo_cardiaco,
+        temperatura,
+        sintomas,
+        receta,
+        observaciones,
+        nombre_medicamento,
+        cantidadventa
+    } = req.body;
 
     // Validar errores de Express Validator
     const errors = validationResult(req);
@@ -73,38 +82,46 @@ exports.editar = async (req, res) => {
             return res.status(400).json({ mensaje: "El ID es necesario" });
         }
 
-        const inventario = await inventarios.findByPk(id);
-        if (!inventario) {
-            return res.status(404).json({ mensaje: "El inventario no existe" });
+        const cita = await Citas.findByPk(id);
+        if (!cita) {
+            return res.status(404).json({ mensaje: "La cita no existe" });
         }
 
-        if (nombre_medicamento) {
-            const inventarioExistente = await inventarios.findOne({
+        if (nombre_paciente) {
+            const citaExistente = await cita.findOne({
                 where: {
-                    nombre_medicamento,
+                    nombre_paciente,
                     id: { [Op.ne]: id }
                 }
             });
-            if (inventarioExistente) {
-                return res.status(400).json({ mensaje: "El nombre del medicamento ya está en uso" });
+            if (citaExistente) {
+                return res.status(400).json({ mensaje: "El nombre del paciente ya está en uso" });
             }
         }
 
-        inventario.categoria = categoria || inventario.categoria;
-        inventario.nombre_medicamento = nombre_medicamento || inventario.nombre_medicamento;
-        inventario.descripcion = descripcion || inventario.descripcion;
-        inventario.precio = precio || inventario.precio;
-        inventario.cantidad = cantidad || inventario.cantidad
+        cita.fecha_cita = fecha_cita || cita.fecha_cita;
+        cita.nombre_dr = nombre_dr || cita.nombre_dr;
+        cita.nombre_paciente = nombre_paciente || cita.nombre_paciente;
+        cita.presion = presion || cita.presion;
+        cita.peso = peso || cita.peso;
+        cita.ritmo_cardiaco = ritmo_cardiaco || cita.ritmo_cardiaco;
+        cita.temperatura = temperatura || cita.temperatura;
+        cita.sintomas = sintomas || cita.sintomas;
+        cita.receta = receta || cita.receta;
+        cita.observaciones = observaciones || cita.observaciones;
+        cita.nombre_medicamento = nombre_medicamento || cita.nombre_medicamento;
+        cita.cantidadventa = cantidadventa || cita.cantidadventa;
 
-        await inventario.save();
+        await cita.save();
 
-        res.json({ mensaje: "Inventario actualizado correctamente", inventario });
+        res.json({ mensaje: "Cita actualizada correctamente", cita });
 
     } catch (error) {
-        console.error("Error al editar el inventario:", error);
-        res.status(500).json({ mensaje: "Error al editar el inventario", error: error.message });
+        console.error("Error al editar la cita:", error);
+        res.status(500).json({ mensaje: "Error al editar la cita", error: error.message });
     }
 };
+
 
 
 // Ruta para eliminar un Inventario

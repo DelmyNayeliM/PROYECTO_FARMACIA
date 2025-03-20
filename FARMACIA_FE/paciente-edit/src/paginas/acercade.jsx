@@ -48,7 +48,7 @@ const Acercade = () => {
       <div className="container py-5">
   <div className="row justify-content-center mb-4">
     <div className="title-section text-center col-md-8">
-      <h2>Nuestros <strong className="text-primary">Médicos</strong></h2>
+      <h2>Nuestro equipo de<strong className="text-primary">Trabajo</strong></h2>
     </div>
   </div>
   <div className="row gy-4 justify-content-center">
@@ -84,8 +84,23 @@ const Acercade = () => {
         <span className="fw-bold ">Especialidad:</span>
         <span className="text-gray-600 text-black"> Medico General</span>
       </p>
+
+      <div className="col-md-4 col-lg-4">
+          <p className="block-38 fw-bold h4 text-black">Lic. Marleni Cantarero</p>
+        </div>
+        <div className="block-38-body">
+    
+        <span className="fw-bold ">Egresada de la universidad:</span>
+        <span className="text-gray-600 text-black"> Universidad</span>
+   
+      <p className="no-space">
+        <span className="fw-bold ">Especialidad:</span>
+        <span className="text-gray-600 text-black"> Medico General</span>
+      </p>
         </div>
       </div>
+    </div>
+    
     </div>
   </div>
 </div>

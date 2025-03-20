@@ -11,7 +11,7 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar una nueva cita
 exports.guardar = async (req, res) => {
-    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa } = req.body;
+    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa ,} = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -72,11 +72,7 @@ exports.editar = async (req, res) => {
     }
 
     try {
-        // Convertir el id a entero
-        const idCita = parseInt(id, 10);
-
-        // Buscar la cita por id
-        const cita = await citas.findByPk(idCita);
+        const cita = await citas.findByPk(id);
         if (!cita) {
             return res.status(404).json({ mensaje: "La cita no existe" });
         }
@@ -86,7 +82,7 @@ exports.editar = async (req, res) => {
                 where: {
                     fecha_cita,
                     nombre_paciente,
-                    id: { [Op.ne]: idCita }
+                    id: { [Op.ne]: id }
                 }
             });
             if (citaExistente) {
@@ -108,7 +104,6 @@ exports.editar = async (req, res) => {
         cita.nombre_medicamento = nombre_medicamento || cita.nombre_medicamento;
         cita.cantidadventa = cantidadventa || cita.cantidadventa;
 
-        // Guardar cambios
         await cita.save();
         res.status(200).json({ mensaje: "Cita actualizada correctamente", cita });
     } catch (error) {

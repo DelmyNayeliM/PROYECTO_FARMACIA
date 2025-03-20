@@ -96,7 +96,7 @@ useEffect(() => {
     e.preventDefault();
 
     if (fecha_cita === '' || nombre_dr === '' || nombre_paciente === '' || presion === '' || peso === '' || ritmo_cardiaco === '' || temperatura === '' || sintomas === '' || receta === '' || observaciones === '' || nombre_medicamento === '' || cantidadventa === '') {
-      console.log('Por favor, complete todos los campos');
+      alert('Por favor, complete todos los campos');
       return;
     }
 
@@ -117,8 +117,8 @@ useEffect(() => {
             nombre_medicamento,
             cantidadventa,
         });
-        console.log('Respuesta del servidor:', response);
-      } else if (action === 'editar' && id) {
+        alert('Medicamento creado exitosamente');
+      } else if (action === 'editar' && id && citaseditar) {
         response = await axios.put(`${citaseditar}?id=${id}`, {
           fecha_cita,
           nombre_dr,
@@ -133,10 +133,15 @@ useEffect(() => {
           nombre_medicamento,
           cantidadventa
         });
-        console.log('Cita editada:', response.data);
+        if (response && response.data && response.data.success) {
+          alert('Cita editada exitosamente');
       }
-  
-      console.log(response.data);
+  } else {
+      alert('No se puede editar la cita. Falta información.');
+      return;
+  }
+  if (response && response.data) {
+      console.log('Respuesta del servidor:',response.data);
       setFechaCita('');
       setNombreDR('');
       setNombrepaciente('');
@@ -149,14 +154,36 @@ useEffect(() => {
       setObservaciones('');
       setNombreM('');
       setCantidadv('');
-      setId(''); // Limpiamos el ID
-      alert('Cita guardada ');
-    } catch (error) {
-      console.error('Error al guardar o editar la cita', error);
+      setId(''); 
+      alert('Cita Editada ');
+    } else {
+      console.error('La respuesta de la API no contiene "data"');
+  }
+} catch (error) {
+  console.error('Error al guardar o editar la cita', error);
+
+  if (error.response) {
+    alert(`Error ${error.response.status}: ${error.response.statusText}`);
+    console.error('Respuesta del servidor:', error.response);
+
+    if (error.response.data && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+            console.error('Error específico:', err);
+            alert(`Error: ${err.message}`);
+        });
     }
-  };
-  
-  // Función para eliminar el medicamento (en realidad parece ser para eliminar una cita)
+} else if (error.request) {
+    // Solicitud realizada, pero no se recibió respuesta
+    alert('No se recibió respuesta del servidor');
+    console.error('No se recibió respuesta del servidor:', error.request);
+} else {
+    // Error al configurar la solicitud
+    alert('Error al configurar la solicitud');
+    console.error('Error al configurar la solicitud:', error.message);
+}
+}
+};
+
 const handleEliminar = async () => {
   // Verificar si el 'id' y la URL para eliminar están definidos
   if (!id || !citaseliminar) {
@@ -184,20 +211,9 @@ const handleEliminar = async () => {
     } catch (error) {
       // Capturar y mostrar el error si algo falla en la solicitud
       console.error('Error al eliminar la cita', error);
-      if (error.response) {
-        // Si hay una respuesta del servidor, mostrarla
-        console.error('Error del servidor:', error.response.data);
-        alert('Ocurrió un error al intentar eliminar la cita. Intenta de nuevo más tarde.');
-      } else {
-        // Si no hay respuesta del servidor, mostrar el error general
-        console.error('Error general:', error.message);
-        alert('Ocurrió un error al intentar eliminar la cita. Intenta de nuevo más tarde.');
-      }
     }
   }
 }
-
-
 
   const imprimirFormulario = () => {
     const fechaactual_cita = new Date().toLocaleDateString();
@@ -419,7 +435,7 @@ const handleEliminar = async () => {
                       name="nombre_dr"
                       value={nombre_dr}
                       onChange={(e) => setNombreDR(e.target.value)}
-                      title="Ingrese el nombre  del doctor"  
+                      placeholder="Ingrese el nombre  del doctor"  
                     />
                   </div>
                   </div>
@@ -437,7 +453,7 @@ const handleEliminar = async () => {
                         name="nombre_paciente"
                         value={nombre_paciente}
                         onChange={(e) => setNombrepaciente(e.target.value)}
-                        title="Ingrese el nombre  del paciente"  
+                        placeholder="Ingrese el nombre  del paciente"  
                       />
                     </div>
                   </div>
@@ -455,7 +471,7 @@ const handleEliminar = async () => {
                         name="presion"
                         value={presion}
                         onChange={(e) => setPresion(e.target.value)}
-                        title="Ejemplo 120/80"  
+                        placeholder="Ejemplo 120/80"  
                       />
                     </div>
                     {/* Peso */}
@@ -470,7 +486,7 @@ const handleEliminar = async () => {
                         name="peso"
                         value={peso}
                         onChange={(e) => setPeso(e.target.value)}
-                         title="Ejemplo 70"
+                         placeholder="Ejemplo 70"
                       />
                     </div>
                   </div>
@@ -488,7 +504,7 @@ const handleEliminar = async () => {
                         name="ritmo_cardiaco"
                         value={ritmo_cardiaco}
                         onChange={(e) => setRitmo(e.target.value)}
-                         title="80 lpm"
+                         placeholder="80 lpm"
                       />
                     </div>
                     {/* Temperatura */}
@@ -503,7 +519,7 @@ const handleEliminar = async () => {
                         name="temperatura"
                         value={temperatura}
                         onChange={(e) => setTemperatura(e.target.value)}
-                         title="MIN: 35 - MAX: 42"
+                         placeholder="MIN: 35 - MAX: 42"
                       />
                     </div>
                   </div>
@@ -568,7 +584,7 @@ const handleEliminar = async () => {
                         name="nombre_medicamento"
                         value={nombre_medicamento}
                         onChange={(e) => setNombreM(e.target.value)}
-                        title="Debe tener entre 3-75 caracteres"
+                        placeholder="Debe tener entre 3-75 digitos"
                       />
                     </div>
                     <div className="col-md-6">
