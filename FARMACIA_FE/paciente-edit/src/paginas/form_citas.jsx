@@ -519,7 +519,7 @@ const handleEliminar = async () => {
                         name="temperatura"
                         value={temperatura}
                         onChange={(e) => setTemperatura(e.target.value)}
-                         placeholder="MIN: 35 - MAX: 42"
+                         placeholder="min: 35 - max: 42"
                       />
                     </div>
                   </div>

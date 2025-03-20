@@ -51,32 +51,14 @@ const Acercade = () => {
       <h2>Nuestro equipo de<strong className="text-primary">Trabajo</strong></h2>
     </div>
   </div>
-  <div className="row gy-4 justify-content-center">
-    <div className="col-md-6 col-lg-4">
-      <div className="block-38 text-center">
-        <div className="block-38-header">
-          <p className="block-38 fw-bold h4 text-black">Dr. Cristian Audatto Muñoz</p>
-        </div>
-        <div className="block-38-body">
-        <p className="no-space">
-        <span className="fw-bold ">Egresado de la universidad:</span>
-        <span className="text-gray-600 text-black"> Universidad</span>
-        </p>
-          <p className="no-space">
-        <span className="fw-bold ">Especialidad:</span>
-        <span className="text-gray-600 text-black"> Medico General</span>
-      </p>
-        </div>
-      </div>
-    </div>
 
-    <div className="col-md-6 col-lg-4">
-      <div className="block-38 text-center">
-        <div className="block-38-header">
-          <p className="block-38 fw-bold h4 text-black">Dr. Kevin Heney Llanes</p>
-        </div>
-        <div className="block-38-body">
-        <p className="no-space">
+  <div className="d-flex justify-content-center">
+  <div className="block-38 text-center" style={{ width: '30%' }}>
+    <div className="block-38-header">
+      <p className="block-38 fw-bold h4 text-black">Dr. Cristian Audato Muñoz</p>
+    </div>
+    <div className="block-38-body">
+      <p className="no-space">
         <span className="fw-bold ">Egresado de la universidad:</span>
         <span className="text-gray-600 text-black"> Universidad</span>
       </p>
@@ -84,25 +66,42 @@ const Acercade = () => {
         <span className="fw-bold ">Especialidad:</span>
         <span className="text-gray-600 text-black"> Medico General</span>
       </p>
-
-      <div className="col-md-4 col-lg-4">
-          <p className="block-38 fw-bold h4 text-black">Lic. Marleni Cantarero</p>
-        </div>
-        <div className="block-38-body">
-    
-        <span className="fw-bold ">Egresada de la universidad:</span>
-        <span className="text-gray-600 text-black"> Universidad</span>
-   
-      <p className="no-space">
-        <span className="fw-bold ">Especialidad:</span>
-        <span className="text-gray-600 text-black"> Medico General</span>
-      </p>
-        </div>
-      </div>
-    </div>
-    
     </div>
   </div>
+
+  <div className="block-38 text-center" style={{ width: '30%' }}>
+    <div className="block-38-header">
+      <p className="block-38 fw-bold h4 text-black">Lic. Marleni Cantarero</p>
+    </div>
+    <div className="block-38-body">
+      <p className="no-space">
+        <span className="fw-bold ">Egresada de la universidad:</span>
+        <span className="text-gray-600 text-black"> Universidad</span>
+      </p>
+      <p className="no-space">
+        <span className="fw-bold ">Especialidad:</span>
+        <span className="text-gray-600 text-black"> Medico General</span>
+      </p>
+    </div>
+  </div>
+
+  <div className="block-38 text-center" style={{ width: '30%' }}>
+    <div className="block-38-header">
+      <p className="block-38 fw-bold h4 text-black">Dr. Kevin Eney Yanes</p>
+    </div>
+    <div className="block-38-body">
+      <p className="no-space">
+        <span className="fw-bold ">Egresado de la universidad:</span>
+        <span className="text-gray-600 text-black"> Universidad</span>
+      </p>
+      <p className="no-space">
+        <span className="fw-bold ">Especialidad:</span>
+        <span className="text-gray-600 text-black"> Medico General</span>
+      </p>
+    </div>
+  </div>
+
+</div>
 </div>
 </div>
   );

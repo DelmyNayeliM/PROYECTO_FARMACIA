@@ -242,7 +242,7 @@ const handleEliminar = async () => {
                       name="nombre_medicamento"
                       value={nombre_medicamento}
                       onChange={(e) => setNombre_Medicamento(e.target.value)}
-                      title="El nombre debe tener entre 3 y 75 caracteres"
+                      placeholder="El nombre debe tener entre 3 y 75 caracteres"
                     />
                   </div>
 
@@ -258,7 +258,7 @@ const handleEliminar = async () => {
                       className="form-control"
                       value={descripcion}
                       onChange={(e) => setDescripcion(e.target.value)}
-                      title="Entre 10 y 200 caracteres"
+                      placeholder="Entre 10 y 200 caracteres"
                     ></textarea>
                   </div>
 
@@ -274,7 +274,7 @@ const handleEliminar = async () => {
                         name="precio"
                         value={precio}
                         onChange={(e) => setPrecio(e.target.value)}
-                        title="Ejemplo 100.00"
+                        placeholder="Ejemplo 100.00"
                       />
                     </div>
                     <div className="col-md-6">

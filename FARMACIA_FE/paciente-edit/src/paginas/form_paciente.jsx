@@ -386,6 +386,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="nombre_completo"
                         name="nombre_completo"
                         value={nombre_completo}
+                        placeholder="Ingrese el nombre del cliente" 
                         onChange={(e) => setNombreComp(e.target.value)}
                       />
                     </div>
@@ -398,7 +399,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="clave_empleado"
                         name="clave_empleado"
                         value={clave_empleado}
-                        title="Max 5 digitos"  
+                        placeholder="Max 5 digitos"  
                         onChange={(e) => setClaveEmpl(e.target.value)}
                       />
                     </div>
@@ -413,7 +414,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="clave_expediente"
                         name="clave_expediente"
                         value={clave_expediente}
-                        title="Max 8 digitos" 
+                        placeholder="Max 8 digitos" 
                         onChange={(e) => setClaveExpe(e.target.value)}
                       />
                     </div>
@@ -448,7 +449,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="telefono"
                         name="telefono"
                         value={telefono}
-                        title="Solo numeros" 
+                        placeholder="Solo numeros" 
                         onChange={(e) => setTelefono(e.target.value)}
                       />
                     </div>
@@ -461,7 +462,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="edad"
                         name="edad"
                         value={edad}
-                        title="max 110 años" 
+                        placeholder="max 110 años" 
                         onChange={(e) => setEdad(e.target.value)}
                       />
                     </div>
@@ -476,6 +477,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="direccion"
                         name="direccion"
                         value={direccion}
+                        placeholder="Direccion del paciente" 
                         onChange={(e) => setDireccion(e.target.value)}
                       />
                     </div>
@@ -488,7 +490,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         id="correo"
                         name="correo"
                         value={correo}
-                        title="Direccion de correo valida" 
+                        placeholder="Direccion de correo valida" 
                         onChange={(e) => setCorreo(e.target.value)}
                       />
                     </div>
