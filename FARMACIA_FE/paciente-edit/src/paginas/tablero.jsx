@@ -78,6 +78,7 @@ const Tablero = () => {
               <th scope="col">Categoría</th>
               <th scope="col">Nombre del Medicamento</th>
               <th scope="col">Descripción</th>
+              <th scope="col">Fecha Vencimiento</th>
               <th scope="col" className="text-end">Precio</th>
               <th scope="col" className="text-end">Cantidad Restante</th>
             </tr>
@@ -86,11 +87,11 @@ const Tablero = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="5" className="text-center">Cargando...</td>
+                <td colSpan="6" className="text-center">Cargando...</td>
               </tr>
             ) : medicamentos.length === 0 ? (
               <tr>
-                <td colSpan="5" className="text-center">No se encontraron resultados</td>
+                <td colSpan="6" className="text-center">No se encontraron resultados</td>
               </tr>
             ) : (
               medicamentos.map((medicamento) => (
@@ -98,6 +99,7 @@ const Tablero = () => {
                   <td>{medicamento.categoria}</td>
                   <td>{medicamento.nombre_medicamento}</td>
                   <td>{medicamento.descripcion}</td>
+                  <td>{medicamento.fecha_vence}</td>
                   <td>L.{medicamento.precio}</td>
                   <td className="text-end">{medicamento.cantidadRestante}</td>
                 </tr>

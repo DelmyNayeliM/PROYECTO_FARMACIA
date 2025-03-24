@@ -13,7 +13,7 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar un nuevo Inventario
 exports.guardar = async (req, res) => {
-    const { categoria, nombre_medicamento, descripcion, precio, cantidad } = req.body;
+    const { categoria, nombre_medicamento, descripcion, precio, cantidad, fecha_vence } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -33,7 +33,8 @@ exports.guardar = async (req, res) => {
             nombre_medicamento, 
             descripcion, 
             precio,
-            cantidad
+            cantidad,
+            fecha_vence
         });
 
         res.status(201).json(nuevoinventario);
@@ -57,18 +58,12 @@ exports.listar = async (req, res) => {
 exports.editar = async (req, res) => {
     const { id } = req.query;
     const {
-        fecha_cita,
-        nombre_dr,
-        nombre_paciente,
-        presion,
-        peso,
-        ritmo_cardiaco,
-        temperatura,
-        sintomas,
-        receta,
-        observaciones,
-        nombre_medicamento,
-        cantidadventa
+        categoria, 
+        nombre_medicamento, 
+        descripcion, 
+        precio,
+        cantidad,
+        fecha_vence
     } = req.body;
 
     // Validar errores de Express Validator
@@ -82,43 +77,37 @@ exports.editar = async (req, res) => {
             return res.status(400).json({ mensaje: "El ID es necesario" });
         }
 
-        const cita = await Citas.findByPk(id);
-        if (!cita) {
-            return res.status(404).json({ mensaje: "La cita no existe" });
+        const Medicamento = await inventarios.findByPk(id);
+        if (!Medicamento) {
+            return res.status(404).json({ mensaje: "El medicamento no existe" });
         }
 
-        if (nombre_paciente) {
-            const citaExistente = await cita.findOne({
+        if (nombre_medicamento) {
+            const inventarioExistente = await inventarios.findOne({
                 where: {
-                    nombre_paciente,
+                    nombre_medicamento,
                     id: { [Op.ne]: id }
                 }
             });
-            if (citaExistente) {
-                return res.status(400).json({ mensaje: "El nombre del paciente ya está en uso" });
+            if (inventarioExistente) {
+                return res.status(400).json({ mensaje: "El nombre del medicamento ya está en uso" });
             }
         }
 
-        cita.fecha_cita = fecha_cita || cita.fecha_cita;
-        cita.nombre_dr = nombre_dr || cita.nombre_dr;
-        cita.nombre_paciente = nombre_paciente || cita.nombre_paciente;
-        cita.presion = presion || cita.presion;
-        cita.peso = peso || cita.peso;
-        cita.ritmo_cardiaco = ritmo_cardiaco || cita.ritmo_cardiaco;
-        cita.temperatura = temperatura || cita.temperatura;
-        cita.sintomas = sintomas || cita.sintomas;
-        cita.receta = receta || cita.receta;
-        cita.observaciones = observaciones || cita.observaciones;
-        cita.nombre_medicamento = nombre_medicamento || cita.nombre_medicamento;
-        cita.cantidadventa = cantidadventa || cita.cantidadventa;
+        Medicamento.categoria = categoria || Medicamento.categoria;
+        Medicamento.nombre_medicamento = nombre_medicamento || Medicamento.nombre_medicamento;
+        Medicamento.descripcion = descripcion || Medicamento.descripcion;
+        Medicamento.precio = precio || Medicamento.descripcion;
+        Medicamento.cantidad = cantidad || Medicamento.cantidad;
+        Medicamento.fecha_vence = fecha_vence || Medicamento.fecha_vence;
 
-        await cita.save();
+        await Medicamento.save();
 
-        res.json({ mensaje: "Cita actualizada correctamente", cita });
+        res.json({ mensaje: "Medicamento actualizado correctamente", Medicamento });
 
     } catch (error) {
-        console.error("Error al editar la cita:", error);
-        res.status(500).json({ mensaje: "Error al editar la cita", error: error.message });
+        console.error("Error al editar el medicaento:", error);
+        res.status(500).json({ mensaje: "Error al editar el medicamento", error: error.message });
     }
 };
 

@@ -4,8 +4,10 @@ const inventario = db.define(
     'inventario',
     {
         categoria: {
-            type: DataTypes.ENUM('Medicamento', 'Analgesicos', 'Material'),
-            defaultValue: 'Medicamento',
+            type: DataTypes.ENUM('Muestras medicas', 'Antibioticos adultos','Migraña', 'Parenterales', 
+                'Cardiometabolicos', 'Anestesia', 'Cremas', 'Gotas', 'Ginecologicos', 'Gastrointestinales', 'Antigripal'
+                , 'Alergias', 'Tos', 'Asma-gripe', 'Antibioticos niños', 'Analgesicos-antipirectico niños', 'Antipirectico adultos'),
+            defaultValue: 'Alergias',
         },
         nombre_medicamento: {
             type: DataTypes.STRING(45),
@@ -28,6 +30,13 @@ const inventario = db.define(
         cantidad: {
             type: DataTypes.STRING(20), 
             allowNull: false
+        },
+        fecha_vence: {
+            type: DataTypes.DATEONLY,  
+            allowNull: false,      
+            validate: {
+                isDate: true,      
+            }
         },
     },
     {

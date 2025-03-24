@@ -8,6 +8,7 @@ const FormularioRegistro = ({ medicamentoid }) => {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [cantidad, setCantidad] = useState('');
+  const [fecha_vence, setFechaV] = useState('');
   const [id, setId] = useState("");
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
@@ -26,6 +27,7 @@ const FormularioRegistro = ({ medicamentoid }) => {
               setDescripcion(medicamento.descripcion);
               setPrecio(medicamento.precio);
               setCantidad(medicamento.cantidad);
+              setFechaV(medicamento.fecha_vence);
             } else {
           }
       } else {
@@ -70,6 +72,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
     setDescripcion(medicamento.descripcion);
     setPrecio(medicamento.precio);
     setCantidad(medicamento.cantidad);
+    setFechaV(medicamento.fecha_vence);
     setSearchTerm(''); // Limpiar el searchTerm para que desaparezca la lista
   }
   
@@ -78,7 +81,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
   const handleSubmit = async (e, action) => {
     e.preventDefault();
 
-    if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad === '') {
+    if (categoria === '' || nombre_medicamento === '' || descripcion === '' || precio === '' || cantidad === '' || fecha_vence=== '') {
         alert('Por favor, complete todos los campos');
         return;
     }
@@ -93,6 +96,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
                 descripcion,
                 precio: parseFloat(precio), // Asegúrate de que sea un número
                 cantidad: parseInt(cantidad), // Asegúrate de que sea un número entero
+                fecha_vence,
             });
             alert('Medicamento creado exitosamente');
         } else if (action === 'editar' && id && medicamentoeditar) {
@@ -102,6 +106,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
                 descripcion,
                 precio: parseFloat(precio),
                 cantidad: parseInt(cantidad),
+                fecha_vence,
             });
             if (response && response.data && response.data.success) {
               alert('Medicamento editado exitosamente');
@@ -119,6 +124,7 @@ fetchMedicamentos(); // Solo ejecutar si el ID es válido
             setDescripcion('');
             setPrecio('');
             setCantidad('');
+            setFechaV('');
             alert('Medicamento editado exitosamente');
         } else {
             console.error('La respuesta de la API no contiene "data"');
@@ -162,6 +168,7 @@ const handleEliminar = async () => {
       setDescripcion('');
       setPrecio('');
       setCantidad('');
+      setFechaV('');
       // Resetear otros campos...
       setId(null); // Si tienes un estado para el ID
     } catch (error) {
@@ -211,11 +218,12 @@ const handleEliminar = async () => {
             </div>
 
             <div className="col-md-12">
+              
               <form>
                 <div className="p-3 p-lg-5 border">
                   <div className="form-group row">
                     <label htmlFor="categoria" className="text-black">
-                      Categoría: <span className="text-danger">*</span>
+                      Categorías: <span className="text-danger">*</span>
                     </label>
                     <select
                       className="form-control"
@@ -225,9 +233,21 @@ const handleEliminar = async () => {
                       onChange={(e) => setCategoria(e.target.value)}
                     >
                       <option value="">Seleccionar...</option>
-                      <option value="Medicamento">Medicamento</option>
-                      <option value="Analgesicos">Analgesicos</option>
-                      <option value="Material">Material</option>
+                      <option value="Muestras medicas">Muestras Medicas</option>
+                      <option value="Antibioticos adultos">Antibioticos adultos</option>
+                      <option value="Migraña">Migraña</option>
+                      <option value="Parenterales">Parenterales</option>
+                      <option value="Cardiometabolicos">Cardiometabolicos</option>
+                      <option value="Anestesia">Anestesia</option>
+                      <option value="Cremas">Cremas</option>
+                      <option value="Gotas">Gotas</option>
+                      <option value="Ginecologicos">Ginecologicos</option>
+                      <option value="Gastrointestinales">Gastrointestinales</option>
+                      <option value="Alergias">Alergias</option>
+                      <option value="Tos">Tos</option>
+                      <option value="Asma-gripe">Asma-gripe</option>
+                      <option value="Antibioticos niños">Antibioticos niños</option>
+                      <option value="Analgesicos-antipirectico niños">Analgesicos-antipirectico niños</option>
                     </select>
                   </div>
 
@@ -261,6 +281,20 @@ const handleEliminar = async () => {
                       placeholder="Entre 10 y 200 caracteres"
                     ></textarea>
                   </div>
+
+                  <div className="col-md-6">
+                      <label htmlFor="fecha_vence" className="text-black">
+                        Fecha de vencimiento: <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="fecha_vence"
+                        name="fecha_vence"
+                        value={fecha_vence}
+                        onChange={(e) => setFechaV(e.target.value)}
+                      />
+                    </div>
 
                   <div className="form-group row">
                     <div className="col-md-6">

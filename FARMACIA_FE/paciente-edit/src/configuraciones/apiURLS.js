@@ -6,6 +6,7 @@ export const medicamentoeliminar = Servidor + '/inventario/eliminar';
 export const medicamentolistar = Servidor + '/inventario/listar';  
 export const medicamentobuscar = Servidor + '/inventario/buscar-medicamentos';  
 export const medicamentoid = Servidor + '/inventario/buscar/';
+export const medicamentobuscarv = Servidor + '/inventario/buscar/vence/'
 
 export const pacienteguardar = Servidor + '/pacientes/guardar';  
 export const pacienteeditar = Servidor + '/pacientes/editar';  

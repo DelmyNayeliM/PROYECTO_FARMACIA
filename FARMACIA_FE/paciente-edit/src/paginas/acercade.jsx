@@ -75,8 +75,7 @@ const Acercade = () => {
     </div>
     <div className="block-38-body">
       <p className="no-space">
-        <span className="fw-bold ">Egresada de la universidad:</span>
-        <span className="text-gray-600 text-black"> Universidad</span>
+        <span className="text-gray-600 text-black"> Encargada del plan medico</span>
       </p>
       <p className="no-space">
         <span className="fw-bold ">Especialidad:</span>
@@ -92,7 +91,7 @@ const Acercade = () => {
     <div className="block-38-body">
       <p className="no-space">
         <span className="fw-bold ">Egresado de la universidad:</span>
-        <span className="text-gray-600 text-black"> Universidad</span>
+        <span className="text-gray-600 text-black"></span>
       </p>
       <p className="no-space">
         <span className="fw-bold ">Especialidad:</span>

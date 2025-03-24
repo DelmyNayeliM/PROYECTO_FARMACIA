@@ -160,4 +160,47 @@ rutas.get('/buscar/:id', async (req, res) => {
   }
 });
 
+  
+rutas.get('/buscar/vence/:fecha', async (req, res) => {
+    try {
+      const { fecha } = req.params;  // Tomamos la fecha desde los parámetros de la URL
+  
+      // Verificar si el formato de la fecha es válido (YYYY-MM-DD)
+      const regexFecha = /^\d{4}-\d{2}-\d{2}$/;
+      if (!regexFecha.test(fecha)) {
+        return res.status(400).json({ error: 'Formato de fecha no válido. Use el formato YYYY-MM-DD.' });
+      }
+  
+      // Convertir la fecha a un objeto Date local
+      const [year, month, day] = fecha.split('-');
+      const fechaFormateada = new Date(year, month - 1, day);  // Mes es 0 indexado (enero es 0)
+  
+      // Aseguramos que la hora sea a medianoche en la zona horaria local
+      fechaFormateada.setHours(0, 0, 0, 0);
+  
+      console.log('Fecha convertida:', fechaFormateada);
+  
+      // Buscar los medicamentos con la fecha de vencimiento proporcionada
+      const medicamentos = await Inventario.findAll({
+        where: {
+          fecha_vence: fechaFormateada // Buscamos medicamentos cuyo 'fecha_vence' coincida con la fecha
+        }
+      });
+  
+      // Si no se encuentran medicamentos, devolvemos un error 404
+      if (medicamentos.length === 0) {
+        return res.status(404).json({ error: 'No se encontraron medicamentos con esa fecha de vencimiento' });
+      }
+  
+      // Si encontramos medicamentos, los devolvemos en la respuesta
+      return res.status(200).json({ medicamentos });
+    } catch (error) {
+      console.error('Error al buscar medicamentos por fecha de vencimiento:', error);
+      return res.status(500).json({ error: 'Error al buscar medicamentos por fecha de vencimiento' });
+    }
+  });
+  
+  
+  
+  
 module.exports = rutas;
