@@ -30,18 +30,18 @@ const LoginForm = () => {
         body: JSON.stringify(userData),
       });
 
-      const data = await response.json();  
+      const data = await response.json();
       if (response.ok) {
         console.log('Login exitoso:', data);
         navigate('/'); // Redirige al formulario de paciente
       } else {
         throw new Error(data.error || 'Credenciales incorrectas o error en la API');
-      }      
+      }
     } catch (err) {
       console.error('Error durante el login:', err);
       setError(err.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -52,17 +52,29 @@ const LoginForm = () => {
           <div className="col-md-6 col-lg-4">
             <div className="card p-4 shadow-sm">
               <div className="card-body">
-                <h3 className="text-center mb-4">Login</h3>
+                <h3 className="text-center mb-4">Inicio de sesion</h3>
                 <form onSubmit={handleSubmit}>
+
+                  {/* Logo con URL externa */}
+                <div className="text-center mt-4">
+                  <img 
+                    src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" // URL de tu logo
+                    alt="Logo" 
+                    style={{ width: '150px', height: 'auto' }} 
+                  />
+                </div>
+
                   <div className="mb-3">
                     <label htmlFor="tipo_usuario" className="form-label">Tipo de Usuario</label>
                     <input
-                      type="text"
+                    
                       className="form-control"
                       id="tipo_usuario"
                       placeholder="(Administrador o Medico)"
                       value={tipo_usuario}
                       onChange={(e) => setTipo_usuario(e.target.value)}
+                      
+                      required
                     />
                   </div>
 
@@ -97,6 +109,8 @@ const LoginForm = () => {
                   </button>
                 </form>
                 {error && <div className="alert alert-danger mt-3">{error}</div>}
+
+                
               </div>
             </div>
           </div>

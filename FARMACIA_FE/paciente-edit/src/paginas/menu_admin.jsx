@@ -48,7 +48,7 @@ const Inicioadmin = () => {
 
       {/* Icono de cerrar sesión en la esquina inferior derecha */}
       <Link to="/login" className="logout-icon">
-        <FaDoorOpen size={30} color="black" />
+        <FaDoorOpen size={80} color="black" />
       </Link>
     </main>
   );

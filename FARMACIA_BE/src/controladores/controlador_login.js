@@ -4,7 +4,7 @@ const usuarios = require('../modelos/usuarios'); // Asegúrate de importar corre
 
 // Ruta de login
 exports.login = async (req, res) => {
-    const { nombre, password } = req.body;
+    const { nombre, password, tipo_usuario } = req.body;
 
     // Validación de los campos
     const errors = validationResult(req);
@@ -17,6 +17,11 @@ exports.login = async (req, res) => {
         const usuario = await usuarios.findOne({ where: { nombre } });
         if (!usuario) {
             return res.status(400).json({ mensaje: 'Usuario no encontrado' });
+        }
+
+        // Verificar que el tipo de usuario es el correcto
+        if (usuario.tipo_usuario !== tipo_usuario) {
+            return res.status(400).json({ mensaje: 'Tipo de usuario incorrecto' });
         }
 
         // Verificar la contraseña con bcrypt
