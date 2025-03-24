@@ -20,11 +20,6 @@ const App = () => {
                   <li><Link to="/medicamento">Inventario</Link></li>
                   <li className="has-children">
                     <Link to="#">Categoria</Link>
-                    <ul className="dropdown">
-                      <li><Link to="/tablero_paciente">Medicamentos</Link></li>
-                      <li><Link to="/medicamento">Suplementos</Link></li>
-                      <li><Link to="/medicamento">Material</Link></li> 
-                    </ul>
                   </li>
                   <li><Link to="/citas">Citas</Link></li>
                   <li><Link to="/contact">Pacientes</Link></li>

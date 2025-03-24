@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
-const usuarios = require('../modelos/usuarios');
+const usuarios = require('../modelos/usuarios'); // Asegúrate de importar correctamente el modelo
 
 // Ruta de login
 exports.login = async (req, res) => {
@@ -19,8 +19,8 @@ exports.login = async (req, res) => {
             return res.status(400).json({ mensaje: 'Usuario no encontrado' });
         }
 
-        // Verificar la contraseña
-        const esValido = await usuario.verificarPassword(password); // Usa el método de verificar contraseña que agregamos en el modelo
+        // Verificar la contraseña con bcrypt
+        const esValido = await bcrypt.compare(password, usuario.password); // Comparar la contraseña proporcionada con la almacenada (cifrada)
         if (!esValido) {
             return res.status(400).json({ mensaje: 'Contraseña incorrecta' });
         }

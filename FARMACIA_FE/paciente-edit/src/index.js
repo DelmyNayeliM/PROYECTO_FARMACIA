@@ -11,43 +11,53 @@ import './css/owl.carousel.min.css';
 import './css/owl.theme.default.min.css';
 import './css/menu.css';
 
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 import Form_medicamento from './paginas/medicamento';
 import Formulariopaciente from './paginas/form_paciente';
 import Formulariocitas from './paginas/form_citas';
 import Acercade from './paginas/acercade';
-import Login from './paginas/Login';
+import LoginForm from './paginas/Login'; 
 import Navbar from './plantilla/navbar';
 import Formulario from './paginas/imprimir';
-import Inicio from './paginas/menu';
-import Tablero from './paginas/tablero';
-import FormularioRegistro from './paginas/form_registro'
 import Inicioadmin from './paginas/menu_admin';
-import LoginForm from './paginas/Login';
+import Tablero from './paginas/tablero';
+import FormularioRegistro from './paginas/form_registro';
 import TableroPaciente from './paginas/tablero';
+
+const App = () => {
+  const location = useLocation(); // Obtener la ruta actual
+
+  return (
+    <div>
+      {/* Solo muestra la Navbar si no estamos en la página de login */}
+      {location.pathname !== '/login' && <Navbar />}
+
+      <Routes>
+        {/* Página de login */}
+        <Route path="/login" element={<LoginForm />} />
+
+        {/* Rutas accesibles sin autenticación */}
+        <Route path="/" element={<Inicioadmin />} />
+        <Route path="/medicamento" element={<Form_medicamento />} />
+        <Route path="/form_paciente" element={<Formulariopaciente />} />
+        <Route path="/form_citas" element={<Formulariocitas />} />
+        <Route path="/acercade" element={<Acercade />} />
+        <Route path="/tablero" element={<Tablero />} />
+        <Route path="/formulario" element={<Formulario />} />
+        <Route path="/form_registro" element={<FormularioRegistro />} />
+        <Route path="/tablero_paciente" element={<TableroPaciente />} />
+      </Routes>
+    </div>
+  );
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>  
-      <div>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Inicioadmin />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/medicamento" element={<Form_medicamento />} />
-          <Route path="/form_paciente" element={<Formulariopaciente />} />
-          <Route path="/form_citas" element={<Formulariocitas />} />
-          <Route path="/acercade" element={<Acercade />} />
-          <Route path="/tablero" element={<Tablero />} />
-          <Route path="/formulario" element={<Formulario />} />
-          <Route path="/form_registro" element={<FormularioRegistro />} />
-          <Route path="/tablero_paciente" element={<TableroPaciente />} />
-        </Routes>
-      </div>
+    <BrowserRouter>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

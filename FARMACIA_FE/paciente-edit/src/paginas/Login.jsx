@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [tipo_usuario, setTipo_usuario] = useState('');
@@ -7,17 +8,19 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate(); // Hook de redirección
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     const userData = {
       tipo_usuario,
       nombre,
       password,
     };
-  
+
     try {
       const response = await fetch('http://localhost:3003/inicio/login', {
         method: 'POST',
@@ -26,15 +29,14 @@ const LoginForm = () => {
         },
         body: JSON.stringify(userData),
       });
-  
+
       const data = await response.json();  
       if (response.ok) {
-        // Aquí puedes manejar lo que pasa si el login es exitoso
         console.log('Login exitoso:', data);
+        navigate('/'); // Redirige al formulario de paciente
       } else {
-        // Si el response no es ok, mostrar el error que viene de la API
         throw new Error(data.error || 'Credenciales incorrectas o error en la API');
-      }
+      }      
     } catch (err) {
       console.error('Error durante el login:', err);
       setError(err.message);
@@ -42,8 +44,6 @@ const LoginForm = () => {
       setLoading(false); 
     }
   };
-  
-
 
   return (
     <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>

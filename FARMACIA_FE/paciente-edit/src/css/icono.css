@@ -1,0 +1,14 @@
+.logout-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+  }
+  
+  .logout-icon:hover {
+    color: #f00; /* Cambiar color al pasar el ratón por encima */
+  }
+  

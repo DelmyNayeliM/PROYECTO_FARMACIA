@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaDoorOpen } from 'react-icons/fa'; // Icono de puerta
+import '../css/icono.css'; 
 
 const Inicioadmin = () => {
   const menuItems = [
@@ -8,6 +10,8 @@ const Inicioadmin = () => {
     { title: 'Medicamentos', path: '/form_registro' }
   ];
 
+
+  
   return (
     <main className="site-wrapper">
       <div className="pt-table desktop-768">
@@ -41,8 +45,14 @@ const Inicioadmin = () => {
           </div>
         </div>
       </div>
+
+      {/* Icono de cerrar sesión en la esquina inferior derecha */}
+      <Link to="/login" className="logout-icon">
+        <FaDoorOpen size={30} color="black" />
+      </Link>
     </main>
   );
 };
 
 export default Inicioadmin;
+
