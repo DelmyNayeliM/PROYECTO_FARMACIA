@@ -68,7 +68,7 @@ rutas.put('/editar',
 
 
 
-// Ruta para eliminar un usuario
+// Ruta para eliminar un paciente
 
 rutas.delete('/eliminar',
     query("id")
@@ -128,17 +128,39 @@ rutas.get('/buscarpacientes', async (req, res) => {
   }
 });
 
-rutas.post('/guardarImagenPaciente', guardarImagenPaciente, (req, res) => {
+rutas.post('/guardarImagenPaciente', guardarImagenPaciente, async (req, res) => {
     try {
+        // Verificar si no se ha subido ninguna imagen
         if (!req.file) {
             return res.status(400).json({ mensaje: 'No se ha subido ninguna imagen' });
         }
-        const rutaImagen = req.file.path;
-        res.status(201).json({ mensaje: 'Imagen subida correctamente', ruta: rutaImagen });
+
+        // Obtener la ruta de la imagen cargada
+        const rutaImagen = req.file.path; // ruta completa en el sistema de archivos
+
+        // Puedes guardar solo la parte relativa de la ruta (el nombre del archivo) en la base de datos
+        const rutaRelativa = rutaImagen.replace('public', ''); // Remover 'public' del inicio
+
+        // Aquí puedes ahora guardar la ruta en tu modelo de paciente:
+        const paciente = await Paciente.update(
+            { foto_paciente: rutaRelativa },
+            { where: { id: req.query.id } }
+        );
+
+        // Verifica si el paciente fue actualizado correctamente
+        if (paciente[0] === 0) {
+            return res.status(404).json({ mensaje: 'Paciente no encontrado' });
+        }
+
+        // Responder con un mensaje de éxito y la ruta de la imagen
+        res.status(201).json({ mensaje: 'Imagen subida correctamente', ruta: rutaRelativa });
+
     } catch (error) {
+        // Manejo de errores
         console.error(error);
         res.status(500).json({ mensaje: 'Error al subir la imagen', error });
     }
 });
+
 
 module.exports = rutas;

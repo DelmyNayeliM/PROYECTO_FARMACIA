@@ -66,16 +66,17 @@ const LoginForm = () => {
 
                   <div className="mb-3">
                     <label htmlFor="tipo_usuario" className="form-label">Tipo de Usuario</label>
-                    <input
-                    
+                    <select
                       className="form-control"
                       id="tipo_usuario"
-                      placeholder="(Administrador o Medico)"
                       value={tipo_usuario}
                       onChange={(e) => setTipo_usuario(e.target.value)}
-                      
                       required
-                    />
+                      >
+                      <option value="">Seleccionar...</option>
+                      <option value="administrador">Administrador</option>
+                      <option value="medico">Medico</option>
+                    </select>
                   </div>
 
                   <div className="mb-3">

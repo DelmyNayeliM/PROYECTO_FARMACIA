@@ -36,8 +36,6 @@ const App = () => {
       <Routes>
         {/* Página de login */}
         <Route path="/login" element={<LoginForm />} />
-
-        {/* Rutas accesibles sin autenticación */}
         <Route path="/" element={<Inicioadmin />} />
         <Route path="/medicamento" element={<Form_medicamento />} />
         <Route path="/form_paciente" element={<Formulariopaciente />} />
