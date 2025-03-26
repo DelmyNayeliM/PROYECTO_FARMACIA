@@ -23,7 +23,6 @@ const Tablero = () => {
       const data = await response.json();
   
       if (response.status === 200) {
-        // Si `cita` es un array, acceder al primer valor de `cantidadventa` (o a la cantidad correcta si hay más de uno)
         const cantidadVenta = cita.length > 0 ? parseInt(cita[0].cantidadventa) : 0; // Aseguramos que sea un número
 
         const medicamentosConCantidadRestante = data.map(medicamento => ({

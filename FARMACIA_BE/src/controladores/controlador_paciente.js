@@ -172,7 +172,7 @@ exports.eliminar = async (req, res) => {
 };
 */}
 
-exports.actualizarImagen = async (req, res, next) => {
+{/*exports.actualizarImagen = async (req, res, next) => {
     const validacion = validationResult(req);
     
     if (validacion.errors.length > 0) {
@@ -215,4 +215,4 @@ exports.actualizarImagen = async (req, res, next) => {
         console.log("Error en actualizar la imagen en la base de datos", error);
         return res.json({ msj: "Error en actualizar la imagen en el servidor" });
     }
-};
+};*/}

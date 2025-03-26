@@ -13,7 +13,6 @@ const FormularioRegistro = ({ medicamentoid }) => {
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [medicamentosResultados, setmedicamentosResultados] = useState([]); // Para almacenar los resultados de búsqueda
 
-
   useEffect(() => {
     const fetchMedicamentos = async () => {
       if (!id || !medicamentoid) return; // Si no hay ID, no hacer nada
