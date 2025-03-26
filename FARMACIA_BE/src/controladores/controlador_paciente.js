@@ -146,7 +146,8 @@ exports.eliminar = async (req, res) => {
 };
 
 
-exports. validarImagen = (req, res, next)=>{
+
+{/*exports. validarImagen = (req, res, next)=>{
     const validacion = validationResult(req);
     if (validacion.errors.length > 0){
         var msjerror="";
@@ -169,6 +170,7 @@ exports. validarImagen = (req, res, next)=>{
         });
     }
 };
+*/}
 
 exports.actualizarImagen = async (req, res, next) => {
     const validacion = validationResult(req);

@@ -21,7 +21,7 @@ const Formulariopaciente = ({ pacienteid }) => {
 
   useEffect(() => {
     const fetchPacientes = async () => {
-      if (!id) return; // Si no hay ID, no hacer nada
+      if (!id || !pacienteid) return; // Si no hay ID, no hacer nada
       try {
         const response = await axios.get(`${pacienteid}/${id}`);
         if (response.status === 200) {

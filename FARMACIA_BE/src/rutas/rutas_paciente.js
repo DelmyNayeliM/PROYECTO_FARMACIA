@@ -138,27 +138,23 @@ rutas.post('/guardarImagenPaciente', guardarImagenPaciente, async (req, res) => 
         // Obtener la ruta de la imagen cargada
         const rutaImagen = req.file.path; // ruta completa en el sistema de archivos
 
-        // Puedes guardar solo la parte relativa de la ruta (el nombre del archivo) en la base de datos
+        // Puedes guardar solo la parte relativa de la ruta en la base de datos
         const rutaRelativa = rutaImagen.replace('public', ''); // Remover 'public' del inicio
 
-        // Aquí puedes ahora guardar la ruta en tu modelo de paciente:
+        // Guardar la ruta en la base de datos
         const paciente = await Paciente.update(
             { foto_paciente: rutaRelativa },
             { where: { id: req.query.id } }
         );
 
-        // Verifica si el paciente fue actualizado correctamente
         if (paciente[0] === 0) {
             return res.status(404).json({ mensaje: 'Paciente no encontrado' });
         }
 
-        // Responder con un mensaje de éxito y la ruta de la imagen
-        res.status(201).json({ mensaje: 'Imagen subida correctamente', ruta: rutaRelativa });
-
+        res.status(200).json({ mensaje: 'Imagen subida correctamente', ruta: rutaRelativa });
     } catch (error) {
-        // Manejo de errores
         console.error(error);
-        res.status(500).json({ mensaje: 'Error al subir la imagen', error });
+        res.status(500).json({ mensaje: 'Error al subir la imagen', error: error.message });
     }
 });
 
