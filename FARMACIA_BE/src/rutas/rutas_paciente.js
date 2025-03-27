@@ -3,7 +3,9 @@ const { Router } = require('express');
 const { body, query } = require('express-validator');
 const controladorPacientes = require('../controladores/controlador_paciente');
 const Paciente = require('../modelos/paciente'); // Modelo de usuario
-const { guardarImagenPaciente } = require('../configuraciones/archivo');
+const upload = require('../configuraciones/archivo');
+const { guardarImagen } = ('../controladores/controlador_paciente');
+
 
 const rutas = Router();
 
@@ -128,7 +130,14 @@ rutas.get('/buscarpacientes', async (req, res) => {
   }
 });
 
-rutas.post('/guardarImagenPaciente', guardarImagenPaciente, async (req, res) => {
+//Ruta de guardarImagenPaciente
+
+rutas.post('/:id/guardar-imagen', upload, 
+    controladorPacientes.guardarImagen);
+
+
+
+{/*rutas.post('/guardarImagenPaciente', guardarImagenPaciente, async (req, res) => {
     try {
         // Verificar si no se ha subido ninguna imagen
         if (!req.file) {
@@ -154,6 +163,6 @@ rutas.post('/guardarImagenPaciente', guardarImagenPaciente, async (req, res) => 
         res.status(500).json({ mensaje: 'Error al subir la imagen', error: error.message });
     }
 });
-
+*/}
 
 module.exports = rutas;

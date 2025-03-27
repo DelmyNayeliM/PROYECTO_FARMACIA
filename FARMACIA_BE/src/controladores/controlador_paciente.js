@@ -1,7 +1,7 @@
 const { Op, ValidationError } = require('sequelize'); // Asegúrate de importar Op
 const { validationResult } = require('express-validator');
 const Pacientes = require('../modelos/paciente');
-const {guardarImagenPaciente} = require('../configuraciones/archivo');
+//const {guardarImagenPaciente} = require('../configuraciones/archivo');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
@@ -142,6 +142,43 @@ exports.eliminar = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ msj: 'Error al eliminar el paciente', error });
+    }
+};
+
+
+exports.guardarImagen = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log('ID del usuario:', id); // Depuración
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'No se ha proporcionado ninguna imagen' });
+        }
+
+        // Interpolación de cadenas correctamente usando backticks
+        const filePath = `/public/img/paciente/${req.file.filename}`;
+        console.log('Archivo recibido:', filePath); //Depuración
+
+        // Buscar y actualizar el Paciente
+        const Paciente = await Pacientes.findByPk(id);
+        if (!Paciente) {
+            return res.status(404).json({ error: 'Paciente no encontrado' });
+        }
+
+        // Actualizamos el campo correcto en el modelo 
+        Paciente.foto_paciente = filePath;
+        await Paciente.save();
+
+        res.json({
+            message: 'Imagen guardada correctamente',
+            Pacientes: {
+                id: Paciente.id,
+                foto_paciente: Paciente.foto_paciente // Asegurarse de devolver el campo correcto
+            }
+        });
+    } catch (error) {
+        console.error('Error al guardar la imagen:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 

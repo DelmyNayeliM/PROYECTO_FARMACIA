@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar, pacienteguardarimagen  } from '../configuraciones/apiURLS';
 
 const Formulariopaciente = ({ pacienteid }) => {
   const [tipo_paciente, setTipoPaciente] = useState('');
@@ -135,7 +135,7 @@ const Formulariopaciente = ({ pacienteid }) => {
           nombre_completo,
           clave_empleado,
           clave_expediente,
-          foto_paciente,
+          foto_paciente, 
           telefono: parseInt(telefono),
           edad: parseInt(edad),
           direccion,
@@ -463,7 +463,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                         className="form-control"
                         id="foto_paciente"
                         name="foto_paciente"
-                        onChange={handleFileChange}
+                        onChange={pacienteguardarimagen}
                       />
                     </div>
                   </div>
