@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar, pacienteguardarimagen  } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar } from '../configuraciones/apiURLS';
 
 const Formulariopaciente = ({ pacienteid }) => {
   const [tipo_paciente, setTipoPaciente] = useState('');
@@ -18,6 +18,11 @@ const Formulariopaciente = ({ pacienteid }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pacienteResultados, setPacienteResultados] = useState([]);
   const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
+
+  //const pacienteguardarimagen = (event) => {
+    // Puedes manejar el archivo aquí
+   // console.log(event.target.files[0]);
+ // };
 
   useEffect(() => {
     const fetchPacientes = async () => {
@@ -157,7 +162,7 @@ const Formulariopaciente = ({ pacienteid }) => {
         setCorreo('');
         setEnfermedad('');
         setId('');
-        alert('Paciente guardado o editado exitosamente');
+        alert('Paciente guardado exitosamente');
       } else {
         console.error('La respuesta de la API no contiene "data"');
       }
@@ -194,6 +199,18 @@ const Formulariopaciente = ({ pacienteid }) => {
         const response = await axios.delete(`${pacienteeliminar}?id=${id}`);
         console.log(response.data);
         alert('Paciente eliminado exitosamente');
+        setTipoPaciente('');
+        setTipoEmpleado('');
+        setNombreComp('');
+        setClaveEmpl('');
+        setClaveExpe('');
+        setFotopaciente('');
+        setTelefono('');
+        setEdad('');
+        setDireccion('');
+        setCorreo('');
+        setEnfermedad('');
+        setId('');
       } catch (error) {
         console.error('Error al eliminar el paciente', error);
       }
@@ -457,16 +474,17 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
-                      <input
-                        type="file"
-                        className="form-control"
-                        id="foto_paciente"
-                        name="foto_paciente"
-                        onChange={pacienteguardarimagen}
-                      />
-                    </div>
+                    <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="foto_paciente"
+                      name="foto_paciente"
+                      onChange={handleFileChange}
+                    />
                   </div>
+                  </div>
+
 
                   {fotoPreview && (
                     <div className="form-group row">

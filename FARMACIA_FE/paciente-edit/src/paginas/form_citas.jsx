@@ -117,7 +117,7 @@ useEffect(() => {
             nombre_medicamento,
             cantidadventa,
         });
-        alert('Medicamento creado exitosamente');
+        alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
         response = await axios.put(`${citaseditar}?id=${id}`, {
           fecha_cita,
@@ -134,7 +134,7 @@ useEffect(() => {
           cantidadventa
         });
         if (response && response.data && response.data.success) {
-          alert('Cita editada exitosamente');
+         // alert('Cita editada exitosamente');
       }
   } else {
       alert('No se puede editar la cita. Falta información.');
@@ -202,6 +202,19 @@ const handleEliminar = async () => {
       if (response.status === 200) {
         console.log('Cita eliminada:', response.data);
         alert('Cita eliminada exitosamente');
+        setFechaCita('');
+        setNombreDR('');
+        setNombrepaciente('');
+        setPresion('');
+        setPeso('');
+        setRitmo('');
+        setTemperatura('');
+        setSintomas('');
+        setReceta('');
+        setObservaciones('');
+        setNombreM('');
+        setCantidadv('');
+        setId(''); 
         // Aquí podrías actualizar la lista de citas si es necesario
       } else {
         // Si el servidor responde con algo distinto a 200, manejarlo aquí
