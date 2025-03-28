@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar } from '../configuraciones/apiURLS';
 
+
 const Formulariopaciente = ({ pacienteid }) => {
   const [tipo_paciente, setTipoPaciente] = useState('');
   const [tipo_empleado, setTipoEmpleado] = useState('');

@@ -3,7 +3,8 @@ const { Router } = require('express');
 const { body, query, validationResult } = require('express-validator');
 const controladorcitas = require('../controladores/controlador_citas');
 const Cita = require('../modelos/citas'); // Modelo de Citas
-const Inventario = require('../modelos/inventario'); // Modelo de Inventario
+const inventario = require('../modelos/inventario'); // Modelo de Inventario
+const Paciente = require('../modelos/paciente'); //Modelo de paciente
 const citas = require('../modelos/citas');
 
 const rutas = Router();
@@ -30,6 +31,34 @@ rutas.post('/guardar',
                 throw new Error('Ya existe una cita programada en esta fecha');
             }
         }),
+        body('PacienteId')
+        .optional()
+        .isInt({ min: 1 }).withMessage('El id del paciente debe ser entero')
+        .custom(async (value) => {
+            if (value) {
+            const buscarCita = await Paciente.findOne({
+                where: { id: value } // Asegúrate de que la búsqueda sea coherente
+            });
+
+            if (!buscarCita) {
+                throw new Error('Ya existe una cita programada con este ID');
+            }
+        }
+    }),
+    body('inventarioId')
+        .optional()
+        .isInt({ min: 1 }).withMessage('El id del medicamento debe ser entero')
+        .custom(async (value) => {
+            if (value) {
+            const buscarCita = await inventario.findOne({
+                where: { id: value } // Asegúrate de que la búsqueda sea coherente
+            });
+
+            if (!buscarCita) {
+                throw new Error('Ya existe una cita programada con este ID');
+            }
+        }
+    }),
     controladorcitas.guardar
 );
 
@@ -162,21 +191,20 @@ rutas.get('/buscar-citas',
 rutas.get('/buscarid/:id', async (req, res) => {
     try {
       const { id } = req.params;  // Tomamos el ID desde los parámetros de la URL
-  
-      // Buscar el medicamento por ID usando `findByPk`
-      const citas = await Cita.findByPk(id);
-  
-      // Si no se encuentra la cita, devolvemos un error 404
-      if (!citas) {
-        return res.status(404).json({ error: 'Cita no encontrada' });
-      }
-  
-      // Si encontramos la cita, lo devolvemos en la respuesta
-      return res.status(200).json({ citas });
-    } catch (error) {
-      console.error('Error al buscar la cita:', error);
-      return res.status(500).json({ error: 'Error al buscar cita' });
-    }
-  });
-
+    
+        // Buscar el medicamento por ID usando `findByPk`
+        const citas = await Cita.findByPk(id);
+    
+        // Si no se encuentra la cita, devolvemos un error 404
+        if (!citas) {
+            return res.status(404).json({ error: 'Cita no encontrada' });
+        }
+    
+        // Si encontramos la cita, lo devolvemos en la respuesta
+        return res.status(200).json({ citas });
+        } catch (error) {
+        console.error('Error al buscar la cita:', error);
+        return res.status(500).json({ error: 'Error al buscar cita' });
+        }
+    });
 module.exports = rutas;

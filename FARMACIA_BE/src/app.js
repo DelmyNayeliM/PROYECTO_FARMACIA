@@ -7,6 +7,7 @@ const rutas_citas = require('./rutas/rutas_citas'); // Importa las rutas de cita
 const rutasLogin = require('./rutas/rutas_login');
 const path = require('path');
 const cors = require('cors');
+const { configurarModelos} = require('../src/configurarmodelos');
 
 const corsOptions = {
     origin: 'http://localhost:3000',  // Origen permitido
@@ -27,7 +28,8 @@ db.sync({ alter: true })
     .catch(error => console.error('Error al sincronizar la base de datos:', error));
 
 db.authenticate()
-    .then(() => console.log("Conexión establecida"))
+    .then(() => {console.log("Conexión establecida");configurarModelos();
+})
     .catch(error => console.log("Error: " + error));
 
 // Montar las rutas

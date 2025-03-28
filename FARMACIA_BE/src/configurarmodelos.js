@@ -4,7 +4,7 @@ const modelocitas = require('./modelos/citas');
 
 const sequelize = require('./configuraciones/conexionbd');
 
-async function configurarModelos() {
+exports.configurarModelos = async () => {
     try {
         // Relación de uno a muchos: Un paciente puede tener muchas citas
         modelopacientes.hasMany(modelocitas);  // Un paciente tiene muchas citas
@@ -24,4 +24,3 @@ async function configurarModelos() {
     }
 }
 
-module.exports = configurarModelos;

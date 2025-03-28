@@ -11,7 +11,7 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar una nueva cita
 exports.guardar = async (req, res) => {
-    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa ,} = req.body;
+    const { fecha_cita, nombre_dr, PacienteId, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, inventarioId, cantidadventa ,} = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -19,7 +19,7 @@ exports.guardar = async (req, res) => {
     }
 
     try {
-        const citaExistente = await citas.findOne({ where: { fecha_cita, nombre_paciente } });
+        const citaExistente = await citas.findOne({ where: { fecha_cita, PacienteId } });
         if (citaExistente) {
             return res.status(400).json({ mensaje: 'Ya existe una cita programada para este paciente en esta fecha' });
         }
@@ -27,7 +27,7 @@ exports.guardar = async (req, res) => {
         const nuevacita = await citas.create({
             fecha_cita,
             nombre_dr,
-            nombre_paciente,
+            PacienteId,
             presion,
             peso,
             ritmo_cardiaco,
@@ -35,7 +35,7 @@ exports.guardar = async (req, res) => {
             sintomas,
             receta,
             observaciones,
-            nombre_medicamento,
+            inventarioId,
             cantidadventa
         });
         res.status(201).json(nuevacita);
@@ -59,7 +59,7 @@ exports.listar = async (req, res) => {
 // Ruta para editar una cita
 exports.editar = async (req, res) => {
     const { id } = req.query;  // Se obtiene el id de la query string
-    const { fecha_cita, nombre_dr, nombre_paciente, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, nombre_medicamento, cantidadventa } = req.body;
+    const { fecha_cita, nombre_dr, PacienteId, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, inventarioId, cantidadventa } = req.body;
 
     // Validar que el id esté presente y sea un número
     if (!id || isNaN(id)) {
@@ -81,7 +81,7 @@ exports.editar = async (req, res) => {
             const citaExistente = await citas.findOne({
                 where: {
                     fecha_cita,
-                    nombre_paciente,
+                    PacienteId,
                     id: { [Op.ne]: id }
                 }
             });
@@ -93,7 +93,7 @@ exports.editar = async (req, res) => {
         // Actualización de la cita
         cita.fecha_cita = fecha_cita || cita.fecha_cita;
         cita.nombre_dr = nombre_dr || cita.nombre_dr;
-        cita.nombre_paciente = nombre_paciente || cita.nombre_paciente;
+        cita.PacienteId = PacienteId || cita.PacienteId;
         cita.presion = presion || cita.presion;
         cita.peso = peso || cita.peso;
         cita.ritmo_cardiaco = ritmo_cardiaco || cita.ritmo_cardiaco;
@@ -101,7 +101,7 @@ exports.editar = async (req, res) => {
         cita.sintomas = sintomas || cita.sintomas;
         cita.receta = receta || cita.receta;
         cita.observaciones = observaciones || cita.observaciones;
-        cita.nombre_medicamento = nombre_medicamento || cita.nombre_medicamento;
+        cita.inventarioId = inventarioId || cita.inventarioId;
         cita.cantidadventa = cantidadventa || cita.cantidadventa;
 
         await cita.save();
@@ -138,3 +138,4 @@ exports.eliminar = async (req, res) => {
         res.status(500).json({ msj: 'Error al eliminar la cita', error });
     }
 };
+

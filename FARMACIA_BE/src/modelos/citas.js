@@ -15,10 +15,6 @@ const citas = db.define(
         type: DataTypes.STRING(45),
         allowNull: false,
     },
-        nombre_paciente: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-    },
         presion: {
             type: DataTypes.STRING(45),
             allowNull: false,
@@ -55,13 +51,6 @@ const citas = db.define(
         },
         observaciones: {
             type: DataTypes.TEXT,
-        },
-        nombre_medicamento: {
-            type: DataTypes.STRING(45),
-            allowNull: false,
-            validate: {
-                len: [3, 75],  // El nombre debe tener entre 3 y 75 caracteres
-            }
         },
         cantidadventa: {
             type: DataTypes.STRING(20), 

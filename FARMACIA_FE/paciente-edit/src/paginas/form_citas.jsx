@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar} from '../configuraciones/apiURLS';
+import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar, pacientelistar, medicamentolistar} from '../configuraciones/apiURLS';
 
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState("");
   const [nombre_dr, setNombreDR] = useState('');
-  const [nombre_paciente, setNombrepaciente] = useState('');
+  const [nombre_paciente, setNombrepaciente] = useState([]);
   const [presion, setPresion] = useState('');
   const [peso, setPeso] = useState('');
   const [ritmo_cardiaco, setRitmo] = useState('');
@@ -13,7 +13,7 @@ const Formulariocitas = ({ citaid }) => {
   const [sintomas, setSintomas] = useState('');
   const [receta, setReceta] = useState('');
   const [observaciones, setObservaciones] = useState('');
-  const [nombre_medicamento, setNombreM] = useState('');
+  const [nombre_medicamento, setNombreM] = useState([]);
   const [cantidadventa, setCantidadv] = useState('');
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
@@ -49,6 +49,33 @@ useEffect(() => {
 
   if (id) fetchCita(); // Solo ejecutar si el ID es válido
 }, [id]); // Asegúrate de que id esté en las dependencias
+
+const fetchPacientes = async () => {
+  try {
+    const response = await axios.get(pacientelistar);
+    setNombrepaciente(response.data);
+  } catch (error) {
+    console.error("Error al obtener los pacientes:", error);
+    alert("No se pudieron cargar los pacientes."); // Corrección en alert()
+  }
+};
+
+useEffect(() => {
+  fetchPacientes(); // Reutilizando la función correctamente
+}, []);
+
+    useEffect(() => {
+      const fetchInventario = async () => {
+          try {
+              const response = await axios.get(medicamentolistar);
+              setNombreM(response.data);
+          } catch (error) {
+              console.error("Error fetching tipos de producto:", error);
+          }
+      }
+      fetchInventario();
+  }, []);
+
 
   useEffect(() => {
     const fetchCita = async () => {
@@ -453,23 +480,29 @@ const handleEliminar = async () => {
                   </div>
                   </div>
 
-                  {/* Nombre del Paciente */}
-                  <div className="form-group row">
-                    <div className="col-md-12">
-                      <label htmlFor="nombre_paciente" className="text-black">
-                        Nombre del paciente: <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="nombre_paciente"
-                        name="nombre_paciente"
-                        value={nombre_paciente}
-                        onChange={(e) => setNombrepaciente(e.target.value)}
-                        placeholder="Ingrese el nombre  del paciente"  
-                      />
-                    </div>
-                  </div>
+                 {/* Nombre del Paciente */}
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <label htmlFor="PacienteId" className="text-black">
+                    Nombre del paciente: <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className="form-control"
+                    id="PacienteId"
+                    name="nombre_paciente"
+                    value={nombre_paciente}
+                    onChange={(e) => setNombrepaciente(e.target.value)}
+                  >
+                    <option value="">Seleccione un paciente</option>
+                    {Array.isArray(nombre_paciente) &&
+                      nombre_paciente.map((tipo) => (
+                        <option key={tipo.id} value={tipo.id}>
+                          {tipo.nombre_completo}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
 
                   {/* Presión */}
                   <div className="form-group row">
@@ -499,7 +532,7 @@ const handleEliminar = async () => {
                         name="peso"
                         value={peso}
                         onChange={(e) => setPeso(e.target.value)}
-                         placeholder="Ejemplo 70"
+                        placeholder="Ejemplo 70"
                       />
                     </div>
                   </div>
@@ -517,7 +550,7 @@ const handleEliminar = async () => {
                         name="ritmo_cardiaco"
                         value={ritmo_cardiaco}
                         onChange={(e) => setRitmo(e.target.value)}
-                         placeholder="80 lpm"
+                        placeholder="80 lpm"
                       />
                     </div>
                     {/* Temperatura */}
@@ -532,7 +565,7 @@ const handleEliminar = async () => {
                         name="temperatura"
                         value={temperatura}
                         onChange={(e) => setTemperatura(e.target.value)}
-                         placeholder="min: 35 - max: 42"
+                        placeholder="min: 35 - max: 42"
                       />
                     </div>
                   </div>
@@ -586,20 +619,28 @@ const handleEliminar = async () => {
                   </div>
 
                   <div className="form-group row">
-                    <div className="col-md-6">
-                      <label htmlFor="nombre_medicamento" className="text-black">
-                        Medicamento: <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="nombre_medicamento"
-                        name="nombre_medicamento"
-                        value={nombre_medicamento}
-                        onChange={(e) => setNombreM(e.target.value)}
-                        placeholder="Debe tener entre 3-75 digitos"
-                      />
-                    </div>
+                  <div className="col-md-6">
+                    <label htmlFor="inventarioId" className="text-black">
+                      Medicamento: <span className="text-danger">*</span>
+                    </label>
+                    <select
+                      className="form-control"
+                      id="inventarioId"
+                      name="nombre_medicamento"
+                      value={nombre_medicamento}
+                      onChange={(e) => setNombreM(e.target.value)}
+                    >
+                      <option 
+                      value=" ">Seleccione un tipo</option>
+                      {nombre_medicamento.map((tipo) => (
+                        <option 
+                        key={tipo.id} value={tipo.id}>
+                          {tipo.nombre_medicamento}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                     <div className="col-md-6">
                       <label htmlFor="cantidadventa" className="text-black">
                         Cantidad: <span className="text-danger">*</span>
