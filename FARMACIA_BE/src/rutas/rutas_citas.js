@@ -4,6 +4,7 @@ const { body, query, validationResult } = require('express-validator');
 const controladorcitas = require('../controladores/controlador_citas');
 const Cita = require('../modelos/citas'); // Modelo de Citas
 const Inventario = require('../modelos/inventario'); // Modelo de Inventario
+const citas = require('../modelos/citas');
 
 const rutas = Router();
 
@@ -33,23 +34,21 @@ rutas.post('/guardar',
 );
 
 // Ruta para editar una cita
-rutas.put('/editar',
-    body("id")
-        .isInt()
-        .withMessage("El ID debe ser un número entero")
-        .custom(async (value) => {
-            const citaExistente = await Cita.findOne({
-                where: { id: value }
-            });
-            if (!citaExistente) {
-                throw new Error('La cita con el ID proporcionado no existe');
-            }
-        }),
+rutas.put('/editar/:id',
+    query("id").isInt().withMessage("El ID debe ser un número entero"),
     body("nombre_completo")
         .optional()
         .isLength({ min: 3, max: 50 })
-        .withMessage('El nombre debe tener entre 3 a 50 caracteres'),
-    controladorcitas.editar
+        .withMessage('El nombre debe tener entre 3 a 50 caracteres')
+        .custom(async (value, { req }) => {
+            const citaID = req.query.id; // tomamos el ID de la query
+            const citaExistente = await citas.findOne({
+                where: { nombre_completo: value, id: { [Op.ne]: citaID } }
+            });
+            if (citaExistente) {
+                throw new Error('El nombre del paciente ya existe');
+            }
+        }),
 );
 
 // Ruta para eliminar una cita

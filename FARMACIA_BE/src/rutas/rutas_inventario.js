@@ -49,10 +49,14 @@ rutas.put('/editar',
     controladorinventarios.editar
 );
 
-
+rutas.delete('/eliminar',
+    query("id")
+        .isInt().withMessage("El ID debe ser un número entero"), // Validación del ID como número entero
+        controladorinventarios.eliminar
+);
 
 // Ruta para eliminar un usuario
-rutas.delete('/eliminar',
+/*rutas.delete('/eliminar',
     query("id")
         .isInt()
         .withMessage("El Id debe ser un número entero")
@@ -65,7 +69,7 @@ rutas.delete('/eliminar',
             }
         }),
     controladorinventarios.eliminar
-);
+);*/
 
 rutas.get('/buscar', 
     query("nombre_medicamento")

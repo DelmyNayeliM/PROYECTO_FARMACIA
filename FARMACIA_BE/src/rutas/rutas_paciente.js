@@ -69,6 +69,7 @@ rutas.put('/editar',
 
 
 // Ruta para eliminar un usuario
+
 rutas.delete('/eliminar',
     query("id")
         .isInt()
