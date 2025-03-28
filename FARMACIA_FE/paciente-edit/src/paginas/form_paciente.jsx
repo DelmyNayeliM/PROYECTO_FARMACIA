@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar } from '../configuraciones/apiURLS';
 
+
+
 const Formulariopaciente = ({ pacienteid }) => {
   const [tipo_paciente, setTipoPaciente] = useState('');
   const [tipo_empleado, setTipoEmpleado] = useState('');
@@ -18,6 +20,8 @@ const Formulariopaciente = ({ pacienteid }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pacienteResultados, setPacienteResultados] = useState([]);
   const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
+
+  const buscarid="";
 
   useEffect(() => {
     const fetchPacientes = async () => {
@@ -189,16 +193,25 @@ const Formulariopaciente = ({ pacienteid }) => {
   };
   
   const handleEliminar = async () => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este Paciente?')) {
-      try {
-        const response = await axios.delete(`${pacienteeliminar}/${id}`);
-        console.log(response.data);
-        alert('Paciente eliminado exitosamente');
-      } catch (error) {
-        console.error('Error al eliminar el paciente', error);
+    try {
+      if (!window.confirm('¿Estás seguro de que deseas eliminar este Paciente?')) {
+        return;
+      }
+  
+      const response = await axios.delete(`${pacienteeliminar}/${buscarid}`);
+      console.log(response.data);
+      alert('Paciente eliminado exitosamente');
+    } catch (error) {
+      console.error('Error al eliminar el paciente', error);
+      
+      if (error.response) {
+        alert(`Error: ${error.response.data.message || 'No se pudo eliminar el paciente'}`);
+      } else {
+        alert('Error de conexión. Intenta nuevamente.');
       }
     }
   };
+  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -315,13 +328,13 @@ const Formulariopaciente = ({ pacienteid }) => {
             </div>
 
              {/* Campo para ingresar ID */}
-             <div className="col-md-12">
+            <div className="col-md-12">
               <label htmlFor="pacienteid" className="text-black">
               </label>
               <input
                 type="text"
                 className="form-control"
-                value={id}
+                value={buscarid}
                 onChange={(e) => setId(e.target.value)}
               />
             </div>
