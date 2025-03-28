@@ -5,7 +5,7 @@ import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar, p
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState("");
   const [nombre_dr, setNombreDR] = useState('');
-  const [nombre_paciente, setNombrepaciente] = useState([]);
+  const [nombre_paciente, setNombrePaciente] = useState([]);
   const [presion, setPresion] = useState('');
   const [peso, setPeso] = useState('');
   const [ritmo_cardiaco, setRitmo] = useState('');
@@ -28,7 +28,7 @@ useEffect(() => {
         const cita = response.data;
         setFechaCita(cita.fecha_cita);
         setNombreDR(cita.nombre_dr);
-        setNombrepaciente(cita.nombre_paciente);
+        setNombrePaciente(cita.nombre_paciente);
         setPresion(cita.presion);
         setPeso(cita.peso);
         setRitmo(cita.ritmo_cardiaco);
@@ -53,16 +53,23 @@ useEffect(() => {
 const fetchPacientes = async () => {
   try {
     const response = await axios.get(pacientelistar);
-    setNombrepaciente(response.data);
+    
+    // Verifica si la respuesta contiene un array antes de actualizar el estado
+    if (Array.isArray(response.data)) {
+      setNombrePaciente(response.data);
+    } else {
+      console.error("La API no devolvió un array:", response.data);
+      setNombrePaciente([]); // Asegura que el estado sea un array vacío
+    }
   } catch (error) {
     console.error("Error al obtener los pacientes:", error);
-    alert("No se pudieron cargar los pacientes."); // Corrección en alert()
+    setNombrePaciente([]); // Asegura que no sea null
   }
 };
 
-useEffect(() => {
-  fetchPacientes(); // Reutilizando la función correctamente
-}, []);
+    useEffect(() => {
+      fetchPacientes();
+    }, []);
 
     useEffect(() => {
       const fetchInventario = async () => {
@@ -104,7 +111,7 @@ useEffect(() => {
   const handleSelectcita = (cita) => {
     setFechaCita(cita.fecha_cita);
     setNombreDR(cita.nombre_dr);
-    setNombrepaciente(cita.nombre_paciente);
+    setNombrePaciente(cita.nombre_paciente);
     setPresion(cita.presion);
     setPeso(cita.peso);
     setRitmo(cita.ritmo_cardiaco);
@@ -171,7 +178,7 @@ useEffect(() => {
       console.log('Respuesta del servidor:',response.data);
       setFechaCita('');
       setNombreDR('');
-      setNombrepaciente('');
+      setNombrePaciente('');
       setPresion('');
       setPeso('');
       setRitmo('');
@@ -231,7 +238,7 @@ const handleEliminar = async () => {
         alert('Cita eliminada exitosamente');
         setFechaCita('');
         setNombreDR('');
-        setNombrepaciente('');
+        setNombrePaciente('');
         setPresion('');
         setPeso('');
         setRitmo('');
@@ -480,29 +487,30 @@ const handleEliminar = async () => {
                   </div>
                   </div>
 
-                 {/* Nombre del Paciente */}
-              <div className="form-group row">
-                <div className="col-md-12">
-                  <label htmlFor="PacienteId" className="text-black">
-                    Nombre del paciente: <span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className="form-control"
-                    id="PacienteId"
-                    name="nombre_paciente"
-                    value={nombre_paciente}
-                    onChange={(e) => setNombrepaciente(e.target.value)}
-                  >
-                    <option value="">Seleccione un paciente</option>
-                    {Array.isArray(nombre_paciente) &&
+                  {/* Nombre del Paciente */}
+                  <div className="form-group row">
+                    <div className="col-md-12">
+                      <label htmlFor="nombre_paciente" className="text-black">
+                        Nombre del paciente: <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-control"
+                        id="PacienteId"
+                        name="nombre_paciente"
+                        value={nombre_paciente}
+                        onChange={(e) => setNombrePaciente(e.target.value)} >
+                        <option
+                        value=" ">Seleccione un tipo</option>
+                        {Array.isArray(nombre_paciente) &&
                       nombre_paciente.map((tipo) => (
                         <option key={tipo.id} value={tipo.id}>
                           {tipo.nombre_completo}
                         </option>
-                      ))}
-                  </select>
-                </div>
-              </div>
+                        ))} 
+                        </select>
+                    </div>
+                  </div>
+
 
                   {/* Presión */}
                   <div className="form-group row">
@@ -633,9 +641,8 @@ const handleEliminar = async () => {
                       <option 
                       value=" ">Seleccione un tipo</option>
                       {nombre_medicamento.map((tipo) => (
-                        <option 
-                        key={tipo.id} value={tipo.id}>
-                          {tipo.nombre_medicamento}
+                        <option key={tipo.id} value={tipo.id}>
+                          {tipo.nombre_completo}
                         </option>
                       ))}
                     </select>
