@@ -280,7 +280,7 @@ const Formulariopaciente = ({ pacienteid }) => {
           .foto-container img {
             width: 150px;
             height: 150px;
-            border: 3px solid #007bff;
+            border: 3px solidrgb(28, 29, 29);
             object-fit: cover; /* Asegura que la imagen se ajuste al cuadrado */
           }
           .info-container {
@@ -295,7 +295,7 @@ const Formulariopaciente = ({ pacienteid }) => {
             margin: 0;
           }
           .info-container strong {
-            color: #007bff;
+            color:rgb(0, 0, 0);
           }
           .footer {
             font-size: 12px;

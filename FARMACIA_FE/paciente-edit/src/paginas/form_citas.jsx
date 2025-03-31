@@ -18,6 +18,7 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
+  const [selectedPaciente, setSelectedPaciente] = useState(null);
 
 useEffect(() => {
   const fetchCita = async () => {
@@ -475,15 +476,17 @@ const handleEliminar = async () => {
                     <label htmlFor="nombre_dr" className="text-black">
                       Nombre del Doctor: <span className="text-danger">*</span>
                     </label>
-                    <input
-                      type="text"
+                    <select
                       className="form-control"
                       id="nombre_dr"
                       name="nombre_dr"
                       value={nombre_dr}
-                      onChange={(e) => setNombreDR(e.target.value)}
-                      placeholder="Ingrese el nombre  del doctor"  
-                    />
+                      onChange={(e) => setNombreDR(e.target.value)}  
+                    >
+                    <option value="">Seleccionar...</option>
+                    <option value="Muestras medicas">Dr. Cristian Muñoz</option>
+                    <option value="Antibioticos adultos">Dr. Kevin Yanes</option>
+                    </select>
                   </div>
                   </div>
 
@@ -500,7 +503,7 @@ const handleEliminar = async () => {
                         value={nombre_paciente}
                         onChange={(e) => setNombrePaciente(e.target.value)} >
                         <option
-                        value=" ">Seleccione un tipo</option>
+                        value=" ">Seleccione un Paciente</option>
                         {Array.isArray(nombre_paciente) &&
                       nombre_paciente.map((tipo) => (
                         <option key={tipo.id} value={tipo.id}>
@@ -636,13 +639,13 @@ const handleEliminar = async () => {
                       id="inventarioId"
                       name="nombre_medicamento"
                       value={nombre_medicamento}
-                      onChange={(e) => setNombreM(e.target.value)}
-                    >
-                      <option 
-                      value=" ">Seleccione un tipo</option>
-                      {nombre_medicamento.map((tipo) => (
+                      onChange={(e) => setNombreM(e.target.value)} >
+                        <option
+                        value=" ">Seleccione un medicamento</option>
+                        {Array.isArray(nombre_medicamento) &&
+                      nombre_medicamento.map((tipo) => (
                         <option key={tipo.id} value={tipo.id}>
-                          {tipo.nombre_completo}
+                          {tipo.nombre_medicamento}
                         </option>
                       ))}
                     </select>
