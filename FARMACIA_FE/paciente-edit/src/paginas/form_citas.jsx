@@ -5,7 +5,7 @@ import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar, p
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState("");
   const [nombre_dr, setNombreDR] = useState('');
-  const [nombre_paciente, setNombrePaciente] = useState([]); const [pacientes, setPacientes] = useState([]); // Guarda la lista de pacientes
+  const [nombre_paciente, setNombrePaciente] = useState(''); const [pacientes, setPacientes] = useState([]); // Guarda la lista de pacientes
   const [presion, setPresion] = useState('');
   const [peso, setPeso] = useState('');
   const [ritmo_cardiaco, setRitmo] = useState('');
@@ -13,7 +13,7 @@ const Formulariocitas = ({ citaid }) => {
   const [sintomas, setSintomas] = useState('');
   const [receta, setReceta] = useState('');
   const [observaciones, setObservaciones] = useState('');
-  const [nombre_medicamento, setNombreM] = useState([]); const [medicamentos, setMedicamentos] = useState([]);
+  const [nombre_medicamento, setNombreM] = useState(''); const [medicamentos, setMedicamentos] = useState([]);
   const [cantidadventa, setCantidadv] = useState('');
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
@@ -157,7 +157,6 @@ useEffect(() => {
             observaciones,
             nombre_medicamento,
             cantidadventa,
-            PacienteId: pacienteId
         });
         alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
@@ -491,8 +490,8 @@ const handleEliminar = async () => {
                       onChange={(e) => setNombreDR(e.target.value)}  
                     >
                     <option value="">Seleccionar...</option>
-                    <option value="Muestras medicas">Dr. Cristian Muñoz</option>
-                    <option value="Antibioticos adultos">Dr. Kevin Yanes</option>
+                    <option value="Dr. Cristian Muñoz">Dr. Cristian Muñoz</option>
+                    <option value="Dr. Kevin Yanes">Dr. Kevin Yanes</option>
                     </select>
                   </div>
                   </div>

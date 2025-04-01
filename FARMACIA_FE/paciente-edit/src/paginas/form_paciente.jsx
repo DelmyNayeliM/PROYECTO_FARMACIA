@@ -58,7 +58,7 @@ const Formulariopaciente = ({ pacienteid }) => {
   useEffect(() => {
     console.log('Término de búsqueda:', searchTerm);
     const fetchPacientes = async () => {
-      if (searchTerm.trim().length < 2) { 
+      if (searchTerm.trim().length < 1) { 
         console.log('Búsqueda demasiado corta, no se realiza.');
         setPacienteResultados([]); 
         return;
@@ -132,7 +132,7 @@ const Formulariopaciente = ({ pacienteid }) => {
           edad: parseInt(edad), 
           direccion,
           correo,
-          enfermedad_base
+          enfermedad_base,
         });
       } else if (action === 'editar' && id) {
         response = await axios.put(`${pacienteeditar}?id=${id}`, {

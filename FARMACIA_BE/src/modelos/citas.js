@@ -15,7 +15,7 @@ const citas = db.define(
         }
     },
         nombre_dr: {
-        type: DataTypes.STRING(45),
+            type: DataTypes.ENUM('Dr. Cristian Muñoz', 'Dr. Kevin Yanes'),
         allowNull: false,
     },
         presion: {
