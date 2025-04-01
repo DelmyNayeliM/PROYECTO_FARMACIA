@@ -11,7 +11,6 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar una nueva cita
 exports.guardar = async (req, res) => {
-    const { fecha_cita, nombre_dr, PacienteId, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, inventarioId, cantidadventa ,} = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -19,15 +18,13 @@ exports.guardar = async (req, res) => {
     }
 
     try {
-        const citaExistente = await citas.findOne({ where: { fecha_cita, PacienteId } });
-        if (citaExistente) {
-            return res.status(400).json({ mensaje: 'Ya existe una cita programada para este paciente en esta fecha' });
-        }
+        const { fecha_cita, nombre_dr, PacienteId, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, inventarioId, cantidadventa ,} = req.body;
+
         // Crear la nueva cita
         const nuevacita = await citas.create({
             fecha_cita,
             nombre_dr,
-            PacienteId,
+            PacienteId : PacienteId,
             presion,
             peso,
             ritmo_cardiaco,
@@ -35,7 +32,7 @@ exports.guardar = async (req, res) => {
             sintomas,
             receta,
             observaciones,
-            inventarioId,
+            inventarioId : inventarioId,
             cantidadventa
         });
         res.status(201).json(nuevacita);

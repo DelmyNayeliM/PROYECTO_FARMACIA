@@ -1,6 +1,9 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/conexionbd');
 
+const modelopacientes = require('./paciente');
+const modeloinventario = require('./inventario');
+
 const citas = db.define(
     'citas',
     {        
@@ -62,5 +65,14 @@ const citas = db.define(
         timestamps: true,  // Si es necesario
     }
 );
+
+// Relación de uno a muchos: Un paciente puede tener muchas citas
+modelopacientes.hasMany(citas);  // Un paciente tiene muchas citas
+citas.belongsTo(modelopacientes); // Cada cita pertenece a un solo paciente
+
+// Relación de uno a muchos: Un inventario puede estar relacionado con muchas citas
+modeloinventario.hasMany(citas);  // Un inventario puede estar relacionado con muchas citas
+citas.belongsTo(modeloinventario); // Cada cita pertenece a un solo inventario (medicamento)
+
 
 module.exports = citas;

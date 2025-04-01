@@ -5,7 +5,7 @@ import { citasguardar, citaseditar, citasbuscar, citasbuscarid, citaseliminar, p
 const Formulariocitas = ({ citaid }) => {
   const [fecha_cita, setFechaCita] = useState("");
   const [nombre_dr, setNombreDR] = useState('');
-  const [nombre_paciente, setNombrePaciente] = useState([]);
+  const [nombre_paciente, setNombrePaciente] = useState([]); const [pacientes, setPacientes] = useState([]); // Guarda la lista de pacientes
   const [presion, setPresion] = useState('');
   const [peso, setPeso] = useState('');
   const [ritmo_cardiaco, setRitmo] = useState('');
@@ -13,12 +13,11 @@ const Formulariocitas = ({ citaid }) => {
   const [sintomas, setSintomas] = useState('');
   const [receta, setReceta] = useState('');
   const [observaciones, setObservaciones] = useState('');
-  const [nombre_medicamento, setNombreM] = useState([]);
+  const [nombre_medicamento, setNombreM] = useState([]); const [medicamentos, setMedicamentos] = useState([]);
   const [cantidadventa, setCantidadv] = useState('');
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  const [selectedPaciente, setSelectedPaciente] = useState(null);
 
 useEffect(() => {
   const fetchCita = async () => {
@@ -54,35 +53,42 @@ useEffect(() => {
 const fetchPacientes = async () => {
   try {
     const response = await axios.get(pacientelistar);
-    
-    // Verifica si la respuesta contiene un array antes de actualizar el estado
+
     if (Array.isArray(response.data)) {
-      setNombrePaciente(response.data);
+      setPacientes(response.data); // Ahora guardamos la lista en `pacientes`
     } else {
       console.error("La API no devolvió un array:", response.data);
-      setNombrePaciente([]); // Asegura que el estado sea un array vacío
+      setPacientes([]); 
     }
   } catch (error) {
     console.error("Error al obtener los pacientes:", error);
-    setNombrePaciente([]); // Asegura que no sea null
+    setPacientes([]); 
   }
 };
 
-    useEffect(() => {
-      fetchPacientes();
-    }, []);
+useEffect(() => {
+  fetchPacientes();
+}, []);
 
-    useEffect(() => {
-      const fetchInventario = async () => {
-          try {
-              const response = await axios.get(medicamentolistar);
-              setNombreM(response.data);
-          } catch (error) {
-              console.error("Error fetching tipos de producto:", error);
-          }
+useEffect(() => {
+  const fetchInventario = async () => {
+    try {
+      const response = await axios.get(medicamentolistar);
+
+      if (Array.isArray(response.data)) {
+        setMedicamentos(response.data); // Guardamos la lista en `medicamentos`
+      } else {
+        console.error("La API no devolvió un array:", response.data);
+        setMedicamentos([]);
       }
-      fetchInventario();
-  }, []);
+    } catch (error) {
+      console.error("Error al obtener los medicamentos:", error);
+      setMedicamentos([]);
+    }
+  };
+
+  fetchInventario();
+}, []);
 
 
   useEffect(() => {
@@ -151,6 +157,7 @@ const fetchPacientes = async () => {
             observaciones,
             nombre_medicamento,
             cantidadventa,
+            PacienteId: pacienteId
         });
         alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
@@ -497,20 +504,19 @@ const handleEliminar = async () => {
                         Nombre del paciente: <span className="text-danger">*</span>
                       </label>
                       <select
-                        className="form-control"
-                        id="PacienteId"
-                        name="nombre_paciente"
-                        value={nombre_paciente}
-                        onChange={(e) => setNombrePaciente(e.target.value)} >
-                        <option
-                        value=" ">Seleccione un Paciente</option>
-                        {Array.isArray(nombre_paciente) &&
-                      nombre_paciente.map((tipo) => (
-                        <option key={tipo.id} value={tipo.id}>
-                          {tipo.nombre_completo}
+                      className="form-control"
+                      id="PacienteId"
+                      name="nombre_paciente"
+                      value={nombre_paciente} // Aquí solo va el ID seleccionado
+                      onChange={(e) => setNombrePaciente(e.target.value)}
+                    >
+                      <option value="">Seleccione un Paciente</option>
+                      {pacientes.map((paciente) => (
+                        <option key={paciente.id} value={paciente.id}>
+                          {paciente.nombre_completo}
                         </option>
-                        ))} 
-                        </select>
+                      ))}
+                    </select>
                     </div>
                   </div>
 
@@ -635,20 +641,19 @@ const handleEliminar = async () => {
                       Medicamento: <span className="text-danger">*</span>
                     </label>
                     <select
-                      className="form-control"
-                      id="inventarioId"
-                      name="nombre_medicamento"
-                      value={nombre_medicamento}
-                      onChange={(e) => setNombreM(e.target.value)} >
-                        <option
-                        value=" ">Seleccione un medicamento</option>
-                        {Array.isArray(nombre_medicamento) &&
-                      nombre_medicamento.map((tipo) => (
-                        <option key={tipo.id} value={tipo.id}>
-                          {tipo.nombre_medicamento}
-                        </option>
-                      ))}
-                    </select>
+                    className="form-control"
+                    id="inventarioId"
+                    name="nombre_medicamento"
+                    value={nombre_medicamento} // Aquí solo va el ID seleccionado
+                    onChange={(e) => setNombreM(e.target.value)}
+                  >
+                    <option value="">Seleccione un medicamento</option>
+                    {medicamentos.map((tipo) => (
+                      <option key={tipo.id} value={tipo.id}>
+                        {tipo.nombre_medicamento}
+                      </option>
+                    ))}
+                  </select>
                   </div>
 
                     <div className="col-md-6">
