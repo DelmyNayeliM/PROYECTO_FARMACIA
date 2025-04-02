@@ -18,7 +18,10 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
+  const [PacienteId, setPacienteId] = useState('');
+  const [inventarioId, setInventarioId] = useState('');
 
+  
 useEffect(() => {
   const fetchCita = async () => {
     if (!id) return; // Si no hay ID, no hacer nada
@@ -90,6 +93,18 @@ useEffect(() => {
   fetchInventario();
 }, []);
 
+useEffect(() => {
+  const fetchData = async () => {
+    const PacienteId = await axios.get(pacientelistar);
+    const inventarioId = await axios.get(medicamentolistar);
+    console.log('Pacientes:', inventarioId.data);
+    console.log('Medicamentos:', PacienteId.data);
+    setPacientes(PacienteId.data);
+    setMedicamentos(inventarioId.data);
+  
+  };
+  fetchData();
+}, []);
 
   useEffect(() => {
     const fetchCita = async () => {
@@ -130,6 +145,15 @@ useEffect(() => {
     setCantidadv(cita.cantidadventa);
     setId(cita.id); 
     setSearchTerm('');
+
+  const paciente = pacientes.find(p => p.id === cita.pacienteId);
+  const inventario = medicamentos.find(m => m.id === cita.inventarioId);
+
+  // Actualizar estados
+  setNombrePaciente(paciente?.nombre || '');
+  setNombreM(inventario?.nombre || '');
+  setPacienteId(cita.pacienteId); // Guardar ID para enviar al backend
+  setInventarioId(cita.inventarioId);
   };
 
   // Maneja el envío del formulario para guardar o editar el medicamento
@@ -275,7 +299,7 @@ const handleEliminar = async () => {
 
     const fecha_cita = document.getElementById('fecha_cita').value;  // Si el valor proviene de un campo de formulario
     const nombre_dr = document.getElementById('nombre_dr').value;
-    const nombre_paciente = document.getElementById('nombre_paciente').value;
+    const nombre_paciente = document.getElementById('PacienteId').value;
     const presion = document.getElementById('presion').value;
     const peso = document.getElementById('peso').value;
     const ritmo_cardiaco = document.getElementById('ritmo_cardiaco').value;
@@ -283,7 +307,7 @@ const handleEliminar = async () => {
     const sintomas = document.getElementById('sintomas').value;
     const receta = document.getElementById('receta').value;
     const observaciones = document.getElementById('observaciones').value;
-    const nombre_medicamento = document.getElementById('nombre_medicamento').value;
+    const nombre_medicamento = document.getElementById('inventarioId').value;
     const cantidadventa = document.getElementById('cantidadventa').value;
 
     const contenido = `
@@ -361,7 +385,7 @@ const handleEliminar = async () => {
             </tr>
             <tr>
               <td><strong>Nombre del Doctor:</strong></td>
-              <td>Dr. ${nombre_dr}</td>
+              <td>${nombre_dr}</td>
             </tr>
             <tr>
               <td><strong>Nombre del Paciente:</strong></td>
