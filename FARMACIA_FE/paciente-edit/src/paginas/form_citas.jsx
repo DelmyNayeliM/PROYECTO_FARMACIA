@@ -18,8 +18,8 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  const [PacienteId, setPacienteId] = useState('');
-  const [inventarioId, setInventarioId] = useState('');
+  const [PacienteId, setPacienteId] = useState([]);
+  const [inventarioId, setInventarioId] = useState([]);
 
   
 useEffect(() => {
@@ -93,19 +93,6 @@ useEffect(() => {
   fetchInventario();
 }, []);
 
-useEffect(() => {
-  const fetchData = async () => {
-    const PacienteId = await axios.get(pacientelistar);
-    const inventarioId = await axios.get(medicamentolistar);
-    console.log('Pacientes:', inventarioId.data);
-    console.log('Medicamentos:', PacienteId.data);
-    setPacientes(PacienteId.data);
-    setMedicamentos(inventarioId.data);
-  
-  };
-  fetchData();
-}, []);
-
   useEffect(() => {
     const fetchCita = async () => {
       if (searchTerm.trim() === '') {
@@ -143,18 +130,25 @@ useEffect(() => {
     setObservaciones(cita.observaciones);
     setNombreM(cita.nombre_medicamento);
     setCantidadv(cita.cantidadventa);
+    setInventarioId(cita.inventarioId);
+    setPacienteId(cita.PacienteId);
     setId(cita.id); 
     setSearchTerm('');
 
-  const paciente = pacientes.find(p => p.id === cita.pacienteId);
+console.log('PacienteId:', cita.PacienteId);
+console.log('InventarioId:', cita.inventarioId);
+
+  /*const paciente = pacientes.find(p => p.id === cita.pacienteId);
   const inventario = medicamentos.find(m => m.id === cita.inventarioId);
 
   // Actualizar estados
   setNombrePaciente(paciente?.nombre || '');
   setNombreM(inventario?.nombre || '');
   setPacienteId(cita.pacienteId); // Guardar ID para enviar al backend
-  setInventarioId(cita.inventarioId);
-  };
+  setInventarioId(cita.inventarioId); // Guardar ID para enviar al backend
+  */
+};
+
 
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
@@ -181,6 +175,8 @@ useEffect(() => {
             observaciones,
             nombre_medicamento,
             cantidadventa,
+            PacienteId,
+            inventarioId,
         });
         alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
@@ -196,7 +192,9 @@ useEffect(() => {
           receta,
           observaciones,
           nombre_medicamento,
-          cantidadventa
+          cantidadventa,
+          PacienteId,
+          inventarioId,
         });
         if (response && response.data && response.data.success) {
          // alert('Cita editada exitosamente');
@@ -219,6 +217,8 @@ useEffect(() => {
       setObservaciones('');
       setNombreM('');
       setCantidadv('');
+      setPacienteId('');
+      setInventarioId('');
       setId(''); 
       alert('Cita Editada ');
     } else {
@@ -279,6 +279,8 @@ const handleEliminar = async () => {
         setObservaciones('');
         setNombreM('');
         setCantidadv('');
+        setPacienteId('');
+        setInventarioId('');
         setId(''); 
         // Aquí podrías actualizar la lista de citas si es necesario
       } else {

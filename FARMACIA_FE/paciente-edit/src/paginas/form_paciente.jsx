@@ -20,10 +20,6 @@ const Formulariopaciente = ({ pacienteid }) => {
   const [pacienteResultados, setPacienteResultados] = useState([]);
   const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
 
-  //const pacienteguardarimagen = (event) => {
-    // Puedes manejar el archivo aquí
-   // console.log(event.target.files[0]);
- // };
 
   useEffect(() => {
     const fetchPacientes = async () => {
@@ -221,15 +217,15 @@ const Formulariopaciente = ({ pacienteid }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFotopaciente(file);
+      setFotopaciente(file);  // Aquí guardamos el archivo
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFotoPreview(reader.result); // Mostrar la vista previa de la imagen
+        setFotoPreview(reader.result);  // Mostramos la vista previa
       };
       reader.readAsDataURL(file);
     }
   };
-
+  
   const imprimirFormulario = () => {
 
     // Obtener fecha y hora actual
