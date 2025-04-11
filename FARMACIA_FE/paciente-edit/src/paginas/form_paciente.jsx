@@ -217,12 +217,39 @@ const Formulariopaciente = ({ pacienteid }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFotopaciente(file);  // Aquí guardamos el archivo
+      setFotopaciente(file);  // Guardamos el archivo en el estado
       const reader = new FileReader();
       reader.onloadend = () => {
         setFotoPreview(reader.result);  // Mostramos la vista previa
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUpload = () => {
+    if (foto_paciente) {
+      const formData = new FormData();
+      formData.append('img', foto_paciente);
+
+      // Realizamos la solicitud POST al backend
+      fetch('/subir-imagen/:id', {  // Asegúrate de reemplazar '123' con el id del usuario
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.filename) {
+          alert('Imagen subida con éxito');
+        } else {
+          alert('Error al subir la imagen');
+        }
+      })
+      .catch(error => {
+        console.error('Error al subir la imagen:', error);
+        alert('Hubo un error al subir la imagen');
+      });
+    } else {
+      alert('Por favor selecciona una imagen');
     }
   };
   
@@ -471,26 +498,38 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
 
                     <div className="col-md-6">
-                    <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="foto_paciente"
-                      name="foto_paciente"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                  </div>
+      <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
+      <input
+        type="file"
+        className="form-control"
+        id="foto_paciente"
+        name="foto_paciente"
+        onChange={handleFileChange}
+        accept="image/*"  // Solo acepta imágenes
+      />
 
+      {fotoPreview && (
+        <div className="form-group row mt-3">
+          <div className="col-md-12">
+            <h5>Vista Previa de la Foto:</h5>
+            <img 
+              src={fotoPreview} 
+              alt="Vista previa" 
+              className="img-thumbnail" 
+              style={{ maxWidth: '200px', maxHeight: '200px' }} 
+            />
+          </div>
+        </div>
+      )}
 
-                  {fotoPreview && (
-                    <div className="form-group row">
-                      <div className="col-md-12">
-                        <h5>Vista Previa de la Foto:</h5>
-                        <img src={fotoPreview} alt="Vista previa" className="img-thumbnail" style={{ maxWidth: '200px', maxHeight: '200px' }} />
-                      </div>
-                    </div>
-                  )}
+      <button 
+        className="btn btn-primary mt-3"
+        onClick={handleUpload}
+      >
+        Subir Imagen
+      </button>
+    </div>
+    </div>
 
                   <div className="form-group row">
                     <div className="col-md-6">

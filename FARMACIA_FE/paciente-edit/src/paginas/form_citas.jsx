@@ -18,8 +18,26 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  const [PacienteId, setPacienteId] = useState([]);
+  const [PacienteId, setPacienteId] = useState([ ]);
   const [inventarioId, setInventarioId] = useState([]);
+
+ /* const [medicamentosFields, setMedicamentosFields] = useState([
+    { nombre_medicamento: "", cantidadventa: "" }
+  ]);*/
+
+  /*const handleChange = (e, index) => {
+    const { name, value } = e.target;
+    const newFields = [...medicamentosFields];
+    newFields[index][name] = value;
+    setMedicamentosFields(newFields);
+  };
+
+  const addField = () => {
+    setMedicamentosFields([
+      ...medicamentosFields,
+      { nombre_medicamento: "", cantidadventa: "" }
+    ]);
+  };*/
 
   
 useEffect(() => {
@@ -138,45 +156,61 @@ useEffect(() => {
 console.log('PacienteId:', cita.PacienteId);
 console.log('InventarioId:', cita.inventarioId);
 
-  /*const paciente = pacientes.find(p => p.id === cita.pacienteId);
-  const inventario = medicamentos.find(m => m.id === cita.inventarioId);
-
-  // Actualizar estados
-  setNombrePaciente(paciente?.nombre || '');
-  setNombreM(inventario?.nombre || '');
-  setPacienteId(cita.pacienteId); // Guardar ID para enviar al backend
-  setInventarioId(cita.inventarioId); // Guardar ID para enviar al backend
-  */
 };
 
+/*const handleAddMedicamento = () => {
+  if (nombre_medicamento && cantidadventa) {
+    setMedicamentos([
+      ...medicamentos,
+      { nombre_medicamento, cantidadventa }
+    ]);
+    setNombreM('');
+    setCantidadv('');
+  }
+};*/
 
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
     e.preventDefault();
-
-    if (fecha_cita === '' || nombre_dr === '' || nombre_paciente === '' || presion === '' || peso === '' || ritmo_cardiaco === '' || temperatura === '' || sintomas === '' || receta === '' || observaciones === '' || nombre_medicamento === '' || cantidadventa === '') {
+  
+    if (
+      fecha_cita === '' ||
+      nombre_dr === '' ||
+      nombre_paciente === '' ||
+      presion === '' ||
+      peso === '' ||
+      ritmo_cardiaco === '' ||
+      temperatura === '' ||
+      sintomas === '' ||
+      receta === '' ||
+      observaciones === '' ||
+      nombre_medicamento === '' ||
+      cantidadventa === '' ||
+      !PacienteId ||
+      !inventarioId
+    ) {
       alert('Por favor, complete todos los campos');
       return;
     }
-
+  
     try {
       let response;
       if (action === 'guardar') {
         response = await axios.post(citasguardar, {
           fecha_cita,
-            nombre_dr,
-            nombre_paciente,
-            presion,
-            peso,
-            ritmo_cardiaco,
-            temperatura,
-            sintomas,
-            receta,
-            observaciones,
-            nombre_medicamento,
-            cantidadventa,
-            PacienteId,
-            inventarioId,
+          nombre_dr,
+          nombre_paciente,
+          presion,
+          peso,
+          ritmo_cardiaco,
+          temperatura,
+          sintomas,
+          receta,
+          observaciones,
+          nombre_medicamento,
+          cantidadventa,
+          PacienteId,
+          inventarioId,
         });
         alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
@@ -196,58 +230,55 @@ console.log('InventarioId:', cita.inventarioId);
           PacienteId,
           inventarioId,
         });
-        if (response && response.data && response.data.success) {
-         // alert('Cita editada exitosamente');
+        if (response && response.data.success) {
+          alert('Cita editada exitosamente');
+        }
       }
-  } else {
-      alert('No se puede editar la cita. Falta información.');
-      return;
-  }
-  if (response && response.data) {
-      console.log('Respuesta del servidor:',response.data);
-      setFechaCita('');
-      setNombreDR('');
-      setNombrePaciente('');
-      setPresion('');
-      setPeso('');
-      setRitmo('');
-      setTemperatura('');
-      setSintomas('');
-      setReceta('');
-      setObservaciones('');
-      setNombreM('');
-      setCantidadv('');
-      setPacienteId('');
-      setInventarioId('');
-      setId(''); 
-      alert('Cita Editada ');
-    } else {
-      console.error('La respuesta de la API no contiene "data"');
-  }
-} catch (error) {
-  console.error('Error al guardar o editar la cita', error);
-
-  if (error.response) {
-    alert(`Error ${error.response.status}: ${error.response.statusText}`);
-    console.error('Respuesta del servidor:', error.response);
-
-    if (error.response.data && error.response.data.errors) {
-        error.response.data.errors.forEach((err) => {
+  
+      if (response && response.data) {
+        console.log('Respuesta del servidor:', response.data);
+        // Limpiar el formulario después de la acción
+        setFechaCita('');
+        setNombreDR('');
+        setNombrePaciente('');
+        setPresion('');
+        setPeso('');
+        setRitmo('');
+        setTemperatura('');
+        setSintomas('');
+        setReceta('');
+        setObservaciones('');
+        setNombreM('');
+        setCantidadv('');
+        setPacienteId('');
+        setInventarioId('');
+        setId('');
+        alert('Cita procesada exitosamente');
+      } else {
+        console.error('La respuesta de la API no contiene "data"');
+      }
+    } catch (error) {
+      console.error('Error al guardar o editar la cita', error);
+      if (error.response) {
+        alert(`Error ${error.response.status}: ${error.response.statusText}`);
+        console.error('Respuesta del servidor:', error.response);
+  
+        if (error.response.data && error.response.data.errors) {
+          error.response.data.errors.forEach((err) => {
             console.error('Error específico:', err);
             alert(`Error: ${err.message}`);
-        });
+          });
+        }
+      } else if (error.request) {
+        alert('No se recibió respuesta del servidor');
+        console.error('No se recibió respuesta del servidor:', error.request);
+      } else {
+        alert('Error al configurar la solicitud');
+        console.error('Error al configurar la solicitud:', error.message);
+      }
     }
-} else if (error.request) {
-    // Solicitud realizada, pero no se recibió respuesta
-    alert('No se recibió respuesta del servidor');
-    console.error('No se recibió respuesta del servidor:', error.request);
-} else {
-    // Error al configurar la solicitud
-    alert('Error al configurar la solicitud');
-    console.error('Error al configurar la solicitud:', error.message);
-}
-}
-};
+  };
+  
 
 const handleEliminar = async () => {
   // Verificar si el 'id' y la URL para eliminar están definidos
@@ -751,6 +782,3 @@ const handleEliminar = async () => {
 };
 
 export default Formulariocitas;
-
-
-
