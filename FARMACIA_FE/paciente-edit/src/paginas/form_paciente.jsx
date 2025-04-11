@@ -230,28 +230,40 @@ const Formulariopaciente = ({ pacienteid }) => {
     if (foto_paciente) {
       const formData = new FormData();
       formData.append('img', foto_paciente);
-
-      // Realizamos la solicitud POST al backend
-      fetch('/subir-imagen/:id', {  // Asegúrate de reemplazar '123' con el id del usuario
+  
+      fetch('pacienteguardarimagen', {
         method: 'POST',
         body: formData,
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.filename) {
-          alert('Imagen subida con éxito');
+      .then(async response => {
+        const contentType = response.headers.get('content-type');
+  
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error del servidor: ${response.status}\n${errorText}`);
+        }
+  
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          if (data.filename) {
+            alert('Imagen subida con éxito');
+          } else {
+            alert('Error al subir la imagen');
+          }
         } else {
-          alert('Error al subir la imagen');
+          const text = await response.text();
+          throw new Error(`Respuesta inesperada del servidor:\n${text}`);
         }
       })
       .catch(error => {
         console.error('Error al subir la imagen:', error);
-        alert('Hubo un error al subir la imagen');
+        alert(`Hubo un error al subir la imagen:\n${error.message}`);
       });
     } else {
       alert('Por favor selecciona una imagen');
     }
   };
+  
   
   const imprimirFormulario = () => {
 
@@ -499,14 +511,14 @@ const Formulariopaciente = ({ pacienteid }) => {
 
                     <div className="col-md-6">
       <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
-      <input
-        type="file"
-        className="form-control"
-        id="foto_paciente"
-        name="foto_paciente"
-        onChange={handleFileChange}
-        accept="image/*"  // Solo acepta imágenes
-      />
+          <input
+            type="file"
+            className="form-control"
+            id="foto_paciente"
+            name="foto_paciente"
+            onChange={handleFileChange}
+            accept="image/*"  // Solo acepta imágenes
+          />
 
       {fotoPreview && (
         <div className="form-group row mt-3">

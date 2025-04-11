@@ -18,7 +18,7 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  const [PacienteId, setPacienteId] = useState([ ]);
+  const [PacienteId, setPacienteId] = useState([]);
   const [inventarioId, setInventarioId] = useState([]);
 
  /* const [medicamentosFields, setMedicamentosFields] = useState([
@@ -186,8 +186,8 @@ console.log('InventarioId:', cita.inventarioId);
       observaciones === '' ||
       nombre_medicamento === '' ||
       cantidadventa === '' ||
-      !PacienteId ||
-      !inventarioId
+      PacienteId === '' ||
+      inventarioId === '' 
     ) {
       alert('Por favor, complete todos los campos');
       return;
@@ -212,7 +212,7 @@ console.log('InventarioId:', cita.inventarioId);
           PacienteId,
           inventarioId,
         });
-        alert('Cita creada exitosamente');
+        alert('Cita creada exitosamente'); 
       } else if (action === 'editar' && id && citaseditar) {
         response = await axios.put(`${citaseditar}?id=${id}`, {
           fecha_cita,
@@ -234,7 +234,7 @@ console.log('InventarioId:', cita.inventarioId);
           alert('Cita editada exitosamente');
         }
       }
-  
+
       if (response && response.data) {
         console.log('Respuesta del servidor:', response.data);
         // Limpiar el formulario después de la acción
