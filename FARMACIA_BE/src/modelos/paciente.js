@@ -41,7 +41,7 @@ const Pacientes = db.define('Paciente', {
         allowNull: false,
         unique: true,
     },
-    foto_paciente: {
+    imagen: {
         type: DataTypes.STRING(300),
         allowNull: true,
     },

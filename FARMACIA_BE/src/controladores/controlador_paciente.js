@@ -146,7 +146,7 @@ exports.eliminar = async (req, res) => {
 };
 
 
-exports.guardarImagen = async (req, res) => {
+/*exports.guardarImagen = async (req, res) => {
     try {
         const { id } = req.params;
         console.log('ID del usuario:', id); // Depuración
@@ -181,7 +181,70 @@ exports.guardarImagen = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+*/
 
+const { uploadImagenCategoriaPaciente } = require('../configuraciones/archivo2');
+exports.validarImagenTipoPaciente = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array());
+    }
+    else {
+        uploadImagenCategoriaPaciente(req, res, (err) => {
+            if (err instanceof multer.MulterError) {
+                res.status(400).json({ msj: "Hay errores al cargar la imagen", error: err });
+            }
+            else if (err) {
+                res.status(400).json({ msj: "Hay errores al cargar la imagen", error: err });
+            }
+            else {
+                next();
+            }
+        });
+    }
+};
+
+exports.createProductoPaciente = async (req, res) => {
+    // Validar entrada de datos
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array());
+    }
+
+    const t = await db.transaction();
+    try {
+        const { tipo_paciente, 
+            tipo_empleado, 
+            nombre_completo, 
+            clave_empleado, 
+            clave_expediente, 
+            foto_paciente, 
+            telefono, 
+            edad, 
+            direccion, 
+            correo, 
+            enfermedad_base } = req.body;
+        const imagen = req.file ? (fs.existsSync(path.join(__dirname, '../../../public/img/paciente', req.file.filename)) ? req.file.filename : null) : null;
+        const nuevoP = await ProductoTipos.create({ tipo_paciente, 
+            tipo_empleado, 
+            nombre_completo, 
+            clave_empleado, 
+            clave_expediente, 
+            foto_paciente, 
+            telefono, 
+            edad, 
+            direccion, 
+            correo, 
+            enfermedad_base,
+            imagen: imagen }, { transaction: t });
+        await t.commit();
+        res.status(201).json(nuevoP);
+    } catch (error) {
+        await t.rollback();
+        console.error("Error al crear el tipo de producto:", error);
+        res.status(500).json({ error: "Error al crear el tipo de producto" });
+    }
+};
 
 
 {/*exports. validarImagen = (req, res, next)=>{
