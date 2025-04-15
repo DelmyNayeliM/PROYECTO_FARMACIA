@@ -170,17 +170,19 @@ useEffect(() => {
       if (action === 'guardar') {
         response = await axios.post(citasguardar, {
           fecha_cita,
-            nombre_dr,
-            nombre_paciente,
-            presion,
-            peso,
-            ritmo_cardiaco,
-            temperatura,
-            sintomas,
-            receta,
-            observaciones,
-            nombre_medicamento,
-            cantidadventa,
+          nombre_dr,
+          nombre_paciente,
+          presion,
+          peso,
+          ritmo_cardiaco,
+          temperatura,
+          sintomas,
+          receta,
+          observaciones,
+          nombre_medicamento,
+          cantidadventa,
+          PacienteId,       // <-- incluir esto
+          inventarioId      // <-- y esto también
         });
         alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
@@ -196,7 +198,9 @@ useEffect(() => {
           receta,
           observaciones,
           nombre_medicamento,
-          cantidadventa
+          cantidadventa,
+          PacienteId,       // <-- aquí también
+          inventarioId
         });
         if (response && response.data && response.data.success) {
          // alert('Cita editada exitosamente');

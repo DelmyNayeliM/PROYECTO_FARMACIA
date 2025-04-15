@@ -21,14 +21,9 @@ rutas.post('/guardar',
         .isISO8601()
         .withMessage('Debe ingresar una fecha válida en formato YYYY-MM-DD')
         .custom(async (value) => {
-            if (!value) {
-                throw new Error("La fecha de la cita no puede estar vacía");
-            }
-            const buscarcita = await Cita.findOne({
-                where: { fecha_cita: value }
-            });
-            if (buscarcita) {
-                throw new Error('Ya existe una cita programada en esta fecha');
+            const buscarcita = await citas.findByPk(value);
+            if (!buscarcita) {
+                throw new Error('cita no encontrada');
             }
         }),
         body('PacienteId')
