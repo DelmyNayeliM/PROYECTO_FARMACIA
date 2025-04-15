@@ -20,10 +20,6 @@ const Formulariopaciente = ({ pacienteid }) => {
   const [pacienteResultados, setPacienteResultados] = useState([]);
   const [fotoPreview, setFotoPreview] = useState(null); // Estado para la vista previa de la foto
 
-  //const pacienteguardarimagen = (event) => {
-    // Puedes manejar el archivo aquí
-   // console.log(event.target.files[0]);
- // };
 
   useEffect(() => {
     const fetchPacientes = async () => {
@@ -221,15 +217,54 @@ const Formulariopaciente = ({ pacienteid }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFotopaciente(file);
+      setFotopaciente(file);  // Guardamos el archivo en el estado
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFotoPreview(reader.result); // Mostrar la vista previa de la imagen
+        setFotoPreview(reader.result);  // Mostramos la vista previa
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleUpload = () => {
+    if (foto_paciente) {
+      const formData = new FormData();
+      formData.append('img', foto_paciente);
+  
+      fetch('pacienteguardarimagen', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(async response => {
+        const contentType = response.headers.get('content-type');
+  
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error del servidor: ${response.status}\n${errorText}`);
+        }
+  
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          if (data.filename) {
+            alert('Imagen subida con éxito');
+          } else {
+            alert('Error al subir la imagen');
+          }
+        } else {
+          const text = await response.text();
+          throw new Error(`Respuesta inesperada del servidor:\n${text}`);
+        }
+      })
+      .catch(error => {
+        console.error('Error al subir la imagen:', error);
+        alert(`Hubo un error al subir la imagen:\n${error.message}`);
+      });
+    } else {
+      alert('Por favor selecciona una imagen');
+    }
+  };
+  
+  
   const imprimirFormulario = () => {
 
     // Obtener fecha y hora actual
@@ -475,26 +510,38 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
 
                     <div className="col-md-6">
-                    <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="foto_paciente"
-                      name="foto_paciente"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                  </div>
+      <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
+          <input
+            type="file"
+            className="form-control"
+            id="foto_paciente"
+            name="foto_paciente"
+            onChange={handleFileChange}
+            accept="image/*"  // Solo acepta imágenes
+          />
 
+      {fotoPreview && (
+        <div className="form-group row mt-3">
+          <div className="col-md-12">
+            <h5>Vista Previa de la Foto:</h5>
+            <img 
+              src={fotoPreview} 
+              alt="Vista previa" 
+              className="img-thumbnail" 
+              style={{ maxWidth: '200px', maxHeight: '200px' }} 
+            />
+          </div>
+        </div>
+      )}
 
-                  {fotoPreview && (
-                    <div className="form-group row">
-                      <div className="col-md-12">
-                        <h5>Vista Previa de la Foto:</h5>
-                        <img src={fotoPreview} alt="Vista previa" className="img-thumbnail" style={{ maxWidth: '200px', maxHeight: '200px' }} />
-                      </div>
-                    </div>
-                  )}
+      <button 
+        className="btn btn-primary mt-3"
+        onClick={handleUpload}
+      >
+        Subir Imagen
+      </button>
+    </div>
+    </div>
 
                   <div className="form-group row">
                     <div className="col-md-6">

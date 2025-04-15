@@ -1,7 +1,8 @@
 const { Op } = require('sequelize');
 const { validationResult } = require('express-validator');
 const citas = require('../modelos/citas');
-const moment = require('moment');
+//const citaMedicamentos = require('../modelos/citas_medicamentos');
+//const moment = require('moment');
 
 // Ruta de inicio
 exports.inicio = (req, res) => {
@@ -11,20 +12,16 @@ exports.inicio = (req, res) => {
 
 // Ruta para guardar una nueva cita
 exports.guardar = async (req, res) => {
-console.log("Datos recibidos:", req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-        const { fecha_cita, nombre_dr, PacienteId, presion, peso, ritmo_cardiaco, temperatura, sintomas, receta, observaciones, inventarioId, cantidadventa ,} = req.body;
-
-        // Crear la nueva cita
-        const nuevacita = await citas.create({
+        const {
             fecha_cita,
             nombre_dr,
-            PacienteId : PacienteId,
+            PacienteId,
             presion,
             peso,
             ritmo_cardiaco,
@@ -32,16 +29,46 @@ console.log("Datos recibidos:", req.body);
             sintomas,
             receta,
             observaciones,
-            inventarioId : inventarioId,
+            inventarioId,
+            cantidadventa
+        } = req.body;
+
+        // Validar si ya existe una cita para el mismo paciente en la misma fecha
+        const citaExistente = await citas.findOne({
+            where: {
+                fecha_cita,
+                PacienteId
+            }
+        });
+
+        if (citaExistente) {
+            return res.status(400).json({
+                mensaje: "Este paciente ya tiene una cita registrada en esa fecha"
+            });
+        }
+
+        const nuevaCita = await citas.create({
+            fecha_cita,
+            nombre_dr,
+            PacienteId,
+            presion,
+            peso,
+            ritmo_cardiaco,
+            temperatura,
+            sintomas,
+            receta,
+            observaciones,
+            inventarioId,
             cantidadventa
         });
-        res.status(201).json(nuevacita);
+
+        res.status(201).json(nuevaCita);
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ mensaje: 'Error al guardar la cita', error });
     }
 };
-
 // Ruta para listar todas las citas
 exports.listar = async (req, res) => {
     try {
@@ -83,7 +110,7 @@ exports.editar = async (req, res) => {
                 }
             });
             if (citaExistente) {
-                return res.status(400).json({ mensaje: "La fecha de la cita ya está ocupada por otro paciente" });
+                return res.status(400).json({ mensaje: "Este paciente ya tiene una cita en esa fecha" });
             }
         }
 

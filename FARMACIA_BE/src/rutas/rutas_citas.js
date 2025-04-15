@@ -17,46 +17,50 @@ rutas.get('/listar', controladorcitas.listar);
 
 // Ruta para guardar una nueva cita
 rutas.post('/guardar',
+    // Validar fecha_cita
     body("fecha_cita")
-        .isISO8601()
-        .withMessage('Debe ingresar una fecha válida en formato YYYY-MM-DD')
-        .custom(async (value) => {
-            const buscarcita = await citas.findByPk(value);
-            if (!buscarcita) {
-                throw new Error('cita no encontrada');
+        .isISO8601().withMessage('Debe ingresar una fecha válida en formato YYYY-MM-DD')
+        .custom(async (value, { req }) => {
+            const PacienteId = req.body.PacienteId;
+            if (!value || !PacienteId) {
+                throw new Error("La fecha y el ID del paciente son obligatorios");
+            }
+
+            const buscarcita = await Cita.findOne({
+                where: {
+                    fecha_cita: value,
+                    PacienteId
+                }
+            });
+
+            if (buscarcita) {
+                throw new Error('Este paciente ya tiene una cita en esa fecha');
             }
         }),
-        body('PacienteId')
-        .optional()
-        .isInt({ min: 1 }).withMessage('El id del paciente debe ser entero')
-        .custom(async (value) => {
-            if (value) {
-            const buscarCita = await Paciente.findOne({
-                where: { id: value } // Asegúrate de que la búsqueda sea coherente
-            });
 
-            if (!buscarCita) {
-                throw new Error('Ya existe una cita programada con este ID');
+    // Validar PacienteId
+    body('PacienteId')
+        .isInt({ min: 1 }).withMessage('El ID del paciente debe ser un número entero')
+        .custom(async (value) => {
+            const paciente = await Paciente.findByPk(value);
+            if (!paciente) {
+                throw new Error('El paciente con este ID no existe');
             }
-        }
-    }),
+        }),
+
+    // Validar inventarioId
     body('inventarioId')
         .optional()
-        .isInt({ min: 1 }).withMessage('El id del medicamento debe ser entero')
+        .isInt({ min: 1 }).withMessage('El ID del medicamento debe ser un número entero')
         .custom(async (value) => {
-            if (value) {
-            const buscarCita = await inventario.findOne({
-                where: { id: value } // Asegúrate de que la búsqueda sea coherente
-            });
-
-            if (!buscarCita) {
-                throw new Error('Ya existe una cita programada con este ID');
+            const item = await inventario.findByPk(value);
+            if (!item) {
+                throw new Error('El medicamento con este ID no existe');
             }
-        }
-    }),
+        }),
+
     controladorcitas.guardar
 );
-
 // Ruta para editar una cita
 rutas.put('/editar',
     query("id").isInt().withMessage("El ID debe ser un número entero"),

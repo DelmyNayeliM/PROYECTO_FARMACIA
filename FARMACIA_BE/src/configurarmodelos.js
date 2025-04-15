@@ -2,6 +2,8 @@ const modelopacientes = require('./modelos/paciente');
 const modeloinventario = require('./modelos/inventario');
 const modelocitas = require('./modelos/citas');
 const modelousuarios = require('./modelos/usuarios');
+const modelocm = require('./modelos/citas');
+
 
 const sequelize = require('./configuraciones/conexionbd');
 
@@ -38,5 +40,13 @@ exports.configurarModelos = async () => {
                         console.log(er);
                     
                     });
+                    await modelocm.sync().then(() => {
+                        console.log('Modelo citas_medicamento creado correctamente');
+                    })
+                        .catch((er) => {
+                            console.log("Error al crear el modelo usuario");
+                            console.log(er);
+                        
+                        });
 }
 
