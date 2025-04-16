@@ -4,7 +4,7 @@ const { body, query } = require('express-validator');
 const controladorPacientes = require('../controladores/controlador_paciente');
 const Paciente = require('../modelos/paciente'); // Modelo de usuario
 const upload = require('../configuraciones/archivo');
-const { guardarImagen } = ('../controladores/controlador_paciente');
+const { uploadImagenCategoriaPaciente } = ('../controladores/controlador_paciente');
 
 
 const rutas = Router();
@@ -133,7 +133,7 @@ rutas.get('/buscarpacientes', async (req, res) => {
 //Ruta de guardarImagenPaciente
 
 rutas.post('/:id/guardar-imagen', upload, 
-    controladorPacientes.guardarImagen);
+    controladorPacientes.uploadImagenCategoriaPaciente);
 
 
 
