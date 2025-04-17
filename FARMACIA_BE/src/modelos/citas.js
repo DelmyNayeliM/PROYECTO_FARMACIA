@@ -67,12 +67,12 @@ const citas = db.define(
 );
 
 // Relación de uno a muchos: Un paciente puede tener muchas citas
-modelopacientes.hasMany(citas);  // Un paciente tiene muchas citas
-citas.belongsTo(modelopacientes); // Cada cita pertenece a un solo paciente
+modelopacientes.hasMany(citas,{ foreignKey: 'pacienteId'});  // Un paciente tiene muchas citas
+citas.belongsTo(modelopacientes,{foreignKey:'pacienteId'}); // Cada cita pertenece a un solo paciente
 
 // Relación de uno a muchos: Un inventario puede estar relacionado con muchas citas
-modeloinventario.hasMany(citas);  // Un inventario puede estar relacionado con muchas citas
-citas.belongsTo(modeloinventario); // Cada cita pertenece a un solo inventario (medicamento)
+modeloinventario.hasMany(citas,{foreignKey:'medicamentoId'});  // Un inventario puede estar relacionado con muchas citas
+citas.belongsTo(modeloinventario,{foreignKey:'medicamentoId'}); // Cada cita pertenece a un solo inventario (medicamento)
 
 
 module.exports = citas;

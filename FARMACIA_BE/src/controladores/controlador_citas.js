@@ -21,7 +21,7 @@ exports.guardar = async (req, res) => {
         const {
             fecha_cita,
             nombre_dr,
-            PacienteId,
+            pacienteId,
             presion,
             peso,
             ritmo_cardiaco,
@@ -29,7 +29,7 @@ exports.guardar = async (req, res) => {
             sintomas,
             receta,
             observaciones,
-            inventarioId,
+            medicamentoId,
             cantidadventa
         } = req.body;
 
@@ -37,7 +37,7 @@ exports.guardar = async (req, res) => {
         const citaExistente = await citas.findOne({
             where: {
                 fecha_cita,
-                PacienteId
+                pacienteId
             }
         });
 
@@ -50,7 +50,7 @@ exports.guardar = async (req, res) => {
         const nuevaCita = await citas.create({
             fecha_cita,
             nombre_dr,
-            PacienteId,
+            pacienteId,
             presion,
             peso,
             ritmo_cardiaco,
@@ -58,7 +58,7 @@ exports.guardar = async (req, res) => {
             sintomas,
             receta,
             observaciones,
-            inventarioId,
+            medicamentoId,
             cantidadventa
         });
 
@@ -69,6 +69,7 @@ exports.guardar = async (req, res) => {
         res.status(500).json({ mensaje: 'Error al guardar la cita', error });
     }
 };
+
 // Ruta para listar todas las citas
 exports.listar = async (req, res) => {
     try {

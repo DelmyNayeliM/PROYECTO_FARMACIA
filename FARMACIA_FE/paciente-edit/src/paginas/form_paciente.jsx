@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar, Servidor } from '../configuraciones/apiURLS';
 
+export const AxiosImagen = axios.create({
+  baseURL: Servidor,
+  timeout: 10000,
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
 
 const Formulariopaciente = ({ pacienteid }) => {
   const [tipo_paciente, setTipoPaciente] = useState('');
@@ -94,102 +99,117 @@ const Formulariopaciente = ({ pacienteid }) => {
     setSearchTerm(''); // Limpiar el searchTerm para que desaparezca la lista
   }
 
-  const handleSubmit = async (e, action) => {
+  const limpiarFormulario = () => {
+    setTipoPaciente('');
+    setTipoEmpleado('');
+    setNombreComp('');
+    setClaveEmpl('');
+    setClaveExpe('');
+    setFotopaciente('');
+    setTelefono('');
+    setEdad('');
+    setDireccion('');
+    setCorreo('');
+    setEnfermedad('');
+    setId('');
+    setFotoPreview(null);
+  };
+
+  const manejarError = (error) => {
+    console.error('Error al guardar o editar el paciente', error);
+
+    if (error.response) {
+      alert(`Error ${error.response.status}: ${error.response.statusText}`);
+      if (Array.isArray(error.response.data)) {
+        error.response.data.forEach((err) => {
+          alert(`Error: ${err.msg}`);
+        });
+      }
+    } else if (error.request) {
+      alert('No se recibió respuesta del servidor');
+    } else {
+      alert('Error al configurar la solicitud');
+    }
+  };
+
+  const handleGuardar = async (e) => {
     e.preventDefault();
-  
+
     if (
-      tipo_paciente === '' ||
-      tipo_empleado === '' ||
-      nombre_completo === '' ||
-      clave_empleado === '' ||
-      clave_expediente === '' ||
-      telefono === '' ||
-      edad === '' ||
-      direccion === '' ||
-      correo === '' ||
-      enfermedad_base === ''
+      tipo_paciente === '' || tipo_empleado === '' || nombre_completo === '' ||
+      clave_empleado === '' || clave_expediente === '' || telefono === '' ||
+      edad === '' || direccion === '' || correo === '' || enfermedad_base === ''
     ) {
       alert('Por favor, complete todos los campos');
       return;
     }
-  
+
     try {
-      let response;
-  
-      if (action === 'guardar') {
-        response = await axios.post(pacienteguardar, {
-          tipo_paciente,
-          tipo_empleado,
-          nombre_completo,
-          clave_empleado,
-          clave_expediente,
-          foto_paciente,
-          telefono: parseInt(telefono), 
-          edad: parseInt(edad), 
-          direccion,
-          correo,
-          enfermedad_base,
-        });
-      } else if (action === 'editar' && id) {
-        response = await axios.put(`${pacienteeditar}?id=${id}`, {
-          tipo_paciente,
-          tipo_empleado,
-          nombre_completo,
-          clave_empleado,
-          clave_expediente,
-          foto_paciente, 
-          telefono: parseInt(telefono),
-          edad: parseInt(edad),
-          direccion,
-          correo,
-          enfermedad_base
-        });
-      }
-  
-      if (response && response.data) {
-        setTipoPaciente('');
-        setTipoEmpleado('');
-        setNombreComp('');
-        setClaveEmpl('');
-        setClaveExpe('');
-        setFotopaciente('');
-        setTelefono('');
-        setEdad('');
-        setDireccion('');
-        setCorreo('');
-        setEnfermedad('');
-        setId('');
+      const formData = new FormData();
+      formData.append('tipo_paciente', tipo_paciente);
+      formData.append('tipo_empleado', tipo_empleado);
+      formData.append('nombre_completo', nombre_completo);
+      formData.append('clave_empleado', clave_empleado);
+      formData.append('clave_expediente', clave_expediente);
+      formData.append('telefono', telefono);
+      formData.append('edad', edad);
+      formData.append('direccion', direccion);
+      formData.append('correo', correo);
+      formData.append('enfermedad_base', enfermedad_base);
+      formData.append('imagen', foto_paciente);
+
+      const respuesta = await AxiosImagen.post(pacienteguardar, formData);
+
+      if (respuesta && respuesta.data) {
+        limpiarFormulario();
         alert('Paciente guardado exitosamente');
-      } else {
-        console.error('La respuesta de la API no contiene "data"');
       }
     } catch (error) {
-      console.error('Error al guardar o editar el paciente', error);
-  
-      if (error.response) {
-        // Ver el detalle de la respuesta del servidor
-        console.error('Error Response:', error.response);
-        alert(`Error ${error.response.status}: ${error.response.statusText}`);
-        
-        if (error.response.data && error.response.data.errors) {
-          // Mostrar los errores específicos si están disponibles
-          error.response.data.errors.forEach((err) => {
-            console.error('Error específico:', err);
-            alert(`Error: ${err.message}`);
-          });
-        }
-      } else if (error.request) {
-        // La solicitud fue realizada pero no se recibió respuesta
-        alert('No se recibió respuesta del servidor');
-        console.error('No se recibió respuesta del servidor:', error.request);
-      } else {
-        // Algo ocurrió al configurar la solicitud
-        alert('Error al configurar la solicitud');
-        console.error('Error al configurar la solicitud:', error.message);
-      }
+      manejarError(error);
     }
   };
-  
+  const handleEditar = async (e) => {
+    e.preventDefault();
+
+    if (!id) {
+      alert('ID de paciente no válido');
+      return;
+    }
+
+    if (
+      tipo_paciente === '' || tipo_empleado === '' || nombre_completo === '' ||
+      clave_empleado === '' || clave_expediente === '' || telefono === '' ||
+      edad === '' || direccion === '' || correo === '' || enfermedad_base === ''
+    ) {
+      alert('Por favor, complete todos los campos');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('tipo_paciente', tipo_paciente);
+      formData.append('tipo_empleado', tipo_empleado);
+      formData.append('nombre_completo', nombre_completo);
+      formData.append('clave_empleado', clave_empleado);
+      formData.append('clave_expediente', clave_expediente);
+      formData.append('telefono', telefono);
+      formData.append('edad', edad);
+      formData.append('direccion', direccion);
+      formData.append('correo', correo);
+      formData.append('enfermedad_base', enfermedad_base);
+      formData.append('imagen', foto_paciente);
+
+      const respuesta = await AxiosImagen.put(`${pacienteeditar}?id=${id}`, formData);
+
+      if (respuesta && respuesta.data) {
+        limpiarFormulario();
+        alert('Paciente actualizado correctamente');
+      }
+    } catch (error) {
+      manejarError(error);
+    }
+  };
+
   const handleEliminar = async () => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este Paciente?')) {
       try {
@@ -217,14 +237,11 @@ const Formulariopaciente = ({ pacienteid }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFotopaciente(file);  // Guardamos el archivo en el estado
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFotoPreview(reader.result);  // Mostramos la vista previa
-      };
-      reader.readAsDataURL(file);
+      setFotopaciente(file); // Guardas el archivo como tal
+      setFotoPreview(URL.createObjectURL(file)); // Para vista previa
     }
   };
+
 
   const handleUpload = () => {
     if (foto_paciente) {
@@ -436,7 +453,7 @@ const Formulariopaciente = ({ pacienteid }) => {
             </div>
 
             <div className="col-md-12">
-              <form onSubmit={handleSubmit}>
+              <form>
                 <div className="p-3 p-lg-5 border">
                   <div className="form-group row">
                     <label htmlFor="tipo_paciente" className="text-black">Tipo de Paciente:</label>
@@ -514,7 +531,7 @@ const Formulariopaciente = ({ pacienteid }) => {
           <input
             type="file"
             className="form-control"
-            id="foto_paciente"
+            id="imagen"
             name="foto_paciente"
             onChange={handleFileChange}
             accept="image/*"  // Solo acepta imágenes
@@ -613,38 +630,45 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
                   </div>
 
-                  <div className="form-group">
-                  <div className="row">
-                    <div className="col-md-4">
-                    <button 
-                      type="button" 
-                      className="btn btn-primary btn-lg btn-block" 
-                      onClick={(e) => handleSubmit(e, 'guardar')}>
-                      Guardar Paciente
-                    </button>
+                  <div className="form-group mt-4">
+                    <div className="row justify-content-center gap-2">
+                      <div className="col-md-3 d-grid mb-2">
+                        <button
+                          type="button"
+                          className="btn btn-success btn-lg"
+                          onClick={handleGuardar}
+                        >
+                          <i className="fas fa-save me-2"></i>
+                          Guardar
+                        </button>
+                      </div>
+
+                      <div className="col-md-3 d-grid mb-2">
+                        <button
+                          type="button"
+                          className="btn btn-warning btn-lg text-white"
+                          onClick={handleEditar}
+                          disabled={!id}
+                        >
+                          <i className="fas fa-edit me-2"></i>
+                          Editar
+                        </button>
+                      </div>
+
+                      <div className="col-md-3 d-grid mb-2">
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-lg"
+                          onClick={handleEliminar}
+                          disabled={!id}
+                        >
+                          <i className="fas fa-trash-alt me-2"></i>
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-md-4">
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-lg btn-block" 
-                      onClick={(e) => handleSubmit(e, 'editar')}
-                      disabled={!id}  // Deshabilitar si no hay un ID
-                    >
-                      Editar Paciente
-                    </button>
-                  </div>
-                  <div className="col-md-4">
-                    <button 
-                      type="button" 
-                      className="btn btn-danger btn-lg btn-block"  
-                      onClick={handleEliminar}
-                      disabled={!id}  // Deshabilitar si no hay un ID  
-                      >
-                      Eliminar Paciente
-                    </button>
-                  </div>
-                </div>
-              </div>
+
                 <div className="form-group">
                   <div className="col-md-12">
                     <button type="button" className="btn btn-primary btn-lg btn-block" onClick={imprimirFormulario}>Imprimir Datos</button>

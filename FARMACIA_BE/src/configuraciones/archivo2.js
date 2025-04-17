@@ -31,13 +31,12 @@ const diskStoragePacientes = multer.diskStorage({
                 Date.now() +
                 uniqueSuffix +
                 "-" +
-                req.query.id +
-                "-" +
                 file.mimetype.replace("/", ".")
             );
         }
     },
 });
+
 exports.uploadImagenPaciente = multer({
     storage: diskStoragePacientes,
     fileFilter: (req, file, cb) => {
