@@ -59,6 +59,7 @@ useEffect(() => {
         setObservaciones(cita.observaciones);
         setNombreM(cita.nombre_medicamento);
         setCantidadv(cita.cantidadventa);
+        setPacienteId(cita.pacienteId);
       } else {
         console.error("No se encontró la cita");
       }
