@@ -23,15 +23,16 @@ app.use(cors(corsOptions)); // CORS debe ir antes de las rutas
 app.use("/imagen", express.static(path.join(__dirname, "public/img/paciente")));
 
 // Sincronización y conexión a la base de datos
+/*
 db.sync({ alter: true })  
     .then(() => console.log('Base de datos sincronizada correctamente.'))
     .catch(error => console.error('Error al sincronizar la base de datos:', error));
 
-//db.authenticate()
-    //.then(() => {console.log("Conexión establecida");configurarModelos();
-//})
-  //  .catch(error => console.log("Error: " + error));
-
+db.authenticate()
+    .then(() => {console.log("Conexión establecida");configurarModelos();
+})
+.catch(error => console.log("Error: " + error));
+*/
 // Montar las rutas
 app.use('/usuarios', rutasUsuario);
 app.use('/citas', rutas_citas);

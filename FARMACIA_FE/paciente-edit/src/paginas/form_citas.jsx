@@ -18,8 +18,8 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  const [PacienteId, setPacienteId] = useState([]);
-  const [inventarioId, setInventarioId] = useState([]);
+  const [pacienteId, setPacienteId] = useState([]);
+  const [medicamentoId, setmedicamentoId] = useState([]);
 
  /* const [medicamentosFields, setMedicamentosFields] = useState([
     { nombre_medicamento: "", cantidadventa: "" }
@@ -148,7 +148,7 @@ useEffect(() => {
     setObservaciones(cita.observaciones);
     setNombreM(cita.nombre_medicamento);
     setCantidadv(cita.cantidadventa);
-    setInventarioId(cita.inventarioId);
+    setmedicamentoId(cita.inventarioId);
     setPacienteId(cita.PacienteId);
     setId(cita.id); 
     setSearchTerm('');
@@ -172,7 +172,7 @@ console.log('InventarioId:', cita.inventarioId);
   // Maneja el envío del formulario para guardar o editar el medicamento
   const handleSubmit = async (e, action) => {
     e.preventDefault();
-  
+
     if (
       fecha_cita === '' ||
       nombre_dr === '' ||
@@ -186,13 +186,13 @@ console.log('InventarioId:', cita.inventarioId);
       observaciones === '' ||
       nombre_medicamento === '' ||
       cantidadventa === '' ||
-      PacienteId === '' ||
-      inventarioId === '' 
+      pacienteId === '' ||
+      medicamentoId === ''
     ) {
       alert('Por favor, complete todos los campos');
       return;
     }
-  
+
     try {
       let response;
       if (action === 'guardar') {
@@ -209,10 +209,10 @@ console.log('InventarioId:', cita.inventarioId);
           observaciones,
           nombre_medicamento,
           cantidadventa,
-          PacienteId,
-          inventarioId,
+          pacienteId,
+          medicamentoId,
         });
-        alert('Cita creada exitosamente'); 
+        alert('Cita creada exitosamente');
       } else if (action === 'editar' && id && citaseditar) {
         response = await axios.put(`${citaseditar}?id=${id}`, {
           fecha_cita,
@@ -227,8 +227,8 @@ console.log('InventarioId:', cita.inventarioId);
           observaciones,
           nombre_medicamento,
           cantidadventa,
-          PacienteId,
-          inventarioId,
+          pacienteId,
+          medicamentoId,
         });
         if (response && response.data.success) {
           alert('Cita editada exitosamente');
@@ -251,7 +251,7 @@ console.log('InventarioId:', cita.inventarioId);
         setNombreM('');
         setCantidadv('');
         setPacienteId('');
-        setInventarioId('');
+        setmedicamentoId('');
         setId('');
         alert('Cita procesada exitosamente');
       } else {
@@ -262,7 +262,7 @@ console.log('InventarioId:', cita.inventarioId);
       if (error.response) {
         alert(`Error ${error.response.status}: ${error.response.statusText}`);
         console.error('Respuesta del servidor:', error.response);
-  
+
         if (error.response.data && error.response.data.errors) {
           error.response.data.errors.forEach((err) => {
             console.error('Error específico:', err);
@@ -278,7 +278,7 @@ console.log('InventarioId:', cita.inventarioId);
       }
     }
   };
-  
+
 
 const handleEliminar = async () => {
   // Verificar si el 'id' y la URL para eliminar están definidos
@@ -311,7 +311,7 @@ const handleEliminar = async () => {
         setNombreM('');
         setCantidadv('');
         setPacienteId('');
-        setInventarioId('');
+        setmedicamentoId('');
         setId(''); 
         // Aquí podrías actualizar la lista de citas si es necesario
       } else {
@@ -554,27 +554,32 @@ const handleEliminar = async () => {
                   </div>
 
                   {/* Nombre del Paciente */}
-                  <div className="form-group row">
-                    <div className="col-md-12">
-                      <label htmlFor="nombre_paciente" className="text-black">
-                        Nombre del paciente: <span className="text-danger">*</span>
-                      </label>
-                      <select
-                      className="form-control"
-                      id="PacienteId"
-                      name="nombre_paciente"
-                      value={nombre_paciente} // Aquí solo va el ID seleccionado
-                      onChange={(e) => setNombrePaciente(e.target.value)}
-                    >
-                      <option value="">Seleccione un Paciente</option>
-                      {pacientes.map((paciente) => (
-                        <option key={paciente.id} value={paciente.id}>
-                          {paciente.nombre_completo}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="form-group row">
+                      <div className="col-md-12">
+                        <label htmlFor="pacienteId" className="text-black">
+                          Nombre del paciente: <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-control"
+                          id="pacienteId"
+                          name="pacienteId"
+                          value={pacienteId}
+                          onChange={(e) => {
+                            const selectedId = e.target.value;
+                            const selectedPaciente = pacientes.find((p) => p.id === parseInt(selectedId));
+                            setPacienteId(selectedId);
+                            setNombrePaciente(selectedPaciente ? selectedPaciente.nombre_completo : '');
+                          }}
+                        >
+                          <option value="">Seleccione un Paciente</option>
+                          {pacientes.map((paciente) => (
+                            <option key={paciente.id} value={paciente.id}>
+                              {paciente.nombre_completo}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                  </div>
 
 
                   {/* Presión */}
@@ -692,25 +697,30 @@ const handleEliminar = async () => {
                   </div>
 
                   <div className="form-group row">
-                  <div className="col-md-6">
-                    <label htmlFor="inventarioId" className="text-black">
-                      Medicamento: <span className="text-danger">*</span>
-                    </label>
-                    <select
-                    className="form-control"
-                    id="inventarioId"
-                    name="nombre_medicamento"
-                    value={nombre_medicamento} // Aquí solo va el ID seleccionado
-                    onChange={(e) => setNombreM(e.target.value)}
-                  >
-                    <option value="">Seleccione un medicamento</option>
-                    {medicamentos.map((tipo) => (
-                      <option key={tipo.id} value={tipo.id}>
-                        {tipo.nombre_medicamento}
-                      </option>
-                    ))}
-                  </select>
-                  </div>
+                      <div className="col-md-6">
+                        <label htmlFor="medicamentoId" className="text-black">
+                          Medicamento: <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-control"
+                          id="medicamentoId"
+                          name="medicamentoId"
+                          value={medicamentoId}
+                          onChange={(e) => {
+                            const selectedId = e.target.value;
+                            const selectedMedicamento = medicamentos.find((m) => m.id === parseInt(selectedId));
+                            setmedicamentoId(selectedId);
+                            setNombreM(selectedMedicamento ? selectedMedicamento.nombre_medicamento : '');
+                          }}
+                        >
+                          <option value="">Seleccione un medicamento</option>
+                          {medicamentos.map((tipo) => (
+                            <option key={tipo.id} value={tipo.id}>
+                              {tipo.nombre_medicamento}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
                     <div className="col-md-6">
                       <label htmlFor="cantidadventa" className="text-black">
