@@ -1,5 +1,5 @@
 {
-  "name": "FARMACIA_BE",
+  "name": "farmacia_be",
   "version": "1.0.0",
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -18,5 +18,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.js"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

@@ -132,8 +132,8 @@ rutas.get('/buscarpacientes', async (req, res) => {
 
 //Ruta de guardarImagenPaciente
 
-rutas.post('/:id/guardar-imagen', upload, 
-    controladorPacientes.uploadImagenCategoriaPaciente);
+//rutas.post('/:id/guardar-imagen', upload, 
+  //  controladorPacientes.uploadImagenCategoriaPaciente);
 
 
 
