@@ -134,7 +134,7 @@ useEffect(() => {
   // Maneja el cambio en la barra de búsqueda
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-  };
+  };  
 
   // Función para seleccionar una cita de los resultados de búsqueda
   const handleSelectcita = (cita) => {
@@ -332,18 +332,25 @@ const handleEliminar = async () => {
     const fechaactual_cita = new Date().toLocaleDateString();
     const hora_cita = new Date().toLocaleTimeString();
 
-    const fecha_cita = document.getElementById('fecha_cita').value;  // Si el valor proviene de un campo de formulario
-    const nombre_dr = document.getElementById('nombre_dr').value;
-    const nombre_paciente = document.getElementById('PacienteId').value;
-    const presion = document.getElementById('presion').value;
-    const peso = document.getElementById('peso').value;
-    const ritmo_cardiaco = document.getElementById('ritmo_cardiaco').value;
-    const temperatura = document.getElementById('temperatura').value;
-    const sintomas = document.getElementById('sintomas').value;
-    const receta = document.getElementById('receta').value;
-    const observaciones = document.getElementById('observaciones').value;
-    const nombre_medicamento = document.getElementById('inventarioId').value;
-    const cantidadventa = document.getElementById('cantidadventa').value;
+    const pacienteSelect = document.getElementById('PacienteId');
+    const nombre_paciente = pacienteSelect?.selectedOptions[0].text || '';
+
+    const inventarioSelect = document.getElementById('inventarioId');
+    const nombre_medicamento = inventarioSelect?.selectedOptions[0].text || '';
+
+
+    const fecha_cita = document.getElementById('fecha_cita')?.value || '';  // Si el valor proviene de un campo de formulario
+    const nombre_dr = document.getElementById('nombre_dr')?.value || '';
+    //const nombre_paciente = document.getElementById('PacienteId')?.value || '';
+    const presion = document.getElementById('presion')?.value || '';
+    const peso = document.getElementById('peso')?.value || '';
+    const ritmo_cardiaco = document.getElementById('ritmo_cardiaco')?.value || '';
+    const temperatura = document.getElementById('temperatura')?.value || '';
+    const sintomas = document.getElementById('sintomas')?.value || '';
+    const receta = document.getElementById('receta')?.value || '';
+    const observaciones = document.getElementById('observaciones')?.value || '';
+    //const nombre_medicamento = document.getElementById('inventarioId')?.value || '';
+    const cantidadventa = document.getElementById('cantidadventa')?.value || '';
 
     const contenido = `
       <html>
@@ -704,24 +711,26 @@ const handleEliminar = async () => {
                           Medicamento: <span className="text-danger">*</span>
                         </label>
                         <select
-                          className="form-control"
-                          id="medicamentoId"
-                          name="medicamentoId"
-                          value={medicamentoId}
-                          onChange={(e) => {
-                            const selectedId = e.target.value;
-                            const selectedMedicamento = medicamentos.find((m) => m.id === parseInt(selectedId));
-                            setmedicamentoId(selectedId);
-                            setNombreM(selectedMedicamento ? selectedMedicamento.nombre_medicamento : '');
-                          }}
-                        >
-                          <option value="">Seleccione un medicamento</option>
-                          {medicamentos.map((tipo) => (
-                            <option key={tipo.id} value={tipo.id}>
-                              {tipo.nombre_medicamento}
-                            </option>
-                          ))}
-                        </select>
+                        className="form-control"
+                        id="medicamentoId"
+                        name="medicamentoId"
+                        value={medicamentoId}
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          const selectedMedicamento = medicamentos.find(
+                            (m) => String(m.id) === selectedId
+                          );
+                          setmedicamentoId(selectedId);
+                          setNombreM(selectedMedicamento ? selectedMedicamento.nombre_medicamento : '');
+                        }}
+                      >
+                        <option value="">Seleccione un medicamento</option>
+                        {medicamentos.map((tipo) => (
+                          <option key={tipo.id} value={String(tipo.id)}>
+                            {tipo.nombre_medicamento}
+                          </option>
+                        ))}
+                      </select>
                       </div>
 
                     <div className="col-md-6">

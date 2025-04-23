@@ -630,40 +630,40 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
                   </div>
 
-                  <div className="form-group mt-4">
-                    <div className="row justify-content-center gap-2">
-                      <div className="col-md-3 d-grid mb-2">
+                  <div className="form-group">
+                    <div className="row ">
+                      <div className="col-md-4">
                         <button
                           type="button"
-                          className="btn btn-success btn-lg"
+                          className="btn btn-primary btn-lg btn-block"
                           onClick={handleGuardar}
                         >
                           <i className="fas fa-save me-2"></i>
-                          Guardar
+                          Guardar Paciente
                         </button>
                       </div>
 
-                      <div className="col-md-3 d-grid mb-2">
+                      <div className="col-md-4">
                         <button
                           type="button"
-                          className="btn btn-warning btn-lg text-white"
+                          className="btn btn-primary btn-lg btn-block"
                           onClick={handleEditar}
                           disabled={!id}
                         >
                           <i className="fas fa-edit me-2"></i>
-                          Editar
+                          Editar Paciente
                         </button>
                       </div>
 
-                      <div className="col-md-3 d-grid mb-2">
+                      <div className="col-md-4">
                         <button
                           type="button"
-                          className="btn btn-danger btn-lg"
+                          className="btn btn-danger btn-lg btn-block"
                           onClick={handleEliminar}
                           disabled={!id}
                         >
                           <i className="fas fa-trash-alt me-2"></i>
-                          Eliminar
+                          Eliminar Paciente
                         </button>
                       </div>
                     </div>
