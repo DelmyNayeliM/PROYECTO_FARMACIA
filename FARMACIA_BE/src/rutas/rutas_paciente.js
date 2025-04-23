@@ -3,9 +3,6 @@ const { Router } = require('express');
 const { body, query } = require('express-validator');
 const controladorPacientes = require('../controladores/controlador_paciente');
 const Paciente = require('../modelos/paciente'); // Modelo de usuario
-const upload = require('../configuraciones/archivo');
-const { uploadImagenCategoriaPaciente } = ('../controladores/controlador_paciente');
-
 
 const rutas = Router();
 
@@ -16,21 +13,10 @@ rutas.get('/', controladorPacientes.inicio);
 rutas.get('/listar', controladorPacientes.listar);
 
 // Ruta para guardar un nuevo usuario
-rutas.post('/guardar',
+rutas.post('/guardar', controladorPacientes.validarImagenPaciente,
     body("nombre_completo")
         .isLength({ min: 3, max: 50 })
-        .withMessage('El nombre debe tener entre 3 a 50 caracteres')
-        .custom(async (value) => {
-            if (!value) {
-                throw new Error("El nombre no permite valores nulos");
-            }
-            const buscarpacientes = await Paciente.findOne({
-                where: { nombre_completo: value }
-            });
-            if (buscarpacientes) {
-                throw new Error('El nombre del paciente ya existe');
-            }
-        }),
+        .withMessage('El nombre debe tener entre 3 a 50 caracteres'),
     body("tipo_paciente")
         .optional()
         .isIn(['Trabajador', 'Dependiente'])
@@ -39,10 +25,10 @@ rutas.post('/guardar',
         .optional()
         .isIn(['Temporal', 'Permanente'])
         .withMessage('El tipo de empleado debe ser "Temporal" o "Permanente"'),
-    controladorPacientes.guardar
+    controladorPacientes.createPaciente
 );
 
-rutas.put('/editar',
+rutas.put('/editar',controladorPacientes.validarImagenPaciente,
     query("id").isInt().withMessage("El ID debe ser un número entero"),
     body("nombre_completo")
         .optional()
@@ -129,12 +115,6 @@ rutas.get('/buscarpacientes', async (req, res) => {
     return res.status(500).json({ message: 'Error interno del servidor.', error: error.message });
   }
 });
-
-//Ruta de guardarImagenPaciente
-
-//rutas.post('/:id/guardar-imagen', upload, 
-  //  controladorPacientes.uploadImagenCategoriaPaciente);
-
 
 
 {/*rutas.post('/guardarImagenPaciente', guardarImagenPaciente, async (req, res) => {

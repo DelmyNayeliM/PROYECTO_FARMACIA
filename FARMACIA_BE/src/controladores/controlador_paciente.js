@@ -1,11 +1,11 @@
-const { Op, ValidationError } = require('sequelize'); // Asegúrate de importar Op
+const { Op } = require('sequelize');
 const { validationResult } = require('express-validator');
 const Pacientes = require('../modelos/paciente');
-//const {guardarImagenPaciente} = require('../configuraciones/archivo');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-
+const db = require('../configuraciones/conexionbd');
+const { uploadImagenPaciente } = require('../configuraciones/archivo2');
 
 // Ruta de inicio
 exports.inicio = (req, res) => {
@@ -14,45 +14,6 @@ exports.inicio = (req, res) => {
     };
     res.json(objeto);
 };
-
-// Ruta para guardar un nuevo usuario
-// Ejemplo de validación en la ruta de guardar
-exports.guardar = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { tipo_paciente, tipo_empleado, nombre_completo, clave_empleado, clave_expediente, foto_paciente, telefono, edad, direccion, correo, enfermedad_base } = req.body;
-
-    // Verifica si el paciente ya existe
-    const pacienteExistente = await Pacientes.findOne({ where: { nombre_completo } });
-    if (pacienteExistente) {
-        return res.status(400).json({ mensaje: 'El paciente ya existe' });
-    }
-
-    try {
-        const nuevopaciente = await Pacientes.create({
-            tipo_paciente, 
-            tipo_empleado, 
-            nombre_completo, 
-            clave_empleado, 
-            clave_expediente, 
-            foto_paciente, 
-            telefono, 
-            edad, 
-            direccion, 
-            correo, 
-            enfermedad_base
-        });
-
-        res.status(201).json(nuevopaciente);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ mensaje: 'Error al guardar el paciente', error });
-    }
-};
-
 
 // Ruta para listar todos los usuarios
 exports.listar = async (req, res) => {
@@ -65,29 +26,105 @@ exports.listar = async (req, res) => {
     }
 };
 
-exports.editar = async (req, res) => {
-    const { id } = req.query; // Obtener id de la query
-    const { tipo_paciente, tipo_empleado, nombre_completo, clave_empleado, clave_expediente, foto_paciente, telefono, edad, direccion, correo, enfermedad_base } = req.body;
-
-    // Validar errores de Express Validator
+exports.validarImagenPaciente = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json(errors.array());
+    }
+    else {
+        uploadImagenPaciente(req, res, (err) => {
+            if (err instanceof multer.MulterError) {
+                res.status(400).json({ msj: "Hay errores al cargar la imagen", error: err });
+            }
+            else if (err) {
+                res.status(400).json({ msj: "Hay errores al cargar la imagen", error: err });
+            }
+            else {
+                next();
+            }
+        });
+    }
+};
+
+exports.createPaciente = async (req, res) => {
+    // Validar entrada de datos
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array());
     }
 
+    const t = await db.transaction();
     try {
-        // Buscar el paciente por ID
+        const { tipo_paciente,
+            tipo_empleado,
+            nombre_completo,
+            clave_empleado,
+            clave_expediente,
+            foto_paciente,
+            telefono,
+            edad,
+            direccion,
+            correo,
+            enfermedad_base } = req.body;
+        const imagen = req.file ? (fs.existsSync(path.join(__dirname, '../../public/img/paciente/', req.file.filename)) ? req.file.filename : null) : null;
+        const nuevoP = await Pacientes.create({
+            tipo_paciente,
+            tipo_empleado,
+            nombre_completo,
+            clave_empleado,
+            clave_expediente,
+            foto_paciente,
+            telefono,
+            edad,
+            direccion,
+            correo,
+            enfermedad_base,
+            imagen: imagen
+        }, { transaction: t });
+        await t.commit();
+        res.status(201).json(nuevoP);
+    } catch (error) {
+        await t.rollback();
+        console.error("Error al crear un paciente:", error);
+        res.status(500).json({ error: "Error al crear el tipo de producto" });
+    }
+};
+
+exports.editar = async (req, res) => {
+    const { id } = req.query;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json(errors.array());
+    }
+
+    const t = await db.transaction();
+    try {
         const paciente = await Pacientes.findByPk(id);
         if (!paciente) {
             return res.status(404).json({ mensaje: "El paciente no existe" });
         }
 
-        // Verificar si el nombre ya está en uso por otro paciente
+        const {
+            tipo_paciente,
+            tipo_empleado,
+            nombre_completo,
+            clave_empleado,
+            clave_expediente,
+            foto_paciente,
+            telefono,
+            edad,
+            direccion,
+            correo,
+            enfermedad_base
+        } = req.body;
+
+        // Verifica duplicado de nombre
         if (nombre_completo) {
             const pacienteExistente = await Pacientes.findOne({
                 where: {
                     nombre_completo,
-                    id: { [Op.ne]: id } // Verifica que el nombre no pertenezca al mismo paciente
+                    id: { [Op.ne]: id }
                 }
             });
             if (pacienteExistente) {
@@ -95,28 +132,49 @@ exports.editar = async (req, res) => {
             }
         }
 
-        // Actualizar los campos
-        paciente.tipo_paciente = tipo_paciente || paciente.tipo_paciente;
-        paciente.tipo_empleado = tipo_empleado || paciente.tipo_empleado;
-        paciente.nombre_completo = nombre_completo || paciente.nombre_completo;
-        paciente.clave_empleado = clave_empleado || paciente.clave_empleado;
-        paciente.clave_expediente = clave_expediente || paciente.clave_expediente;
-        paciente.foto_paciente = foto_paciente || paciente.foto_paciente;
-        paciente.telefono = telefono || paciente.telefono;
-        paciente.edad = edad || paciente.edad;
-        paciente.direccion = direccion || paciente.direccion;
-        paciente.correo = correo || paciente.correo;
-        paciente.enfermedad_base = enfermedad_base || paciente.enfermedad_base;
+        // Imagen nueva si se subió
+        let imagenNueva = paciente.imagen;
+        if (req.file) {
+            const imagenPath = path.join(__dirname, '../../public/img/paciente/', req.file.filename);
 
-        await paciente.save();
+            if (fs.existsSync(imagenPath)) {
+                imagenNueva = req.file.filename;
+
+                // Si ya tenía una imagen anterior, eliminarla
+                if (paciente.imagen) {
+                    const rutaAnterior = path.join(__dirname, '../../public/img/paciente/', paciente.imagen);
+                    if (fs.existsSync(rutaAnterior)) {
+                        fs.unlinkSync(rutaAnterior); // Eliminar imagen anterior
+                    }
+                }
+            }
+        }
+
+        // Actualización
+        await paciente.update({
+            tipo_paciente: tipo_paciente ?? paciente.tipo_paciente,
+            tipo_empleado: tipo_empleado ?? paciente.tipo_empleado,
+            nombre_completo: nombre_completo ?? paciente.nombre_completo,
+            clave_empleado: clave_empleado ?? paciente.clave_empleado,
+            clave_expediente: clave_expediente ?? paciente.clave_expediente,
+            foto_paciente: foto_paciente ?? paciente.foto_paciente,
+            telefono: telefono ?? paciente.telefono,
+            edad: edad ?? paciente.edad,
+            direccion: direccion ?? paciente.direccion,
+            correo: correo ?? paciente.correo,
+            enfermedad_base: enfermedad_base ?? paciente.enfermedad_base,
+            imagen: imagenNueva
+        }, { transaction: t });
+
+        await t.commit();
         res.json({ mensaje: "Paciente actualizado correctamente", paciente });
 
     } catch (error) {
-        console.error(error);
+        await t.rollback();
+        console.error("Error al editar paciente:", error);
         res.status(500).json({ mensaje: "Error al editar el paciente", error });
     }
 };
-
 
 // Ruta para eliminar un usuario
 exports.eliminar = async (req, res) => {
@@ -144,175 +202,3 @@ exports.eliminar = async (req, res) => {
         res.status(500).json({ msj: 'Error al eliminar el paciente', error });
     }
 };
-
-
-/*exports.guardarImagen = async (req, res) => {
-    try {
-        const { id } = req.params;
-        console.log('ID del usuario:', id); // Depuración
-
-        if (!req.file) {
-            return res.status(400).json({ error: 'No se ha proporcionado ninguna imagen' });
-        }
-
-        // Interpolación de cadenas correctamente usando backticks
-        const filePath = `/public/img/paciente/${req.file.filename}`;
-        console.log('Archivo recibido:', filePath); //Depuración
-
-        // Buscar y actualizar el Paciente
-        const Paciente = await Pacientes.findByPk(id);
-        if (!Paciente) {
-            return res.status(404).json({ error: 'Paciente no encontrado' });
-        }
-
-        // Actualizamos el campo correcto en el modelo 
-        Paciente.foto_paciente = filePath;
-        await Paciente.save();
-
-        res.json({
-            message: 'Imagen guardada correctamente',
-            Pacientes: {
-                id: Paciente.id,
-                foto_paciente: Paciente.foto_paciente // Asegurarse de devolver el campo correcto
-            }
-        });
-    } catch (error) {
-        console.error('Error al guardar la imagen:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-};
-*/
-
-const { uploadImagenCategoriaPaciente } = require('../configuraciones/archivo2');
-exports.validarImagenTipoPaciente = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json(errors.array());
-    }
-    else {
-        uploadImagenCategoriaPaciente(req, res, (err) => {
-            if (err instanceof multer.MulterError) {
-                res.status(400).json({ msj: "Hay errores al cargar la imagen", error: err });
-            }
-            else if (err) {
-                res.status(400).json({ msj: "Hay errores al cargar la imagen", error: err });
-            }
-            else {
-                next();
-            }
-        });
-    }
-};
-
-exports.createProductoPaciente = async (req, res) => {
-    // Validar entrada de datos
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json(errors.array());
-    }
-
-    const t = await db.transaction();
-    try {
-        const { tipo_paciente, 
-            tipo_empleado, 
-            nombre_completo, 
-            clave_empleado, 
-            clave_expediente, 
-            foto_paciente, 
-            telefono, 
-            edad, 
-            direccion, 
-            correo, 
-            enfermedad_base } = req.body;
-        const imagen = req.file ? (fs.existsSync(path.join(__dirname, '../../../public/img/paciente', req.file.filename)) ? req.file.filename : null) : null;
-        const nuevoP = await ProductoTipos.create({ tipo_paciente, 
-            tipo_empleado, 
-            nombre_completo, 
-            clave_empleado, 
-            clave_expediente, 
-            foto_paciente, 
-            telefono, 
-            edad, 
-            direccion, 
-            correo, 
-            enfermedad_base,
-            imagen: imagen }, { transaction: t });
-        await t.commit();
-        res.status(201).json(nuevoP);
-    } catch (error) {
-        await t.rollback();
-        console.error("Error al crear el tipo de producto:", error);
-        res.status(500).json({ error: "Error al crear el tipo de producto" });
-    }
-};
-
-
-{/*exports. validarImagen = (req, res, next)=>{
-    const validacion = validationResult(req);
-    if (validacion.errors.length > 0){
-        var msjerror="";
-        validacion.errors.forEach( r=> {
-            msjerror = msjerror + r.msg + ".";
-        })
-        res.json({msj: "Hay errores en la peticion", error:msjerror});
-    }
-    else{
-        guardarImagenPaciente(req, res, (err)=> {
-            if(err instanceof multer.MulterError){
-                res.json({msj:"Hay error en la carga de la imagen", error: err});
-            }
-            else if (err){
-                res.json({msj:"Hay error en la carga de la imagen", error: err});
-            }
-            else{
-                next();
-            }
-        });
-    }
-};
-*/}
-
-{/*exports.actualizarImagen = async (req, res, next) => {
-    const validacion = validationResult(req);
-    
-    if (validacion.errors.length > 0) {
-        let msjerror = "";
-        validacion.errors.forEach(r => {
-            msjerror += r.msg + "."; 
-        });
-        return res.json({ msj: "Hay errores en la petición", error: msjerror });
-    }
-
-    const { id } = req.query;
-    if (!req.file || !id) {
-        return res.json({ msj: "Falta la imagen o el id de la petición" });
-    }
-
-    const nombreImagen = req.file.filename; 
-
-    try {
-   
-        const buscarpaciente = await Pacientes.findOne({ where: { id: id } });
-
-        if (!buscarpaciente) {
-            return res.json({ msj: "El ID no existe" });
-        }
-        if (buscarpaciente.imagen) {
-            const rutaImagenAnterior = path.join(__dirname, '../../public/imagen', buscarpaciente.imagen);
-            if (fs.existsSync(rutaImagenAnterior)) {
-                fs.unlinkSync(rutaImagenAnterior); 
-                console.log("Imagen anterior eliminada");
-            }
-        }
-
-        buscarpaciente.imagen = nombreImagen;
-        await buscarpaciente.save(); 
-
-        console.log("Imagen actualizada en la base de datos");
-        return res.json({ msj: "Imagen actualizada exitosamente" });
-
-    } catch (error) {
-        console.log("Error en actualizar la imagen en la base de datos", error);
-        return res.json({ msj: "Error en actualizar la imagen en el servidor" });
-    }
-};*/}

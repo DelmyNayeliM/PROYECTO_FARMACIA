@@ -19,27 +19,9 @@ rutas.get('/listar', controladorcitas.listar);
 rutas.post('/guardar',
     // Validar fecha_cita
     body("fecha_cita")
-        .isISO8601().withMessage('Debe ingresar una fecha válida en formato YYYY-MM-DD')
-        .custom(async (value, { req }) => {
-            const PacienteId = req.body.PacienteId;
-            if (!value || !PacienteId) {
-                throw new Error("La fecha y el ID del paciente son obligatorios");
-            }
-
-            const buscarcita = await Cita.findOne({
-                where: {
-                    fecha_cita: value,
-                    PacienteId
-                }
-            });
-
-            if (buscarcita) {
-                throw new Error('Este paciente ya tiene una cita en esa fecha');
-            }
-        }),
-
+        .isISO8601().withMessage('Debe ingresar una fecha válida en formato YYYY-MM-DD'),
     // Validar PacienteId
-    body('PacienteId')
+    body('pacienteId')
         .isInt({ min: 1 }).withMessage('El ID del paciente debe ser un número entero')
         .custom(async (value) => {
             const paciente = await Paciente.findByPk(value);
@@ -49,7 +31,7 @@ rutas.post('/guardar',
         }),
 
     // Validar inventarioId
-    body('inventarioId')
+    body('medicamentoId')
         .optional()
         .isInt({ min: 1 }).withMessage('El ID del medicamento debe ser un número entero')
         .custom(async (value) => {
