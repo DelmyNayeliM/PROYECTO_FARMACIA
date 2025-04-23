@@ -134,7 +134,8 @@ useEffect(() => {
   // Maneja el cambio en la barra de búsqueda
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-  };  
+  };
+  
 
   // Función para seleccionar una cita de los resultados de búsqueda
   const handleSelectcita = (cita) => {
@@ -150,13 +151,15 @@ useEffect(() => {
     setObservaciones(cita.observaciones);
     setNombreM(cita.nombre_medicamento);
     setCantidadv(cita.cantidadventa);
-    setmedicamentoId(cita.inventarioId);
+    setmedicamentoId(cita.medicamentoId);
     setPacienteId(cita.pacienteId);
     setId(cita.id); 
     setSearchTerm('');
 
 console.log('PacienteId:', cita.pacienteId);
-console.log('InventarioId:', cita.inventarioId);
+console.log('InventarioId:', cita.medicamentoId);
+console.log("Cita completa:", cita);
+
 
 };
 
@@ -335,7 +338,7 @@ const handleEliminar = async () => {
     const pacienteSelect = document.getElementById('PacienteId');
     const nombre_paciente = pacienteSelect?.selectedOptions[0].text || '';
 
-    const inventarioSelect = document.getElementById('inventarioId');
+    const inventarioSelect = document.getElementById('medicamentoId');
     const nombre_medicamento = inventarioSelect?.selectedOptions[0].text || '';
 
 
