@@ -18,7 +18,7 @@ const Formulariocitas = ({ citaid }) => {
   const [id, setId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
   const [citasResultados, setcitasResultados] = useState([]); // Para almacenar los resultados de búsqueda
-  const [PacienteId, setPacienteId] = useState([]);
+  const [pacienteId, setPacienteId] = useState([]);
   const [medicamentoId, setmedicamentoId] = useState([]);
 
  /* const [medicamentosFields, setMedicamentosFields] = useState([
@@ -59,7 +59,7 @@ useEffect(() => {
         setObservaciones(cita.observaciones);
         setNombreM(cita.nombre_medicamento);
         setCantidadv(cita.cantidadventa);
-        setPacienteId(cita.PacienteId);
+        setPacienteId(cita.pacienteId);
       } else {
         console.error("No se encontró la cita");
       }
@@ -151,11 +151,11 @@ useEffect(() => {
     setNombreM(cita.nombre_medicamento);
     setCantidadv(cita.cantidadventa);
     setmedicamentoId(cita.inventarioId);
-    setPacienteId(cita.PacienteId);
+    setPacienteId(cita.pacienteId);
     setId(cita.id); 
     setSearchTerm('');
 
-console.log('PacienteId:', cita.PacienteId);
+console.log('PacienteId:', cita.pacienteId);
 console.log('InventarioId:', cita.inventarioId);
 
 };
@@ -188,7 +188,7 @@ console.log('InventarioId:', cita.inventarioId);
       observaciones === '' ||
       nombre_medicamento === '' ||
       cantidadventa === '' ||
-      PacienteId === '' ||
+      pacienteId === '' ||
       medicamentoId === ''
     ) {
       alert('Por favor, complete todos los campos');
@@ -211,7 +211,7 @@ console.log('InventarioId:', cita.inventarioId);
           observaciones,
           nombre_medicamento,
           cantidadventa,
-          PacienteId,
+          pacienteId,
           medicamentoId,
         });
         alert('Cita creada exitosamente');
@@ -229,7 +229,7 @@ console.log('InventarioId:', cita.inventarioId);
           observaciones,
           nombre_medicamento,
           cantidadventa,
-          PacienteId,
+          pacienteId,
           medicamentoId,
         });
         if (response && response.data.success) {
@@ -565,7 +565,7 @@ const handleEliminar = async () => {
                           className="form-control"
                           id="PacienteId"
                           name="PacienteId"
-                          value={PacienteId}
+                          value={pacienteId}
                           onChange={(e) => {
                             const selectedId = e.target.value;
                             const selectedPaciente = pacientes.find((p) => p.id === parseInt(selectedId));
