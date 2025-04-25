@@ -90,6 +90,7 @@ const Formulariopaciente = ({ pacienteid }) => {
     setNombreComp(pacientes.nombre_completo);
     setClaveEmpl(pacientes.clave_empleado);
     setClaveExpe(pacientes.clave_expediente);
+    setFotopaciente(pacientes.foto_paciente); //se manda a llamar al campo para que traiga la foto del paciente 
     setTelefono(pacientes.telefono);
     setEdad(pacientes.edad);
     setDireccion(pacientes.direccion);
@@ -423,7 +424,7 @@ const Formulariopaciente = ({ pacienteid }) => {
               <input
                 type="text"
                 className="form-control"
-                value={id}
+                value={pacienteid}
                 onChange={(e) => setId(e.target.value)}
               />
             </div>
