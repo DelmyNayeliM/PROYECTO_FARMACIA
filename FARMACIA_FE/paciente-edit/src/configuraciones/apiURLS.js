@@ -14,6 +14,7 @@ export const pacienteeliminar = Servidor + '/pacientes/eliminar';
 export const pacientelistar = Servidor + '/pacientes/listar';  
 export const pacientebuscar = Servidor + '/pacientes/buscarpacientes'
 export const pacienteguardarimagen = Servidor + 'pacientes/:id/guardar-imagen';
+export const imagenpaciente = Servidor + '/imagenes/paciente/';
 
 export const citasguardar = Servidor + '/citas/guardar';  
 export const citaseditar = Servidor + '/citas/editar';  

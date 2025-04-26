@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar, Servidor } from '../configuraciones/apiURLS';
+import { pacienteguardar, pacienteeditar, pacienteeliminar, pacientebuscar, Servidor, imagenpaciente } from '../configuraciones/apiURLS';
 
 export const AxiosImagen = axios.create({
   baseURL: Servidor,
@@ -90,7 +90,7 @@ const Formulariopaciente = ({ pacienteid }) => {
     setNombreComp(pacientes.nombre_completo);
     setClaveEmpl(pacientes.clave_empleado);
     setClaveExpe(pacientes.clave_expediente);
-    setFotopaciente(pacientes.foto_paciente); //se manda a llamar al campo para que traiga la foto del paciente 
+    setFotopaciente(pacientes.imagen); //se manda a llamar al campo para que traiga la foto del paciente 
     setTelefono(pacientes.telefono);
     setEdad(pacientes.edad);
     setDireccion(pacientes.direccion);
@@ -98,6 +98,8 @@ const Formulariopaciente = ({ pacienteid }) => {
     setEnfermedad(pacientes.enfermedad_base);
     setId(pacientes.id);
     setSearchTerm(''); // Limpiar el searchTerm para que desaparezca la lista
+
+    console.log(imagenpaciente + pacientes.imagen);
   }
 
   const limpiarFormulario = () => {
@@ -283,7 +285,7 @@ const Formulariopaciente = ({ pacienteid }) => {
   };*/
   
   
-  const imprimirFormulario = () => {
+  const imprimirFormulario = (pacientes) => {
 
     // Obtener fecha y hora actual
     const fechaHora = new Date();
@@ -369,7 +371,7 @@ const Formulariopaciente = ({ pacienteid }) => {
               <img src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png" alt="Logo"/>
             </div>
             <div class="foto-container">
-              <img src="${foto_paciente}" alt="Foto del Paciente"/>
+              <img src="${imagenpaciente + foto_paciente}" alt="Foto del Paciente"/>
             </div>
           </div>
 

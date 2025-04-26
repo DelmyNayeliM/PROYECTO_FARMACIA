@@ -20,7 +20,7 @@ const app = express();
 // Middleware para procesar JSON en solicitudes
 app.use(express.json());
 app.use(cors(corsOptions)); // CORS debe ir antes de las rutas
-app.use("/imagen", express.static(path.join(__dirname, "public/img/paciente")));
+app.use("/imagenes", express.static(path.join(__dirname, "../public/img")));
 
 //Sincronización y conexión a la base de datos
 
