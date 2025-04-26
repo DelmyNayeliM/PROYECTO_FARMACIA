@@ -90,6 +90,7 @@ const Formulariopaciente = ({ pacienteid }) => {
     setNombreComp(pacientes.nombre_completo);
     setClaveEmpl(pacientes.clave_empleado);
     setClaveExpe(pacientes.clave_expediente);
+    setFotopaciente(pacientes.foto_paciente); //se manda a llamar al campo para que traiga la foto del paciente 
     setTelefono(pacientes.telefono);
     setEdad(pacientes.edad);
     setDireccion(pacientes.direccion);
@@ -243,7 +244,7 @@ const Formulariopaciente = ({ pacienteid }) => {
   };
 
 
-  const handleUpload = () => {
+ /* const handleUpload = () => {
     if (foto_paciente) {
       const formData = new FormData();
       formData.append('img', foto_paciente);
@@ -279,7 +280,7 @@ const Formulariopaciente = ({ pacienteid }) => {
     } else {
       alert('Por favor selecciona una imagen');
     }
-  };
+  };*/
   
   
   const imprimirFormulario = () => {
@@ -332,7 +333,7 @@ const Formulariopaciente = ({ pacienteid }) => {
           .foto-container img {
             width: 150px;
             height: 150px;
-            border: 3px solidrgb(28, 29, 29);
+            border: 1px solid rgb(28, 29, 29);
             object-fit: cover; /* Asegura que la imagen se ajuste al cuadrado */
           }
           .info-container {
@@ -423,7 +424,7 @@ const Formulariopaciente = ({ pacienteid }) => {
               <input
                 type="text"
                 className="form-control"
-                value={id}
+                value={pacienteid}
                 onChange={(e) => setId(e.target.value)}
               />
             </div>
@@ -527,38 +528,31 @@ const Formulariopaciente = ({ pacienteid }) => {
                     </div>
 
                     <div className="col-md-6">
-      <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
-          <input
-            type="file"
-            className="form-control"
-            id="imagen"
-            name="foto_paciente"
-            onChange={handleFileChange}
-            accept="image/*"  // Solo acepta imágenes
-          />
+                    <label className="text-black" htmlFor="foto_paciente">Foto del Paciente:</label>
+                        <input
+                          type="file"
+                          className="form-control"
+                          id="imagen"
+                          name="foto_paciente"
+                          onChange={handleFileChange}
+                          accept="image/*"  // Solo acepta imágenes
+                        />
 
-      {fotoPreview && (
-        <div className="form-group row mt-3">
-          <div className="col-md-12">
-            <h5>Vista Previa de la Foto:</h5>
-            <img 
-              src={fotoPreview} 
-              alt="Vista previa" 
-              className="img-thumbnail" 
-              style={{ maxWidth: '200px', maxHeight: '200px' }} 
-            />
-          </div>
-        </div>
-      )}
-
-      <button 
-        className="btn btn-primary mt-3"
-        onClick={handleUpload}
-      >
-        Subir Imagen
-      </button>
-    </div>
-    </div>
+                    {fotoPreview && (
+                      <div className="form-group row mt-3">
+                        <div className="col-md-12">
+                          <h5>Vista Previa de la Foto:</h5>
+                          <img 
+                            src={fotoPreview} 
+                            alt="Vista previa" 
+                            className="img-thumbnail" 
+                            style={{ maxWidth: '200px', maxHeight: '200px' }} 
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  </div>
 
                   <div className="form-group row">
                     <div className="col-md-6">
@@ -642,6 +636,7 @@ const Formulariopaciente = ({ pacienteid }) => {
                           Guardar Paciente
                         </button>
                       </div>
+
 
                       <div className="col-md-4">
                         <button
