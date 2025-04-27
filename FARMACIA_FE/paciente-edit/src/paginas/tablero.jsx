@@ -5,12 +5,12 @@ const Tablero = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [medicamentos, setMedicamentos] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [cita, setCita] = useState({ cantidadventa: '' }); // Cambia a objeto
+  const [cita, setCita] = useState({ actualizar: '' }); // Cambia a objeto
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
   const handleCantidadVentaChange = (e) => {
-    setCita({ ...cita, cantidadventa: e.target.value });
+    setCita({ ...cita, actualizar: e.target.value });
   };
 
   const handleSearch = async () => {

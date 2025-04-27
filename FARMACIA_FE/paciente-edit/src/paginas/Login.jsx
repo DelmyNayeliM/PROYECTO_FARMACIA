@@ -16,7 +16,6 @@ const LoginForm = () => {
     setError(null);
 
     const userData = {
-      tipo_usuario,
       nombre,
       password,
     };
@@ -33,7 +32,7 @@ const LoginForm = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('Login exitoso:', data);
-        navigate('/'); // Redirige al formulario de paciente
+        navigate('/admin'); // Redirige al formulario de paciente
       } else {
         throw new Error(data.error || 'Credenciales incorrectas o error en la API');
       }
@@ -63,21 +62,6 @@ const LoginForm = () => {
                     style={{ width: '150px', height: 'auto' }} 
                   />
                 </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="tipo_usuario" className="form-label">Tipo de Usuario</label>
-                    <select
-                      className="form-control"
-                      id="tipo_usuario"
-                      value={tipo_usuario}
-                      onChange={(e) => setTipo_usuario(e.target.value)}
-                      required
-                      >
-                      <option value="">Seleccionar...</option>
-                      <option value="administrador">Administrador</option>
-                      <option value="medico">Medico</option>
-                    </select>
-                  </div>
 
                   <div className="mb-3">
                     <label htmlFor="nombre" className="form-label">Nombre del Usuario</label>

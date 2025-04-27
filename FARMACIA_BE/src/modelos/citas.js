@@ -2,77 +2,98 @@ const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/conexionbd');
 
 const modelopacientes = require('./paciente');
-const modeloinventario = require('./inventario');
+const modeloinventario = require('./inventario'); // este es el modelo que debes usar
+// const modelocita = require('./citas'); // esto es circular, no necesitas importarlo aquí
 
-const citas = db.define(
-    'citas',
-    {        
-        fecha_cita: {
-        type: DataTypes.DATEONLY,  
-        allowNull: false,      
-        validate: {
-            isDate: true,      
-        }
+const citas = db.define('citas', {
+    fecha_cita: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: { isDate: true }
     },
-        nombre_dr: {
-            type: DataTypes.ENUM('Dr. Cristian Muñoz', 'Dr. Kevin Yanes'),
+    nombre_dr: {
+        type: DataTypes.ENUM('Dr. Cristian Muñoz', 'Dr. Kevin Yanes'),
         allowNull: false,
     },
-        presion: {
-            type: DataTypes.STRING(45),
-            allowNull: false,
-            validate: {
-                is: /^[0-9]+\/[0-9]+$/,  // Formato de presión arterial (ej. 120/80)
-            }
-        },        
-        peso: {
-            type: DataTypes.DECIMAL(6, 2),  // 5 dígitos en total, 2 después del punto decimal
-            allowNull: false,
-            validate: {
-                isNumeric: true,  // Asegura que sea un número
-            }
-        },
-        ritmo_cardiaco: {
-            type: DataTypes.STRING(45),
-            allowNull: false
-        },
-        temperatura: {
-            type: DataTypes.STRING(45),
-            allowNull: false,
-            validate: {
-                isNumeric: true,  // Asegura que sea un número
-                min: 35,          // Rango mínimo (en grados Celsius)
-                max: 42           // Rango máximo (en grados Celsius)
-            }
-        },
-        sintomas: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
-        receta: {
-            type: DataTypes.TEXT,
-        },
-        observaciones: {
-            type: DataTypes.TEXT,
-        },
-        cantidadventa: {
-            type: DataTypes.STRING(20), 
-            allowNull: false
-        },
+    presion: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+        validate: {
+            is: /^[0-9]+\/[0-9]+$/ // Formato 120/80
+        }
     },
-    {
-        tableName: 'citas',
-        timestamps: true,  // Si es necesario
+    peso: {
+        type: DataTypes.DECIMAL(6, 2),
+        allowNull: false,
+        validate: { isNumeric: true }
+    },
+    ritmo_cardiaco: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+    },
+    temperatura: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+        validate: {
+            isNumeric: true,
+            min: 35,
+            max: 42
+        }
+    },
+    sintomas: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    receta: {
+        type: DataTypes.TEXT,
+    },
+    observaciones: {
+        type: DataTypes.TEXT,
+    },
+    cantidadventa: { // debería ser un número, no string
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    medicamentoId: { // campo para relacionar con inventario
+        type: DataTypes.INTEGER,
+        allowNull: false,
     }
-);
+}, {
+    tableName: 'citas',
+    timestamps: true,
+    hooks: {
+        async afterCreate(cita) {
+            try {
+                await modeloinventario.decrement('Cantidad', {
+                    by: cita.cantidadventa,
+                    where: { id: cita.medicamentoId }
+                });
+            } catch (error) {
+                console.error('Error en afterCreate de cita:', error);
+            }
+        },
 
-// Relación de uno a muchos: Un paciente puede tener muchas citas
-modelopacientes.hasMany(citas,{ foreignKey: 'pacienteId'});  // Un paciente tiene muchas citas
-citas.belongsTo(modelopacientes,{foreignKey:'pacienteId'}); // Cada cita pertenece a un solo paciente
+        async afterBulkCreate(citas) {
+            try {
+                for (const f of citas) {
+                    await modeloinventario.decrement('Cantidad', {
+                        by: f.cantidadventa,
+                        where: { id: f.medicamentoId }
+                    });
+                }
+            } catch (error) {
+                console.error('Error en afterBulkCreate de citas:', error);
+            }
+        }
+    }
+});
 
-// Relación de uno a muchos: Un inventario puede estar relacionado con muchas citas
-modeloinventario.hasMany(citas,{foreignKey:'medicamentoId'});  // Un inventario puede estar relacionado con muchas citas
-citas.belongsTo(modeloinventario,{foreignKey:'medicamentoId'}); // Cada cita pertenece a un solo inventario (medicamento)
+// Relación: un paciente tiene muchas citas
+modelopacientes.hasMany(citas, { foreignKey: 'pacienteId' });
+citas.belongsTo(modelopacientes, { foreignKey: 'pacienteId' });
 
+// Relación: un medicamento (inventario) tiene muchas citas
+modeloinventario.hasMany(citas, { foreignKey: 'medicamentoId' });
+citas.belongsTo(modeloinventario, { foreignKey: 'medicamentoId' });
 
 module.exports = citas;

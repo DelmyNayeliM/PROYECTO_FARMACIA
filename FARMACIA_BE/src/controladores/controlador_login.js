@@ -4,7 +4,7 @@ const usuarios = require('../modelos/usuarios'); // Asegúrate de importar corre
 
 // Ruta de login
 exports.login = async (req, res) => {
-    const { nombre, password, tipo_usuario } = req.body;
+    const { nombre, password } = req.body;
 
     // Validación de los campos
     const errors = validationResult(req);
@@ -19,19 +19,19 @@ exports.login = async (req, res) => {
             return res.status(400).json({ mensaje: 'Usuario no encontrado' });
         }
 
-        // Verificar que el tipo de usuario es el correcto
-        if (usuario.tipo_usuario !== tipo_usuario) {
-            return res.status(400).json({ mensaje: 'Tipo de usuario incorrecto' });
-        }
+        
 
         // Verificar la contraseña con bcrypt
         const esValido = await bcrypt.compare(password, usuario.password); // Comparar la contraseña proporcionada con la almacenada (cifrada)
         if (!esValido) {
             return res.status(400).json({ mensaje: 'Contraseña incorrecta' });
         }
-
+        const Usuario = {
+            login: usuario.nombre,
+            tipo: usuario.tipo_usuario
+}
         // Si las credenciales son correctas, responder con un mensaje de éxito
-        res.status(200).json({ mensaje: 'Login exitoso' });
+        res.status(200).json({ mensaje: 'Login exitoso', usuario: Usuario });
     } catch (error) {
         console.error(error);
         res.status(500).json({ mensaje: 'Error al intentar hacer login', error });

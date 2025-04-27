@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
+
 
 const Navbar = () => {
   return (
+  <>
     <div className="site-navbar py-2">
       <div className="container">
         <div className="d-flex align-items-center justify-content-between">
@@ -18,7 +20,7 @@ const Navbar = () => {
             <nav className="site-navigation text-right text-md-center" role="navigation">
               <ul className="site-menu js-clone-nav d-none d-lg-block">
                 <li>
-                  <Link to="/">Inicio</Link>
+                  <Link to="/admin">Inicio</Link>
                 </li>
                 <li>
                   <Link to="/tablero">Inventario</Link>
@@ -41,6 +43,8 @@ const Navbar = () => {
         </div>
       </div>
     </div>
+    <Outlet/>
+  </>
   );
 };
 
