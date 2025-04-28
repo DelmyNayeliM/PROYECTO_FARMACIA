@@ -5,7 +5,7 @@ const Tablero = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [medicamentos, setMedicamentos] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [cita, setCita] = useState({ actualizar: '' }); // Cambia a objeto
+  const [cita, setCita] = useState({ actualizar: '' });
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
@@ -48,7 +48,11 @@ const Tablero = () => {
     } else {
       setMedicamentos([]);
     }
-  }, [searchTerm, cita.cantidadventa]); // <-- Aquí
+  }, [searchTerm, cita.cantidadventa]);
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div className="container mt-5 px-2">
@@ -60,6 +64,13 @@ const Tablero = () => {
         value={searchTerm}
         onChange={handleSearchChange}
       />
+
+      {/* Botón de imprimir */}
+      <div className="my-3">
+        <button className="btn btn-primary" onClick={handlePrint}>
+          Imprimir
+        </button>
+      </div>
 
       {/* Tabla de resultados */}
       <div className="table-responsive">

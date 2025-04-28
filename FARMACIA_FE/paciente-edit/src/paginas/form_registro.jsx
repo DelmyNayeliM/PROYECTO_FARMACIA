@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { medicamentoguardar, medicamentoeditar, medicamentobuscar, medicamentoeliminar} from '../configuraciones/apiURLS';
+import { medicamentoguardar, medicamentoeditar, medicamentobuscar, medicamentoeliminar, medicamentobuscarv} from '../configuraciones/apiURLS';
 
 const FormularioRegistro = ({ medicamentoid }) => {
   const [categoria, setCategoria] = useState('');

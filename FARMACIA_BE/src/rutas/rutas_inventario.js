@@ -134,10 +134,7 @@ rutas.get('/buscar-medicamentos',
                 return res.status(500).json({ message: "Hubo un error al buscar los medicamentos " });
             }
         }
-    );
-    
-
-
+    );    
 
 // Ruta GET para buscar un medicamento por su ID
 rutas.get('/buscar/:id', async (req, res) => {
@@ -160,6 +157,13 @@ rutas.get('/buscar/:id', async (req, res) => {
   }
 });
 
+
+//rutas para listar todos los medicamentos 
+rutas.get('/buscar/all', async (req, res) => {
+
+
+})
+    
   
 rutas.get('/buscar/vence/:fecha', async (req, res) => {
     try {
