@@ -1,14 +1,41 @@
+.site-wrapper {
+  position: relative; /* Necesario para que el ::before funcione correctamente */
+  background-image: url('https://honduras.argos.co/wp-content/uploads/2023/07/REPRESA-HIDROELECTRICA-EL-CAJON-1536x1051.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.site-wrapper::before {
+  content: '';
+  position: fixed; /* Cambiado de absolute a fixed para que cubra toda la pantalla */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* Filtro de transparencia oscuro */
+  z-index: 0;
+  pointer-events: none; /* Permite hacer clic a través del filtro */
+}
+
+.site-wrapper > * {
+  position: relative;
+  z-index: 1; /* Asegura que el contenido esté por encima del filtro */
+}
+
+/* Ícono de cerrar sesión en la esquina inferior derecha */
 .logout-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 9999;
-  }
-  
-  .logout-icon:hover {
-    color: #f00; /* Cambiar color al pasar el ratón por encima */
-  }
-  
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10000; /* Mayor que el filtro y el contenido */
+}
+
+.logout-icon:hover {
+  color: #f00; /* Cambiar color al pasar el ratón */
+}

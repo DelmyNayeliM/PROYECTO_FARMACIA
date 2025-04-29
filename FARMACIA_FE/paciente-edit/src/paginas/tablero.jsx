@@ -1,5 +1,8 @@
 import '../css/tablero.css';
 import React, { useState, useEffect } from 'react';
+const medicamentolistar = 'http://localhost:3003/inventario/listar';
+//const medicamentobuscarv =  'http://localhost:3003/inventario/buscar/vence/'
+
 
 const Tablero = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,17 +12,33 @@ const Tablero = () => {
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
+  const esFechaValida = (texto) => {
+    const fechaRegex = /^\d{4}-\d{2}-\d{2}$/;
+    return fechaRegex.test(texto);
+  };
+
   const handleSearch = async () => {
     if (searchTerm.trim() === '') {
       setMedicamentos([]);
       return;
     }
-
+  
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:3003/inventario/buscar?nombre_medicamento=${searchTerm}`);
+  
+      let url;
+  
+      if (searchTerm.trim() === '*') {
+        url = medicamentolistar;
+      } else if (esFechaValida(searchTerm.trim())) {
+        url = `http://localhost:3003/inventario/buscar/vence/${searchTerm.trim()}`;
+      } else {
+        url = `http://localhost:3003/inventario/buscar?nombre_medicamento=${searchTerm}`;
+      }
+  
+      const response = await fetch(url);
       const data = await response.json();
-
+  
       if (response.status === 200) {
         const cantidadVenta = parseInt(cita.cantidadventa) || 0;
         const medicamentosConCantidadRestante = data.map(medicamento => ({
@@ -37,6 +56,8 @@ const Tablero = () => {
       setLoading(false);
     }
   };
+  
+  
 
   useEffect(() => {
     if (searchTerm.trim() !== '') {
