@@ -1,4 +1,4 @@
-import '../css/tablero.css'; 
+import '../css/tablero.css';
 import React, { useState, useEffect } from 'react';
 
 const Tablero = () => {
@@ -8,10 +8,6 @@ const Tablero = () => {
   const [cita, setCita] = useState({ actualizar: '' });
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
-  const handleCantidadVentaChange = (e) => {
-    setCita({ ...cita, actualizar: e.target.value });
-  };
 
   const handleSearch = async () => {
     if (searchTerm.trim() === '') {
@@ -56,24 +52,24 @@ const Tablero = () => {
 
   return (
     <div className="container mt-5 px-2">
-      {/* Campo de búsqueda */}
-      <input
-        type="text"
-        className="form-control search-input"
-        placeholder="nombre medicamento"
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-
-      {/* Botón de imprimir */}
-      <div className="my-3">
-        <button className="btn btn-primary" onClick={handlePrint}>
-          Imprimir
-        </button>
+      {/* Buscador y botón: solo en pantalla */}
+      <div className="no-print">
+        <input
+          type="text"
+          className="form-control search-input"
+          placeholder="nombre medicamento"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+        <div className="my-3">
+          <button className="btn btn-primary" onClick={handlePrint}>
+            Imprimir
+          </button>
+        </div>
       </div>
 
-      {/* Tabla de resultados */}
-      <div className="table-responsive">
+      {/* Tabla completa para vista normal */}
+      <div className="table-responsive no-print">
         <table className="table table-borderless">
           <thead>
             <tr className="bg-light">
@@ -109,6 +105,48 @@ const Tablero = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Tabla simplificada solo para impresión */}
+      <div className="print-only">
+  {/* Logo en la esquina superior derecha */}
+  <img
+    src="https://www.enteoperador.org/wp-content/uploads/2024/10/ENEE-logo-1.png"
+    alt="Logo"
+    className="print-logo"
+  />
+
+  {/* Fecha de generación */}
+  <p style={{ marginBottom: '20px' }}>
+    Reporte generado el {new Date().toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })}
+  </p>
+
+  {/* Tabla simplificada */}
+  <table className="table-print">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Fecha de Vencimiento</th>
+        <th>Cantidad Restante</th>
+      </tr>
+    </thead>
+    <tbody>
+      {medicamentos.map((medicamento) => (
+        <tr key={medicamento.id}>
+          <td>{medicamento.id}</td>
+          <td>{medicamento.nombre_medicamento}</td>
+          <td>{medicamento.fecha_vence}</td>
+          <td>{medicamento.cantidadRestante}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
     </div>
   );
 };

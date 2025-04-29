@@ -69,13 +69,13 @@
     padding: 10px 15px;  /* Ajuste de padding para celdas */
 }
 
-/* Ajustar la fila de "Cargando..." y "No hay resultados" */
+/* Ajuste para fila de "Cargando..." y "No hay resultados" */
 .table tbody .loading, .table tbody .no-results {
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;  /* Ajuste del tamaño de fuente para que se vea más grande */
+    font-size: 16px;  /* Ajuste del tamaño de fuente */
 }
 
 /* Centrado de las celdas de la tabla */
@@ -102,3 +102,53 @@
         width: 100%;  /* Hace que el input de búsqueda ocupe todo el ancho */
     }
 }
+
+@media print {
+    .no-print {
+      display: none !important;
+    }
+
+    .print-only {
+      display: block !important;
+    }
+
+    /* Asegura que la tabla tenga bordes y los títulos en negrita */
+    .table-print {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 60px;
+      font-size: 12pt;
+    }
+
+    .table-print th, .table-print td {
+      border: 1px solid black;  /* Bordes para las celdas */
+      padding: 8px;
+      text-align: left;
+    }
+
+    .table-print th {
+      font-weight: bold;
+      background-color: #f8f9fa;
+    }
+
+    body {
+      margin: 2cm;
+      font-size: 12pt;
+      color: #000;
+    }
+
+    .print-logo {
+        position: absolute;
+        top: 3cm;
+        right: 1.5cm;
+        max-height: 200px;
+        max-width: 150px;
+        object-fit: contain;
+      }
+      
+  }
+  
+  /* Ocultar por defecto el contenido de impresión */
+  .print-only {
+    display: none;
+  }
