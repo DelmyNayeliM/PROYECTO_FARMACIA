@@ -519,7 +519,7 @@ const handleEliminar = async () => {
                 className="list-group-item"
                 onClick={() => handleSelectcita(cita)}
               >
-                {cita.nombre_paciente || "sin nombre"} - {cita.nombre_dr} 
+                {cita.nombre_completo} - {cita.nombre_dr}
               </li>
             ))
           ) : (

@@ -72,7 +72,7 @@ const citas = db.define('citas', {
                 console.error('Error en afterCreate de cita:', error);
             }
         },
-
+    
         async afterBulkCreate(citas) {
             try {
                 for (const f of citas) {
@@ -84,8 +84,31 @@ const citas = db.define('citas', {
             } catch (error) {
                 console.error('Error en afterBulkCreate de citas:', error);
             }
+        },
+    
+        async beforeUpdate(cita, options) {
+            try {
+                // Solo si la cantidadventa o el medicamentoId cambian
+                if (cita.changed('cantidadventa') || cita.changed('medicamentoId')) {
+                    const prevCita = await cita.constructor.findOne({ where: { id: cita.id } });
+    
+                    // Revertir la cantidad anterior del inventario
+                    await modeloinventario.increment('Cantidad', {
+                        by: prevCita.cantidadventa,
+                        where: { id: prevCita.medicamentoId }
+                    });
+    
+                    // Descontar la nueva cantidad del inventario
+                    await modeloinventario.decrement('Cantidad', {
+                        by: cita.cantidadventa,
+                        where: { id: cita.medicamentoId }
+                    });
+                }
+            } catch (error) {
+                console.error('Error en beforeUpdate de cita:', error);
+            }
         }
-    }
+    }    
 });
 
 // Relación: un paciente tiene muchas citas
